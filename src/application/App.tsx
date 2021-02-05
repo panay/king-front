@@ -1,9 +1,13 @@
 import React from 'react';
-import './App.css';
+import Button from "../ui/Button";
+import {ReactComponent as Logo} from "../infrastructure/assets/images/svgs/logo.svg";
 
 function App() {
   return (
-    <div>ебанешься</div>
+    <div className="max-w-sm m-auto">
+        <Logo className="text-blue-500"/>
+      <Button value="Применить" />
+    </div>
   );
 }
 
