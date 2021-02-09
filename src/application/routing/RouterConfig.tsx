@@ -1,19 +1,22 @@
-import React, {lazy, Suspense} from "react";
-import {Route, Switch} from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { Route, Switch } from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
 
-const NotFoundPage = lazy(() => import('../pages/NotFound'));
+const NotFoundPage = lazy(() => import("../pages/NotFound"));
+const LoginPage = lazy(() => import("../pages/Login"));
+const HomePage = lazy(() => import("../pages/Home"));
 
 export const RouterConfig = () => {
-    return (
-        <>
-            <Suspense fallback={<div>Loading...</div>}>
-                <Switch>
-                    {/*<Route exact path="/" component={Todos}/>*/}
-                    {/*<Route exact path="/:id/tasks" component={Tasks}/>*/}
+  return (
+    <>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <PrivateRoute exact path="/login" component={LoginPage} />
+          <PrivateRoute exact path="/" component={HomePage} />
 
-                    <Route path="*" component={NotFoundPage}/>
-                </Switch>
-            </Suspense>
-        </>
-    )
+          <Route path="*" component={NotFoundPage} />
+        </Switch>
+      </Suspense>
+    </>
+  );
 };

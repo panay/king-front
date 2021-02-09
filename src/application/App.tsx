@@ -1,16 +1,18 @@
-import React from 'react';
-import Button from "../ui/Button";
-import {ReactComponent as Logo} from "../infrastructure/assets/images/svgs/logo.svg";
-import {ReactComponent as PicCampaign} from "../infrastructure/assets/images/svgs/pic-campaign.svg";
-import {ReactComponent as IcHome} from "../infrastructure/assets/images/svgs/ic-home.svg"
+import React from "react";
+import { ReactComponent as Logo } from "../infrastructure/assets/images/svgs/logo.svg";
+import { BrowserRouter as Router } from "react-router-dom";
+import { RouterConfig } from "./routing/RouterConfig";
 
 function App() {
   return (
     <div className="max-w-sm m-auto">
-        <Logo className="text-button-link"/>
-        <PicCampaign />
-        <IcHome className="text-success" />
-      <Button value="Применить" />
+      <Logo className="text-button-link" />
+
+      <Router>
+        <RouterConfig />
+      </Router>
+
+      {/*<Button value="Применить" />*/}
     </div>
   );
 }
