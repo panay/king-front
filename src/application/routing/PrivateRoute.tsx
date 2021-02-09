@@ -2,7 +2,7 @@ import * as React from "react";
 import { Route, RouteProps } from "react-router";
 import { Redirect } from "react-router-dom";
 
-const auth = false;
+const auth = true;
 
 type Props<P> = RouteProps &
   P & {
@@ -15,12 +15,10 @@ const PrivateRoute = ({ component: Component, ...rest }: Props<any>) => {
     <Route
       {...rest}
       render={(props) =>
-        !auth && isLoginPage ? (
+        (auth && !isLoginPage) || (!auth && isLoginPage) ? (
           <Component {...props} />
         ) : auth && isLoginPage ? (
           <Redirect to={{ pathname: "/" }} />
-        ) : auth ? (
-          <Component {...props} />
         ) : (
           <Redirect
             to={{ pathname: "/login", state: { from: props.location } }}
