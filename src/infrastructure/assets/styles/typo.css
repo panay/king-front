@@ -34,10 +34,18 @@
   font-display: swap;
 }
 
-body {
-  font-family: "Inter", sans-serif;
-  color: #181818;
-  font-size: 14px;
-  line-height: 16px;
-  letter-spacing: 0;
+/* purgecss start ignore */
+h1 {
+  @apply font-bold text-4xl;
 }
+
+h2 {
+  @apply font-bold text-xl;
+}
+
+h3,
+h4,
+h5 {
+  @apply font-bold text-base;
+}
+/* purgecss end ignore */

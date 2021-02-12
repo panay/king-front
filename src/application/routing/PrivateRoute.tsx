@@ -1,7 +1,8 @@
-import * as React from "react";
+import React from "react";
 import { Route, RouteProps } from "react-router";
 import { Redirect } from "react-router-dom";
 
+//todo: тут получение токена
 const auth = false;
 
 type Props = RouteProps & {

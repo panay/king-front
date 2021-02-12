@@ -2,7 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* purgecss start ignore */
 html,
 body {
   height: 100%;
 }
+
+body {
+  font-family: "Inter", sans-serif;
+  color: #181818;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+#root {
+  height: 100%;
+}
+/* purgecss end ignore */
