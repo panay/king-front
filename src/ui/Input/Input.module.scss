@@ -1,0 +1,29 @@
+.label {
+  @apply block relative text-left;
+
+  > .placeholder {
+    @apply text-xs text-icon-grey pointer-events-none absolute top-1/2 left-3 transition-transform transform-gpu -translate-y-1/2;
+  }
+
+  .icon {
+    @apply text-primary absolute absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer;
+  }
+
+  > input {
+    @apply placeholder-transparent block bg-input-grey p-2.5 w-full border-2 border-input-grey rounded-lg focus:bg-white focus:outline-none;
+
+    &:focus,
+    &:not(:placeholder-shown) {
+      @apply pt-4 pb-1;
+    }
+
+    &:not(:placeholder-shown):invalid {
+      @apply border-dusty-orange;
+    }
+
+    &:focus ~ .placeholder,
+    &:not(:placeholder-shown) ~ .placeholder {
+      @apply -translate-y-full;
+    }
+  }
+}

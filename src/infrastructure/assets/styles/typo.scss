@@ -34,7 +34,6 @@
   font-display: swap;
 }
 
-/* purgecss start ignore */
 h1 {
   @apply font-bold text-4xl;
 }
@@ -48,4 +47,3 @@ h4,
 h5 {
   @apply font-bold text-base;
 }
-/* purgecss end ignore */

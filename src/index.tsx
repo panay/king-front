@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './index.css';
-import './infrastructure/assets/styles/typo.css';
+import './index.scss';
+import './infrastructure/assets/styles/typo.scss';
 
 import App from './application/App';
 import reportWebVitals from './reportWebVitals';
