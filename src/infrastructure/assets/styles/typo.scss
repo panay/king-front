@@ -35,7 +35,7 @@
 }
 
 h1 {
-  @apply font-bold text-4xl;
+  @apply font-bold text-3xl;
 }
 
 h2 {
@@ -47,3 +47,17 @@ h4,
 h5 {
   @apply font-bold text-base;
 }
+
+a {
+  @apply text-primary hover:text-dusty-orange;
+}
+
+/* purgecss start ignore */
+body {
+  font-family: "Inter", sans-serif;
+  color: #181818;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+/* purgecss end ignore */
