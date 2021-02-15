@@ -6,7 +6,7 @@
   }
 
   .icon {
-    @apply text-primary absolute absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer;
+    @apply border-none text-primary absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer outline-none focus:outline-none;
   }
 
   > input {
