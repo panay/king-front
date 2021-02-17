@@ -3,6 +3,7 @@ import { Route, RouteProps } from "react-router";
 import { Redirect } from "react-router-dom";
 
 //todo: тут получение токена
+// сделать AuthProvider Context и все манипуляции с доступами до роутов сделать там
 const auth = false;
 
 type Props = RouteProps & {

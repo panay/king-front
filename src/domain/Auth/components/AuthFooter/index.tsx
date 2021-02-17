@@ -10,6 +10,7 @@ function AuthFooter({ recovery, onClick }: Props) {
     event.preventDefault();
     onClick(mode);
   };
+
   return recovery ? (
     <p className="mt-6 text-xs">
       <a href="/#" onClick={event => handleOnClick(event, false)} title="Вернуться назад">

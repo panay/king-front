@@ -11,7 +11,7 @@ function Auth() {
   };
 
   return (
-    <div className="bg-white rounded-md max-w-full w-1/4 mt-10 p-6 text-center">
+    <div className="bg-white rounded-xl w-full max-w-sm w-1/4 mt-10 p-6 text-center relative z-10">
       {recovery ? <RecoveryPassword phone="+7 (999) 123–45–67" /> : <AuthForm />}
       <AuthFooter recovery={recovery} onClick={handleRecoveryMode} />
     </div>

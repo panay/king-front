@@ -3,21 +3,29 @@ import { ReactComponent as IcInvisib } from "../../../../infrastructure/assets/i
 import { ReactComponent as IcVision } from "../../../../infrastructure/assets/images/svgs/ic-vision.svg";
 import Button from "../../../../ui/Button";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { ILoginRequest, submitFx } from "../../models/auth";
+import "../../models/init";
 
 function AuthForm() {
   const [passwordHidden, togglePasswordHidden] = useState(true);
+  const { register, handleSubmit, formState } = useForm({
+    mode: "onChange",
+  });
+  const { isValid } = formState;
 
-  const handleSubmitForm = (event: any) => {
-    event.preventDefault();
-    console.log("authForm :: ", event.target);
-  };
+  const onSubmit = (body: ILoginRequest) => submitFx(body);
 
   return (
     <>
       <h1>Авторизация</h1>
-      <form onSubmit={handleSubmitForm}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-6">
           <Input
+            inputRef={register({
+              required: true,
+              pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+            })}
             type="text"
             id="email"
             name="email"
@@ -28,6 +36,9 @@ function AuthForm() {
         </div>
         <div className="mt-4">
           <Input
+            inputRef={register({
+              required: true,
+            })}
             type={passwordHidden ? "password" : "text"}
             id="password"
             name="password"
@@ -52,7 +63,7 @@ function AuthForm() {
           />
         </div>
         <div className="mt-4">
-          <Button value="Войти" type="submit" />
+          <Button value="Войти" type="submit" disabled={!isValid} />
         </div>
       </form>
     </>
