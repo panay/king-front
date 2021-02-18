@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactComponent as IcPhone } from "../../../../infrastructure/assets/images/svgs/ic-phone.svg";
+import { ReactComponent as IcPhone } from "infrastructure/assets/images/svgs/ic-phone.svg";
 
 function RecoveryPassword({ phone }: { phone: string }) {
   return (

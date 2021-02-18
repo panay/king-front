@@ -1,5 +1,5 @@
 import { $user, getUserFx, IUser } from "./";
-import {getUserInfo} from "../../services/user-service";
+import { getUserInfo } from "../../../services/user-service";
 
 const reducer = (state: IUser, payload: IUser) => {
   return {
@@ -7,8 +7,8 @@ const reducer = (state: IUser, payload: IUser) => {
     ...payload,
   };
 };
-const getUser = async (token: string) => {
-  const response = await getUserInfo(token)
+const getUser = async () => {
+  const response = await getUserInfo();
 
   return response.data;
 };

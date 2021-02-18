@@ -1,4 +1,11 @@
 import axios from "axios";
 
-// место для глобальной конфигурации axios
-axios.defaults.headers.post["Content-Type"] = "application/json";
+const globalService = axios.create({
+  baseURL: process.env.REACT_APP_BASE_URL!.toString(),
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export { globalService };

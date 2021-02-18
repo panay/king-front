@@ -1,11 +1,11 @@
-import Input from "../../../../ui/Input";
-import { ReactComponent as IcInvisib } from "../../../../infrastructure/assets/images/svgs/ic-invisib.svg";
-import { ReactComponent as IcVision } from "../../../../infrastructure/assets/images/svgs/ic-vision.svg";
-import Button from "../../../../ui/Button";
+import Input from "ui/Input";
+import { ReactComponent as IcInvisib } from "infrastructure/assets/images/svgs/ic-invisib.svg";
+import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic-vision.svg";
+import Button from "ui/Button";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ILoginRequest, submitFx } from "../../models/auth";
-import "../../models/init";
+import {ILoginRequest, submitFx} from "infrastructure/models/auth/login";
+import "infrastructure/models/auth/init";
 
 function AuthForm() {
   const [passwordHidden, togglePasswordHidden] = useState(true);

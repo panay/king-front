@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
 const NotFoundPage = lazy(() => import("../pages/NotFound"));
@@ -13,8 +13,7 @@ export const RouterConfig = () => {
         <Switch>
           <PrivateRoute exact path="/login" component={LoginPage} />
           <PrivateRoute exact path="/" component={HomePage} />
-
-          <Route path="*" component={NotFoundPage} />
+          <PrivateRoute path="*" component={NotFoundPage} />
         </Switch>
       </Suspense>
     </>
