@@ -1,6 +1,5 @@
 import { $user, getUserFx, IUser } from "./";
-import axios from "axios";
-import "../../../../infrastructure/config/axios.config";
+import {getUserInfo} from "../../services/user-service";
 
 const reducer = (state: IUser, payload: IUser) => {
   return {
@@ -9,11 +8,7 @@ const reducer = (state: IUser, payload: IUser) => {
   };
 };
 const getUser = async (token: string) => {
-  const response = await axios.get("/users/user_info", {
-    headers: {
-      Authorization: token,
-    },
-  });
+  const response = await getUserInfo(token)
 
   return response.data;
 };

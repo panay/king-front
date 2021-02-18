@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './index.scss';
-import './infrastructure/assets/styles/typo.scss';
+import 'index.scss';
+import 'infrastructure/assets/styles/typo.scss';
 
-import App from './application/App';
+import App from 'application/App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(

@@ -40,8 +40,8 @@ function AuthForm() {
               required: true,
             })}
             type={passwordHidden ? "password" : "text"}
-            id="password"
-            name="password"
+            id="pass"
+            name="pass"
             placeholder="Пароль"
             required
             onIconClick={() =>

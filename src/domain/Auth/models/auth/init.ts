@@ -1,14 +1,13 @@
 import { $authToken, ILoginRequest, submitFx } from "./";
-import axios from "axios";
-import "../../../../infrastructure/config/axios.config";
+import {logIn} from "../../services/auth-service";
 
 const reducer = (state: string, payload: string) => payload;
-const logIn = async (body: ILoginRequest) => {
-  const response = await axios.post("auth", JSON.stringify(body));
+const login = async (body: ILoginRequest) => {
+  const response = await logIn(body)
 
-  return response.data;
+  return response.data && response.data.access_token;
 };
 
 $authToken.on(submitFx.doneData, reducer);
 
-submitFx.use(logIn);
+submitFx.use(login);

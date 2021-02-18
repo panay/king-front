@@ -2,7 +2,7 @@ import { createDomain, hydrate } from "effector";
 
 export interface ILoginRequest {
   email: string;
-  password: string;
+  pass: string;
 }
 
 export const authDomain = createDomain("Auth");

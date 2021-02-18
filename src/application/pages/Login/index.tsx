@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import Auth from "../../../domain/Auth";
-import { ReactComponent as Logo } from "../../../infrastructure/assets/images/svgs/logo.svg";
+import Auth from "domain/Auth";
+import { ReactComponent as Logo } from "infrastructure/assets/images/svgs/logo.svg";
 
-import AuthBg from "../../../infrastructure/assets/images/auth-bg.png";
-import AuthBg2x from "../../../infrastructure/assets/images/auth-bg@2x.png";
-import AuthBg3x from "../../../infrastructure/assets/images/auth-bg@3x.png";
+import AuthBg from "infrastructure/assets/images/auth-bg.png";
+import AuthBg2x from "infrastructure/assets/images/auth-bg@2x.png";
+import AuthBg3x from "infrastructure/assets/images/auth-bg@3x.png";
 
 function Login() {
   useEffect(() => {
@@ -20,7 +20,7 @@ function Login() {
         src={AuthBg}
         srcSet={`${AuthBg} 1x, ${AuthBg2x} 2x, ${AuthBg3x} 3x`}
         alt="bubbles background"
-        className="fixed top-0 left-0 right-0 bottom-0 z-0 max-w-full h-full object-cover"
+        className="fixed top-0 left-0 right-0 bottom-0 z-0 max-w-full w-full h-full object-cover"
       />
     </div>
   );
