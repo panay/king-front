@@ -12,5 +12,4 @@ export const submitFx = authDomain.effect<ILoginRequest, boolean, Error>();
 export const logoutFx = authDomain.effect<void, boolean, Error>();
 
 export const $authenticated = authDomain.store<boolean>(false);
-
 persist({ store: $authenticated, key: "authenticated" });
