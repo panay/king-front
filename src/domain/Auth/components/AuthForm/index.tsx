@@ -19,6 +19,7 @@ import {
 function AuthForm() {
   const [passwordHidden, togglePasswordHidden] = useState(true);
   const [buttonValue, changeButtonValue] = useState("Войти");
+  const [buttonDisabled, changeButtonDisabled] = useState(false);
 
   const { register, handleSubmit, formState } = useForm({
     mode: "onChange",
@@ -40,7 +41,11 @@ function AuthForm() {
         ? error.message
         : "Войти"
     );
-  }, [pending, error]);
+
+    changeButtonDisabled(
+      () => !isValid || Object.keys(error).length > 0 || pending
+    );
+  }, [isValid, pending, error]);
 
   return (
     <>
@@ -95,7 +100,7 @@ function AuthForm() {
           <Button
             value={buttonValue || "Войти"}
             type="submit"
-            disabled={!isValid || Object.keys(error).length > 0 || pending}
+            disabled={buttonDisabled || false}
           />
         </div>
       </form>
