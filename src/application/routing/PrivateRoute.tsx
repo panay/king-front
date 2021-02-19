@@ -10,6 +10,7 @@ type Props = RouteProps & {
 const PrivateRoute = ({ component: Component, ...rest }: Props) => {
   const authenticated = useContext(AuthContext);
   const isLoginPage = rest.path === "/login";
+
   return (
     <Route
       {...rest}

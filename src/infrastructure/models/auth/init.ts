@@ -1,12 +1,12 @@
 import { guard } from "effector";
 import { getUserFx } from "./user";
-import { $authenticated, submitFx } from "./login";
+import { $authenticated, loginFx } from "./login";
 import "./user/init";
 import "./login/init";
 
 guard({
   source: $authenticated,
-  clock: submitFx.doneData,
+  clock: loginFx.doneData,
   filter: $authenticated,
   target: getUserFx,
 });

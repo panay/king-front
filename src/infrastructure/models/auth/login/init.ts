@@ -1,33 +1,21 @@
-import { $authenticated, ILoginRequest, logoutFx, submitFx } from "./";
+import { $authenticated, ILoginRequest, logoutFx, loginFx } from "./";
 import { logIn, logOut } from "../../../services/auth-service";
 
-const reducer = (state: boolean, payload: boolean) => payload;
-const login = async (body: ILoginRequest) => {
-  let authenticated: boolean = true;
-  let response;
-  try {
-    response = await logIn(body);
-    authenticated = !!response.headers["Set-Cookie"];
-  } catch (error) {
-    console.log("LogIn ERROR  :: ", error);
-  }
+const doneReducer = (state: boolean, payload: boolean) => payload;
 
-  return authenticated;
+const login = async (body: ILoginRequest) => {
+  const response = await logIn(body);
+  return !!response.data;
 };
 
 const logout = async () => {
-  let authenticated = true;
-  try {
-    await logOut();
-    authenticated = false;
-  } catch (error) {
-    console.log("LogIn Error :: ", error);
-  }
-
-  return authenticated;
+  await logOut();
+  return false;
 };
 
-$authenticated.on(submitFx.doneData, reducer).on(logoutFx.doneData, reducer);
+$authenticated
+  .on(loginFx.doneData, doneReducer)
+  .on(logoutFx.doneData, doneReducer);
 
-submitFx.use(login);
+loginFx.use(login);
 logoutFx.use(logout);

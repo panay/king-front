@@ -1,25 +1,54 @@
+import "infrastructure/models/auth/init";
+import "../../models/init";
+
 import Input from "ui/Input";
 import { ReactComponent as IcInvisib } from "infrastructure/assets/images/svgs/ic-invisib.svg";
 import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic-vision.svg";
 import Button from "ui/Button";
-import React, { useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {ILoginRequest, submitFx} from "infrastructure/models/auth/login";
-import "infrastructure/models/auth/init";
+import { ILoginRequest, loginFx } from "infrastructure/models/auth/login";
+import { useStore } from "effector-react";
+import {
+  $formIsChanged,
+  $loginError,
+  $loginPending,
+  changeForm,
+} from "../../models";
 
 function AuthForm() {
   const [passwordHidden, togglePasswordHidden] = useState(true);
+  const [buttonValue, changeButtonValue] = useState("Войти");
+
   const { register, handleSubmit, formState } = useForm({
     mode: "onChange",
   });
   const { isValid } = formState;
 
-  const onSubmit = (body: ILoginRequest) => submitFx(body);
+  const error = useStore($loginError);
+  const pending = useStore($loginPending);
+  const formIsChanged = useStore($formIsChanged);
+  const handleChangeForm = changeForm.prepend((e: FormEvent) => true);
+
+  const onSubmit = (body: ILoginRequest) => loginFx(body);
+
+  useEffect(() => {
+    changeButtonValue(
+      pending
+        ? "Ожидайте"
+        : Object.keys(error).length > 0
+        ? error.message
+        : "Войти"
+    );
+  }, [pending, error]);
 
   return (
     <>
       <h1>Авторизация</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        onChange={!formIsChanged ? handleChangeForm : undefined}
+      >
         <div className="mt-6">
           <Input
             inputRef={register({
@@ -63,7 +92,11 @@ function AuthForm() {
           />
         </div>
         <div className="mt-4">
-          <Button value="Войти" type="submit" disabled={!isValid} />
+          <Button
+            value={buttonValue || "Войти"}
+            type="submit"
+            disabled={!isValid || Object.keys(error).length > 0 || pending}
+          />
         </div>
       </form>
     </>

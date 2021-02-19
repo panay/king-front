@@ -1,5 +1,6 @@
 import { createDomain } from "effector";
 import {persist} from "effector-storage/local";
+import {AxiosError} from "axios";
 
 interface IKeyValue {
   id: string;
@@ -15,7 +16,7 @@ export interface IUser {
 
 export const userDomain = createDomain("User");
 
-export const getUserFx = userDomain.effect<void, IUser, Error>();
+export const getUserFx = userDomain.effect<void, IUser, AxiosError>();
 
 export const $user = userDomain.store<IUser>({} as IUser);
 persist({ store: $user, key: "user" });
