@@ -5,12 +5,12 @@ const doneReducer = (state: boolean, payload: boolean) => payload;
 
 const login = async (body: ILoginRequest) => {
   const response = await logIn(body);
-  return !!response.data;
+  return response.status === 200;
 };
 
 const logout = async () => {
-  await logOut();
-  return false;
+  const response = await logOut();
+  return response.status !== 200;
 };
 
 $authenticated

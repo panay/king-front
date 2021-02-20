@@ -2,7 +2,7 @@ import React, { SyntheticEvent } from "react";
 
 type Props = {
   recovery: boolean;
-  onClick: any;
+  onClick: (mode: boolean) => void;
 };
 
 function AuthFooter({ recovery, onClick }: Props) {
