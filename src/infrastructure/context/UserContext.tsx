@@ -1,10 +1,10 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { useStore } from "effector-react";
-import { $user, IUser } from "infrastructure/models/auth/user";
+import { $user, IUser } from "../models/auth/user";
 
 const UserContext = React.createContext<IUser | undefined>(undefined);
 
-const UserProvider = ({ children }: { children: React.ReactElement }) => {
+const UserProvider = ({ children }: { children: ReactElement }) => {
   const user = useStore($user);
 
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;

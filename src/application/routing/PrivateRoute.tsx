@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Route, RouteProps } from "react-router";
 import { Redirect } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import AuthContext from "infrastructure/context/AuthContext";
 
 type Props = RouteProps & {
   component: React.ComponentType<any>;

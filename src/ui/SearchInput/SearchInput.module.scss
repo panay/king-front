@@ -1,0 +1,23 @@
+.label {
+  @apply block relative text-left;
+
+  > .placeholder {
+    @apply text-xs text-icon-grey pointer-events-none absolute top-1/2 left-3 transition-transform transform-gpu -translate-y-1/2;
+  }
+
+  .icon {
+    @apply border-none text-primary absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer outline-none focus:outline-none;
+  }
+
+  > input {
+    @apply placeholder-transparent bg-white block p-2.5 pr-8 w-full border-2 border-input-grey rounded-xl focus:outline-none;
+
+    &:focus {
+      @apply pt-4 pb-1;
+    }
+
+    &:focus ~ .placeholder {
+      @apply -translate-y-full;
+    }
+  }
+}

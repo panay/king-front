@@ -11,7 +11,7 @@ module.exports = {
         transparent: "transparent",
 
         primary: "#0052cc",
-        text: "#181818",
+        "default": "#181818",
         success: "#3eb969",
 
         "input-grey": "#f4f4f6",

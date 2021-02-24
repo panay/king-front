@@ -19,8 +19,8 @@ function Sidebar({ user, nav, onLogout }: Props) {
   return (
     <aside className="bg-primary w-20 flex flex-col items-center justify-between py-6">
       <div className="flex flex-col items-center">
-        <div className="w-12 h-12 rounded-full overflow-hidden flex flex-col items-center justify-center bg-input-grey text-text text-xl font-bold">
-          CП
+        <div className="w-12 h-12 rounded-full overflow-hidden flex flex-col items-center justify-center bg-input-grey text-default text-xl font-bold">
+          {user || "СП"}
         </div>
         <nav>
           {nav.map((link, index) => (

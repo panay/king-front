@@ -101,6 +101,7 @@ function AuthForm() {
             value={buttonValue || "Войти"}
             type="submit"
             disabled={buttonDisabled || false}
+            className="w-full"
           />
         </div>
       </form>

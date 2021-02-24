@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import Auth from "domain/Auth";
 import { ReactComponent as Logo } from "infrastructure/assets/images/svgs/logo.svg";
 
-import AuthBg from "infrastructure/assets/images/auth-bg.png";
-import AuthBg2x from "infrastructure/assets/images/auth-bg@2x.png";
-import AuthBg3x from "infrastructure/assets/images/auth-bg@3x.png";
+import AuthBg from "infrastructure/assets/images/pngs/auth-bg.png";
+import AuthBg2x from "infrastructure/assets/images/pngs/auth-bg@2x.png";
+import AuthBg3x from "infrastructure/assets/images/pngs/auth-bg@3x.png";
 
 function Login() {
   useEffect(() => {
