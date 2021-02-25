@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import Layout from "domain/Layout";
-import Header from "ui/Header";
-import EmptyCampaignsWindow from "ui/EmptyCampaignWindow";
+import {Header, EmptyCampaignsWindow} from "ui";
+import { CompanySelectionPanel, TwoColumnLayout } from "domains";
 
 function Settings() {
   useEffect(() => {
@@ -11,15 +10,15 @@ function Settings() {
     console.log("Users Search :: ", value);
   };
   return (
-    <Layout className="bg-input-grey" asideContent={<EmptyCampaignsWindow />}>
+    <TwoColumnLayout
+      className="bg-input-grey"
+      asideContent={<EmptyCampaignsWindow />}
+    >
       <Header
-        headerTitle="Burger King"
-        placeholder="Поиск"
+        headerTitle={<CompanySelectionPanel />}
         onSearch={handleOnSearch}
-      >
-        <div>Карта/Таблица</div>
-      </Header>
-    </Layout>
+      />
+    </TwoColumnLayout>
   );
 }
 

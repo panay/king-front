@@ -1,5 +1,5 @@
 import { $authenticated, ILoginRequest, logoutFx, loginFx } from "./";
-import { logIn, logOut } from "../../../services/auth-service";
+import { logIn, logOut } from "infrastructure/services/auth-service";
 
 const doneReducer = (state: boolean, payload: boolean) => payload;
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Auth from "domain/Auth";
+import {Auth} from "domains";
 import { ReactComponent as Logo } from "infrastructure/assets/images/svgs/logo.svg";
 
 import AuthBg from "infrastructure/assets/images/pngs/auth-bg.png";

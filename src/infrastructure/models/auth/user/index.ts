@@ -1,7 +1,7 @@
 import { createDomain } from "effector";
 import {persist} from "effector-storage/local";
 import {AxiosError} from "axios";
-import {IKeyValue} from "../../../types/key-value.interface";
+import {IKeyValue} from "infrastructure/types";
 
 export interface IUser {
   id: string;

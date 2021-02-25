@@ -1,6 +1,6 @@
 import { $user, getUserFx, IUser, updateCompanyUser } from "./";
-import { getUserInfo } from "../../../services/user-service";
-import { IKeyValue } from "../../../types/key-value.interface";
+import { getUserInfo } from "infrastructure/services/user-service";
+import { IKeyValue } from "infrastructure/types";
 
 const reducer = (state: IUser, payload: IUser) => {
   return {

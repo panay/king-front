@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useCallback, useRef, useState } from "react";
 import { ReactComponent as IcArrowDropdown } from "infrastructure/assets/images/svgs/ic-arrow-dropdown.svg";
-import { IKeyValue } from "infrastructure/types/key-value.interface";
-import useOnClickOutside from "../../infrastructure/hooks/useOnClickOutside";
+import { IKeyValue } from "infrastructure/types";
+import { useOnClickOutside } from "infrastructure/hooks";
 
 type Props = {
   caption: string;

@@ -1,10 +1,9 @@
 import "infrastructure/models/auth/init";
 import "../../models/init";
 
-import Input from "ui/Input";
+import {Input, Button} from "ui";
 import { ReactComponent as IcInvisib } from "infrastructure/assets/images/svgs/ic-invisib.svg";
 import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic-vision.svg";
-import Button from "ui/Button";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ILoginRequest, loginFx } from "infrastructure/models/auth/login";

@@ -1,8 +1,23 @@
-import React, { lazy, Suspense } from "react";
+import React, {
+  ComponentType,
+  lazy,
+  LazyExoticComponent,
+  Suspense,
+  useContext,
+  useMemo,
+} from "react";
 import { Switch } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
+import AuthContext from "infrastructure/context/AuthContext";
+import { SidebarLayout } from "domains";
 
-const routes = [
+interface Route {
+  path: string;
+  component: LazyExoticComponent<ComponentType<any>>;
+  exact: boolean;
+}
+
+const routes: Route[] = [
   {
     path: "/",
     component: lazy(() => import("../pages/Home")),
@@ -31,20 +46,35 @@ const routes = [
 ];
 
 export const RouterConfig = () => {
+  const authenticated = useContext(AuthContext);
+  const loading = <div>Loading...</div>;
+  const result = useMemo(
+    () =>
+      routes.map((route: Route, index: number) => (
+        <PrivateRoute
+          key={index}
+          exact={route.exact}
+          path={route.path}
+          component={route.component}
+        />
+      )),
+    []
+  );
+  if (!authenticated) {
+    return (
+      <Suspense fallback={loading}>
+        <Switch>{result}</Switch>
+      </Suspense>
+    );
+  }
+
   return (
-    <>
-      <Suspense fallback={<div>Loading...</div>}>
+    <SidebarLayout>
+      <Suspense fallback={loading}>
         <Switch>
-          {routes.map((route, index) => (
-            <PrivateRoute
-              key={index}
-              exact={route.exact}
-              path={route.path}
-              component={route.component}
-            />
-          ))}
+          {result}
         </Switch>
       </Suspense>
-    </>
+    </SidebarLayout>
   );
 };
