@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Layout from "domain/Layout";
 import Header from "ui/Header";
 import EmptyCampaignsWindow from "ui/EmptyCampaignWindow";
-import TitleWithDropdown from "../../../ui/TitleWithDropdown";
-import {IKeyValue} from "../../../infrastructure/types/key-value.interface";
+import TitleWithDropdown from "ui/TitleWithDropdown";
+import { IKeyValue } from "infrastructure/types/key-value.interface";
+import { updateCompanyUser } from "infrastructure/models/auth/user";
+import UserContext from "../../../infrastructure/context/UserContext";
 
 function Home() {
-  useEffect(() => {
-    document.title = "Главная – Spark [radar]";
-  });
+  const user = useContext(UserContext);
 
   const handleOnSearch = (value: string) => {
     console.log("Home Search :: ", value);
@@ -33,8 +33,16 @@ function Home() {
     },
   ];
 
+  useEffect(() => {
+    document.title = "Главная – Spark [radar]";
+
+    if (!user || user?.company === null) {
+      updateCompanyUser(companies[0]);
+    }
+  }, [user, companies]);
+
   const handleSelectItem = (item: IKeyValue) => {
-    console.log("handle select uitem :: ", item);
+    updateCompanyUser(item);
   };
 
   return (
@@ -43,7 +51,7 @@ function Home() {
         headerTitle={
           <TitleWithDropdown
             caption="Компания"
-            name={companies[companies.length - 1].name}
+            name={user?.company?.name || ""}
             list={companies}
             onSelectItem={handleSelectItem}
           />

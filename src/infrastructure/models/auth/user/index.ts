@@ -14,8 +14,7 @@ export interface IUser {
 
 export const userDomain = createDomain("User");
 
-//todo ивент на обновление компании авторизованного юзера
-
+export const updateCompanyUser = userDomain.event<IKeyValue>();
 
 export const getUserFx = userDomain.effect<void, IUser, AxiosError>();
 

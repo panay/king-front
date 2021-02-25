@@ -1,6 +1,7 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useCallback, useRef, useState } from "react";
 import { ReactComponent as IcArrowDropdown } from "infrastructure/assets/images/svgs/ic-arrow-dropdown.svg";
-import {IKeyValue} from "infrastructure/types/key-value.interface";
+import { IKeyValue } from "infrastructure/types/key-value.interface";
+import useOnClickOutside from "../../infrastructure/hooks/useOnClickOutside";
 
 type Props = {
   caption: string;
@@ -11,6 +12,13 @@ type Props = {
 
 function TitleWithDropdown({ caption, name, list, onSelectItem }: Props) {
   const [dropdownOpened, toggleDropdown] = useState(false);
+  const dropdownWrapperRef = useRef(null);
+  const onCloseDropdown = useCallback(() => {
+    toggleDropdown((_) => false);
+  }, []);
+
+  useOnClickOutside(dropdownWrapperRef, onCloseDropdown);
+
   const handleClickTitle = (event: SyntheticEvent) => {
     event.preventDefault();
     toggleDropdown((opened) => !opened);
@@ -18,13 +26,14 @@ function TitleWithDropdown({ caption, name, list, onSelectItem }: Props) {
 
   const selectItem = (event: SyntheticEvent) => {
     event.preventDefault();
+    event.stopPropagation();
+
     const value: IKeyValue = {
       id: event.currentTarget.id,
-      name: event.currentTarget.textContent!.toString()
+      name: event.currentTarget.textContent!.toString(),
     };
-    console.log("selectItem :: ", value);
     onSelectItem(value);
-    toggleDropdown((_) => false);
+    onCloseDropdown();
   };
 
   return (
@@ -33,14 +42,18 @@ function TitleWithDropdown({ caption, name, list, onSelectItem }: Props) {
       <div
         className="flex items-center relative z-50"
         onClick={handleClickTitle}
+        ref={dropdownWrapperRef}
       >
         <span className="mr-1 cursor-pointer">{name}</span>
         <IcArrowDropdown className="text-default" />
 
         <ul
-          className={`bg-white absolute rounded-xl p-4 text-default top-full left-0 shadow-xl mt-2 w-full ${
+          className={`bg-white absolute rounded-xl p-4 text-default top-full left-0 shadow-xl mt-2 max-w-full ${
             dropdownOpened ? "block " : "hidden"
           }`}
+          style={{
+            minWidth: "240px",
+          }}
         >
           {list.map((item, index) => (
             <li
