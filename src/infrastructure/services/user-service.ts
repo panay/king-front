@@ -1,7 +1,5 @@
 import { globalService } from "../config/axios.config";
 
-globalService.defaults.baseURL = process.env.REACT_APP_USERS_ENDPOINT!.toString();
-
-const getUserInfo = () => globalService.get("/user_info");
+const getUserInfo = () => globalService.get(`${process.env.REACT_APP_USERS_ENDPOINT}/user_info`);
 
 export { getUserInfo };

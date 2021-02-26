@@ -12,7 +12,14 @@ module.exports = {
 
         primary: "#0052cc",
         "default": "#181818",
-        success: "#3eb969",
+        success: "#3bcf7e",
+        warning: "#ff531d",
+        "hover-warning": "#ff7145",
+        "active-warning": "#ef3a01",
+        "hover-success": "#24DB77",
+        "active-success": "#2FB069",
+        "hover-primary": "#4b87df",
+        "active-primary": "#0049b5",
 
         "input-grey": "#f4f4f6",
         "icon-grey": "#8f92a1",
@@ -28,8 +35,7 @@ module.exports = {
         brown: "#3f2e00",
         orangered: "#f2461f",
         seagreen: "#2e8b58",
-        "lighten-blue": "#f7faff",
-        "dusty-orange": "#ff531d",
+        "lighten-blue": "#f7faff"
       },
       fontFamily: {
         ...fontFamily,
@@ -38,7 +44,11 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['active', 'disabled'],
+      opacity: ['disabled'],
+      pointerEvents: ['disabled']
+    },
   },
   plugins: [],
 };

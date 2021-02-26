@@ -1,7 +1,0 @@
-.button {
-  @apply flex items-center justify-center max-w-full px-4 py-3 font-bold text-center rounded-lg cursor-pointer outline-none focus:outline-none;
-
-  &:disabled {
-    @apply bg-icon-grey pointer-events-none;
-  }
-}

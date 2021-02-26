@@ -1,35 +1,16 @@
-import React, {
-  InputHTMLAttributes,
-  ReactElement,
-  Ref,
-  SyntheticEvent,
-} from "react";
-import styles from "./Input.module.scss";
+import React, { InputHTMLAttributes, Ref } from "react";
 
 type Props = InputHTMLAttributes<unknown> & {
-  onIconClick?: () => void;
-  icon?: ReactElement;
   inputRef?: Ref<HTMLInputElement>;
 };
 
-function Input({ icon, onIconClick, inputRef, ...props }: Props) {
-  const handleOnClick = (event: SyntheticEvent) => {
-    event.preventDefault();
-    if (onIconClick) {
-      onIconClick();
-    }
-  };
-
+function Input({ inputRef, ...props }: Props) {
   return (
-    <label className={styles.label}>
-      <input ref={inputRef} {...props} />
-      <span className={styles.placeholder}>{props.placeholder}</span>
-      {icon && (
-        <button type="button" className={styles.icon} onClick={handleOnClick}>
-          {icon}
-        </button>
-      )}
-    </label>
+    <input
+      ref={inputRef}
+      {...props}
+      className={`py-1.5 px-3 bg-input-grey rounded-lg placeholder-icon-grey text-default text-sm focus:outline-none ${props.className}`}
+    />
   );
 }
 

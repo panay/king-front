@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const globalService = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL!.toString(),
+  baseURL: process.env.REACT_APP_BASE_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

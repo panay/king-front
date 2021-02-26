@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import {Header, EmptyCampaignsWindow} from "ui";
-import { CompanySelectionPanel, TwoColumnLayout } from "domains";
+import { CompanyPanel, TwoColumnLayout } from "domains";
 
 function Settings() {
   useEffect(() => {
@@ -15,7 +15,7 @@ function Settings() {
       asideContent={<EmptyCampaignsWindow />}
     >
       <Header
-        headerTitle={<CompanySelectionPanel />}
+        headerTitle={<CompanyPanel />}
         onSearch={handleOnSearch}
       />
     </TwoColumnLayout>

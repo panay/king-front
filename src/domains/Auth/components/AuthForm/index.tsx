@@ -1,7 +1,7 @@
 import "infrastructure/models/auth/init";
 import "../../models/init";
 
-import {Input, Button} from "ui";
+import {FluidLabelInput, Button} from "ui";
 import { ReactComponent as IcInvisib } from "infrastructure/assets/images/svgs/ic-invisib.svg";
 import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic-vision.svg";
 import React, { FormEvent, useEffect, useState } from "react";
@@ -54,7 +54,7 @@ function AuthForm() {
         onChange={!formIsChanged ? handleChangeForm : undefined}
       >
         <div className="mt-6">
-          <Input
+          <FluidLabelInput
             inputRef={register({
               required: true,
               pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
@@ -68,7 +68,7 @@ function AuthForm() {
           />
         </div>
         <div className="mt-4">
-          <Input
+          <FluidLabelInput
             inputRef={register({
               required: true,
             })}
@@ -83,12 +83,12 @@ function AuthForm() {
             icon={
               passwordHidden ? (
                 <IcInvisib
-                  className="text-primary hover:text-dusty-orange"
+                  className="text-primary hover:text-hover-primary"
                   title="Показать пароль"
                 />
               ) : (
                 <IcVision
-                  className="text-primary hover:text-dusty-orange"
+                  className="text-primary hover:text-hover-primary"
                   title="Спрятать пароль"
                 />
               )

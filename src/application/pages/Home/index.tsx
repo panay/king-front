@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import {EmptyCampaignsWindow, Header} from "ui";
-import { CompanySelectionPanel, TwoColumnLayout } from "domains";
+import { CompanyPanel, TwoColumnLayout } from "domains";
 
 function Home() {
   const handleOnSearch = (value: string) => {
@@ -16,7 +16,7 @@ function Home() {
       className="bg-input-grey"
       asideContent={<EmptyCampaignsWindow />}
     >
-      <Header headerTitle={<CompanySelectionPanel />} onSearch={handleOnSearch} />
+      <Header headerTitle={<CompanyPanel />} onSearch={handleOnSearch} />
     </TwoColumnLayout>
   );
 }

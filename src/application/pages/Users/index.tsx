@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Header } from "ui";
 import UserInfoForm from "./components/UserInfoForm";
-import { CompanySelectionPanel, TwoColumnLayout } from "domains";
+import { CompanyPanel, TwoColumnLayout } from "domains";
 
 function Users() {
   useEffect(() => {
@@ -13,7 +13,7 @@ function Users() {
   return (
     <TwoColumnLayout className="bg-input-grey" asideContent={<UserInfoForm />}>
       <Header
-        headerTitle={<CompanySelectionPanel />}
+        headerTitle={<CompanyPanel />}
         placeholder="Поиск пользователя"
         onSearch={handleOnSearch}
       />

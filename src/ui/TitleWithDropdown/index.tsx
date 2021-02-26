@@ -1,27 +1,56 @@
-import React, { SyntheticEvent, useCallback, useRef, useState } from "react";
+import React, {
+  ReactElement,
+  SyntheticEvent,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import { ReactComponent as IcArrowDropdown } from "infrastructure/assets/images/svgs/ic-arrow-dropdown.svg";
 import { IKeyValue } from "infrastructure/types";
 import { useOnClickOutside } from "infrastructure/hooks";
+import Dropdown from "../Dropdown";
 
 type Props = {
-  caption: string;
-  name: string;
+  name: IKeyValue;
   list: IKeyValue[];
+  onOpen: (opened: boolean) => void;
   onSelectItem: (item: IKeyValue) => void;
+  children?: ReactElement;
 };
 
-function TitleWithDropdown({ caption, name, list, onSelectItem }: Props) {
-  const [dropdownOpened, toggleDropdown] = useState(false);
+function TitleWithDropdown({
+  name,
+  list,
+  onOpen,
+  onSelectItem,
+  children,
+}: Props) {
+  const [dropdownOpened, toggleDropdown] = useState<boolean>(false);
+  const [selected, selectListItem] = useState<string>(name?.id);
+
   const dropdownWrapperRef = useRef(null);
+
   const onCloseDropdown = useCallback(() => {
-    toggleDropdown((_) => false);
+    toggleDropdown(false);
   }, []);
+
+  const childrenElement = children ? (
+    <div className="mt-4">
+      <hr className="text-input-grey pb-4" />
+      {children}
+    </div>
+  ) : (
+    ""
+  );
 
   useOnClickOutside(dropdownWrapperRef, onCloseDropdown);
 
   const handleClickTitle = (event: SyntheticEvent) => {
     event.preventDefault();
-    toggleDropdown((opened) => !opened);
+    event.stopPropagation();
+
+    onOpen(!dropdownOpened);
+    return toggleDropdown(!dropdownOpened);
   };
 
   const selectItem = (event: SyntheticEvent) => {
@@ -33,39 +62,42 @@ function TitleWithDropdown({ caption, name, list, onSelectItem }: Props) {
       name: event.currentTarget.textContent!.toString(),
     };
     onSelectItem(value);
+    selectListItem(value.id);
     onCloseDropdown();
   };
 
   return (
     <>
-      <div className="text-xs text-icon-grey font-normal">{caption}</div>
-      <div
-        className="flex items-center relative z-50"
-        onClick={handleClickTitle}
-        ref={dropdownWrapperRef}
-      >
-        <span className="mr-1 cursor-pointer">{name}</span>
-        <IcArrowDropdown className="text-default" />
-
-        <ul
-          className={`bg-white absolute rounded-xl p-4 text-default top-full left-0 shadow-xl mt-2 max-w-full ${
-            dropdownOpened ? "block " : "hidden"
+      <div className="flex items-center relative z-50" ref={dropdownWrapperRef}>
+        <span className="mr-1 cursor-pointer" onClick={handleClickTitle}>
+          {name?.name}
+        </span>
+        <IcArrowDropdown
+          className={`text-default transform${
+            dropdownOpened ? " rotate-180" : ""
           }`}
+        />
+        <Dropdown
+          opened={dropdownOpened}
           style={{
-            minWidth: "240px",
+            minWidth: "284px",
           }}
         >
           {list.map((item, index) => (
-            <li
-              className="text-default text-base mt-2 font-normal cursor-pointer hover:text-dusty-orange"
+            <div
+              className={`text-primary text-sm mt-2 font-semibold cursor-pointer hover:text-hover-primary${
+                selected === item.id ? " text-default pointer-events-none" : ""
+              }`}
               key={index}
               id={item.id}
               onClick={selectItem}
             >
               {item.name}
-            </li>
+            </div>
           ))}
-        </ul>
+
+          {childrenElement}
+        </Dropdown>
       </div>
     </>
   );
