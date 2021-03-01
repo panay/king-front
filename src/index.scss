@@ -4,9 +4,9 @@
 
 html,
 body {
-  @apply h-full;
+  @apply h-full min-h-full;
 }
 
 #root {
-  @apply h-full;
+  @apply h-full min-h-full;
 }

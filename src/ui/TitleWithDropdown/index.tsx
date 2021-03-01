@@ -9,9 +9,11 @@ import { ReactComponent as IcArrowDropdown } from "infrastructure/assets/images/
 import { IKeyValue } from "infrastructure/types";
 import { useOnClickOutside } from "infrastructure/hooks";
 import Dropdown from "../Dropdown";
+import List from "./components/List";
+import Scrollbar from "../Scrollbar";
 
 type Props = {
-  name: IKeyValue;
+  current: IKeyValue;
   list: IKeyValue[];
   onOpen: (opened: boolean) => void;
   onSelectItem: (item: IKeyValue) => void;
@@ -19,14 +21,13 @@ type Props = {
 };
 
 function TitleWithDropdown({
-  name,
+  current,
   list,
   onOpen,
   onSelectItem,
   children,
 }: Props) {
   const [dropdownOpened, toggleDropdown] = useState<boolean>(false);
-  const [selected, selectListItem] = useState<string>(name?.id);
 
   const dropdownWrapperRef = useRef(null);
 
@@ -53,16 +54,8 @@ function TitleWithDropdown({
     return toggleDropdown(!dropdownOpened);
   };
 
-  const selectItem = (event: SyntheticEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const value: IKeyValue = {
-      id: event.currentTarget.id,
-      name: event.currentTarget.textContent!.toString(),
-    };
+  const selectItem = (value: IKeyValue) => {
     onSelectItem(value);
-    selectListItem(value.id);
     onCloseDropdown();
   };
 
@@ -70,7 +63,7 @@ function TitleWithDropdown({
     <>
       <div className="flex items-center relative z-50" ref={dropdownWrapperRef}>
         <span className="mr-1 cursor-pointer" onClick={handleClickTitle}>
-          {name?.name}
+          {current?.name}
         </span>
         <IcArrowDropdown
           className={`text-default transform${
@@ -83,18 +76,9 @@ function TitleWithDropdown({
             minWidth: "284px",
           }}
         >
-          {list.map((item, index) => (
-            <div
-              className={`text-primary text-sm mt-2 font-semibold cursor-pointer hover:text-hover-primary${
-                selected === item.id ? " text-default pointer-events-none" : ""
-              }`}
-              key={index}
-              id={item.id}
-              onClick={selectItem}
-            >
-              {item.name}
-            </div>
-          ))}
+          <Scrollbar maxHeight="240px">
+            <List list={list} current={current} onSelect={selectItem} />
+          </Scrollbar>
 
           {childrenElement}
         </Dropdown>

@@ -13,10 +13,7 @@ function CreateCompanyFormControl({ onCreate }: Props) {
     mode: "onChange",
   });
   const { isValid } = formState;
-  const onSubmit = (body: { name: string }) => {
-    debugger;
-    onCreate(body.name);
-  };
+  const onSubmit = (body: { name: string }) => onCreate(body.name);
 
   return (
     <form

@@ -51,7 +51,7 @@ function SidebarLayout({ children }: { children: ReactElement }) {
   };
 
   return (
-    <div className="flex h-full">
+    <div className="flex min-h-full">
       <Sidebar nav={nav} onLogout={handleLogout} />
       {children}
     </div>

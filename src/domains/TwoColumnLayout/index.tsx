@@ -9,7 +9,7 @@ type Props = DetailedHTMLProps<
 
 function TwoColumnLayout({ asideContent, ...props }: Props) {
   return (
-    <div className="flex flex-1 h-full">
+    <div className="flex flex-1 min-h-full">
       <div
         {...props}
         className={

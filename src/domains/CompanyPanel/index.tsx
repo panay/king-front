@@ -40,7 +40,7 @@ function CompanyPanel() {
         user?.company?.name
       ) : (
         <TitleWithDropdown
-          name={user?.company as IKeyValue}
+          current={user?.company as IKeyValue}
           list={companies}
           onOpen={handleOnOpenDropdown}
           onSelectItem={handleSelectItem}

@@ -47,8 +47,11 @@ module.exports = {
     extend: {
       backgroundColor: ['active', 'disabled'],
       opacity: ['disabled'],
-      pointerEvents: ['disabled']
+      pointerEvents: ['disabled'],
+      display: ['group-hover']
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 };
