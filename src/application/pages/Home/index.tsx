@@ -9,6 +9,7 @@ import { ReactComponent as IcTrack } from "infrastructure/assets/images/svgs/ic-
 import { ReactComponent as IcGeofence } from "infrastructure/assets/images/svgs/ic-geofence.svg";
 import { ReactComponent as IcCampaigns } from "infrastructure/assets/images/svgs/ic-marketing.svg";
 import { ReactComponent as IcGeotrigger } from "infrastructure/assets/images/svgs/ic-geotriger.svg";
+import ChartCard from "domains/ChartCard";
 
 function Home() {
   const handleOnSearch = (value: string) => {
@@ -72,20 +73,10 @@ function Home() {
           />
         </div>
         <div className="px-2.5 pt-5 w-1/2">
-          <Card
-              icon={<IcGeotrigger />}
-              color="ic-purple"
-              title="Уведомления"
-              growth="0%"
-          />
+          <ChartCard title="Уведомление" options={{}} />
         </div>
         <div className="px-2.5 pt-5 w-1/2">
-          <Card
-              icon={<IcGeotrigger />}
-              color="ic-purple"
-              title="Подключенные устройства"
-              growth="0%"
-          />
+          <ChartCard title="Подключенные устройства" options={{}} />
         </div>
       </div>
     </TwoColumnLayout>

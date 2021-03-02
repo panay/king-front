@@ -46,6 +46,7 @@ module.exports = {
   variants: {
     extend: {
       backgroundColor: ['active', 'disabled'],
+      textColor: ['group-hover'],
       opacity: ['disabled'],
       pointerEvents: ['disabled'],
       display: ['group-hover']
