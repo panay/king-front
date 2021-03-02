@@ -6,6 +6,7 @@ import SearchInput from "./SearchInput";
 import Sidebar from "./Sidebar";
 import TitleWithDropdown from "./TitleWithDropdown";
 import Input from "./Input";
+import Table from "./Table";
 
 export {
   Button,
@@ -16,4 +17,5 @@ export {
   Sidebar,
   TitleWithDropdown,
   Input,
+  Table,
 };
