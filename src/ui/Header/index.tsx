@@ -18,26 +18,29 @@ function Header({ headerTitle, showUserSettings, onSearch, ...props }: Props) {
   };
 
   return (
-    <header className="flex items-center justify-between">
-      <h1>{headerTitle}</h1>
-      <div className="flex items-center">
-        <div className="mr-4">{props.children}</div>
+    <header className="flex items-center -mx-2.5">
+      <h1 className="px-2.5 flex-auto">{headerTitle}</h1>
+      <div className="px-2.5 flex flex-auto justify-end">
+        {props.children}
+
         <NavLink
           exact
           to="/users"
-          className="block mr-4 rounded-xl p-2.5 bg-white hover:bg-primary hover:text-white"
-          activeClassName="text-white bg-primary"
+          className="block mr-4 rounded-xl w-10 h-10 flex flex-col justify-center items-center text-icon-grey bg-white hover:bg-primary hover:text-white"
+          activeClassName="text-icon-white bg-primary"
         >
           <IcUser />
         </NavLink>
         <NavLink
           exact
           to="/settings"
-          className="block mr-4 rounded-xl p-2.5 bg-white hover:bg-primary hover:text-white"
-          activeClassName="text-white bg-primary"
+          className="block rounded-xl w-10 h-10 flex flex-col justify-center items-center text-icon-grey bg-white hover:bg-primary hover:text-white"
+          activeClassName="text-icon-white bg-primary"
         >
           <IcSettings />
         </NavLink>
+      </div>
+      <div className="px-2.5 w-1/3">
         <SearchInput onSearch={handleSearch} placeholder={props.placeholder} />
       </div>
     </header>

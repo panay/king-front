@@ -1,5 +1,5 @@
 .label {
-  @apply block relative text-left;
+  @apply block relative text-left w-full;
 
   > .placeholder {
     @apply text-xs text-icon-grey pointer-events-none absolute top-1/2 left-3 transition-transform transform-gpu -translate-y-1/2;

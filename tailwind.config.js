@@ -6,10 +6,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        black: "#000000",
-        white: "#fff",
-        transparent: "transparent",
-
         primary: "#0052cc",
         "default": "#181818",
         success: "#3bcf7e",
@@ -24,6 +20,7 @@ module.exports = {
         "input-grey": "#f4f4f6",
         "icon-grey": "#8f92a1",
         "border-grey": "#ebecf0",
+        "icon-white": "#ffffff",
 
         "ic-violet": "#5243aa",
         "ic-orange": "#ff991f",
