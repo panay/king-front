@@ -4,9 +4,10 @@ import { Column, useTable } from "react-table";
 type Props = {
   rowData: Array<Record<string, unknown>>;
   columns: Array<Column<Record<string, unknown>>>;
+  rowClicked?: (value: unknown) => void;
 };
 
-function Table({ rowData, columns }: Props) {
+function Table({ rowData, columns, rowClicked }: Props) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -17,6 +18,12 @@ function Table({ rowData, columns }: Props) {
     data: rowData,
     columns: columns,
   });
+
+  const onClickRowHandler = (value: unknown) => {
+    if (rowClicked) {
+      rowClicked(value);
+    }
+  };
 
   return (
     <section {...getTableProps()} className="table-fixed w-full">
@@ -40,13 +47,11 @@ function Table({ rowData, columns }: Props) {
             <div
               {...row.getRowProps()}
               className="relative flex -mx-2.5 mt-2.5 cursor-pointer rounded-xl hover:bg-lighten-blue"
+              onClick={() => onClickRowHandler(row.original)}
             >
               {row.cells.map((cell) => {
                 return (
-                  <div
-                    {...cell.getCellProps()}
-                    className="flex-1 px-2.5 py-4"
-                  >
+                  <div {...cell.getCellProps()} className="flex-1 px-2.5 py-4">
                     {cell.render("Cell")}
                   </div>
                 );
