@@ -46,8 +46,7 @@ module.exports = {
       textColor: ['group-hover'],
       opacity: ['disabled'],
       pointerEvents: ['disabled'],
-      display: ['group-hover'],
-      borderRadius: ['first', 'last']
+      display: ['group-hover']
     },
   },
   plugins: [

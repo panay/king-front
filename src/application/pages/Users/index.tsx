@@ -58,7 +58,7 @@ function Users() {
         accessor: "isActive",
         Cell: (props) => {
           return (
-            <span className="bg-seagreen bg-opacity-20 text-seagreen text-center px-1 py-0.5 rounded-xl">
+            <span className={`text-xs bg-opacity-20 text-center px-2 py-1 rounded ${props.value ? "bg-seagreen text-seagreen" : "bg-warning text-warning"}`}>
               {props.value ? "Активен" : "Не активен"}
             </span>
           );
@@ -75,7 +75,9 @@ function Users() {
         placeholder="Поиск пользователя"
         onSearch={handleOnSearch}
       />
-      <div className="bg-white rounded-xl p-4 mt-6">
+      <div className="bg-white rounded-xl p-4 mt-6" style={{
+          height: "calc(100vh - 70px)"
+      }}>
         <Table rowData={rowData} columns={columns} />
       </div>
     </TwoColumnLayout>
