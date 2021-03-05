@@ -1,8 +1,6 @@
 import {
   $authenticated,
   checkAuthFx,
-  csrfTokenFx,
-  ILoginName,
   ILoginRequest,
   loginFx,
   logoutFx,
@@ -18,22 +16,25 @@ import {
 
 const authReducer = (state: boolean, payload: boolean) => payload;
 
-const isAuth = async (body: ILoginName) => {
-  const response = await checkAuth(body);
-  if (response.status === 200) {
-    setAxiosXSRFTokenHeader(response.data["x-xsrf-token"]);
-    setAxiosAuthTokenHeader(response.data["x-auth-token"]);
-  } else if (response.status === 401) {
+const isAuth = async (login: string) => {
+  let response = null;
+  try {
+    response = await checkAuth(login);
+    if (response.status === 200) {
+      setAxiosXSRFTokenHeader(response.data["X-XSRF-TOKEN"]);
+      setAxiosAuthTokenHeader(response.headers["x-auth-token"]);
+    }
+  } catch (e) {
     $authenticated.reset();
   }
 
-  return response.status === 200;
+  return response?.status === 200;
 };
 
 const getCSRFToken = async () => {
   const response = await csrfToken();
   if (response.status === 200) {
-    setAxiosXSRFTokenHeader(response.data['X-XSRF-TOKEN']);
+    setAxiosXSRFTokenHeader(response.data["X-XSRF-TOKEN"]);
   }
 };
 
@@ -41,7 +42,7 @@ const login = async (body: ILoginRequest) => {
   await getCSRFToken();
   const response = await logIn(body);
   if (response.status === 200) {
-    setAxiosAuthTokenHeader(response.data['X-Auth-Token']);
+    setAxiosAuthTokenHeader(response.headers["x-auth-token"]);
   }
   return response.status === 200;
 };
@@ -60,6 +61,5 @@ $authenticated
   .on(logoutFx.doneData, authReducer);
 
 checkAuthFx.use(isAuth);
-csrfTokenFx.use(getCSRFToken);
 loginFx.use(login);
 logoutFx.use(logout);

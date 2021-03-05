@@ -1,10 +1,11 @@
 import "infrastructure/models/auth/init";
 import "../../models/init";
 
-import {FluidLabelInput, Button} from "ui";
+import { Button, FluidLabelInput } from "ui";
 import { ReactComponent as IcInvisib } from "infrastructure/assets/images/svgs/ic-invisib.svg";
 import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic-vision.svg";
-import React, { FormEvent, useEffect, useState } from "react";
+import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
+import React, { FormEvent, ReactElement, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ILoginRequest, loginFx } from "infrastructure/models/auth/login";
 import { useStore } from "effector-react";
@@ -17,7 +18,9 @@ import {
 
 function AuthForm() {
   const [passwordHidden, togglePasswordHidden] = useState(true);
-  const [buttonValue, changeButtonValue] = useState("Войти");
+  const [buttonValue, changeButtonValue] = useState<string | ReactElement>(
+    "Войти"
+  );
   const [buttonDisabled, changeButtonDisabled] = useState(false);
 
   const { register, handleSubmit, formState } = useForm({
@@ -34,11 +37,13 @@ function AuthForm() {
 
   useEffect(() => {
     changeButtonValue(
-      pending
-        ? "Ожидайте"
-        : Object.keys(error).length > 0
-        ? error.message
-        : "Войти"
+      pending ? (
+        <IcLoader className="w-7 h-7 m-auto" />
+      ) : Object.keys(error).length > 0 ? (
+        error.message
+      ) : (
+        "Войти"
+      )
     );
 
     changeButtonDisabled(
@@ -96,10 +101,10 @@ function AuthForm() {
         </div>
         <div className="mt-4">
           <Button
-            value={buttonValue || "Войти"}
+            icon={buttonValue as ReactElement}
             type="submit"
             disabled={buttonDisabled || false}
-            className="w-full"
+            className={`w-full ${!pending ? "py-3" : ""}`}
           />
         </div>
       </form>

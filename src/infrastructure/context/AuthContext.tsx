@@ -10,9 +10,7 @@ const AuthProvider = ({ children }: { children: React.ReactElement }) => {
   const user = useStore($user);
 
   useEffect(() => {
-    checkAuthFx({
-      login: user?.login,
-    }).then();
+    checkAuthFx(user?.login || "admin").then();
   }, [user]);
 
   return (
