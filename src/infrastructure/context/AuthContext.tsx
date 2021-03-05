@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useStore } from "effector-react";
-import { $authenticated } from "../models/auth/login";
+import { $authenticated, checkAuthFx } from "../models/auth/login";
+import { $user } from "../models/auth/user";
 
 const AuthContext = React.createContext<boolean>(false);
 
 const AuthProvider = ({ children }: { children: React.ReactElement }) => {
   const authenticated = useStore($authenticated);
+  const user = useStore($user);
+
+  useEffect(() => {
+    checkAuthFx({
+      login: user?.login,
+    }).then();
+  }, [user]);
 
   return (
     <AuthContext.Provider value={authenticated}>

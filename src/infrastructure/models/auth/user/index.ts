@@ -9,6 +9,7 @@ export interface IUser {
   company: IKeyValue;
   userRole: IKeyValue;
   username: string;
+  login: string;
   avatar?: string;
 }
 

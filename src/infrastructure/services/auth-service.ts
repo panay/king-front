@@ -1,5 +1,14 @@
 import { globalService } from "../config/axios.config";
-import { ILoginRequest } from "../models/auth/login";
+import {ILoginName, ILoginRequest } from "../models/auth/login";
+
+const checkAuth = (body: ILoginName) =>
+  globalService.post(
+    `${process.env.REACT_APP_AUTH_ENDPOINT}/check`,
+    JSON.stringify(body)
+  );
+
+const csrfToken = () =>
+  globalService.get(`${process.env.REACT_APP_AUTH_ENDPOINT}/csrf-token`);
 
 const logIn = (body: ILoginRequest) =>
   globalService.post(
@@ -10,4 +19,16 @@ const logIn = (body: ILoginRequest) =>
 const logOut = () =>
   globalService.delete(`${process.env.REACT_APP_AUTH_ENDPOINT}/logout`);
 
-export { logIn, logOut };
+const setAxiosXSRFTokenHeader = (token: string) =>
+  (globalService.defaults.headers["X-XSRF-TOKEN"] = token);
+const setAxiosAuthTokenHeader = (token: string) =>
+  (globalService.defaults.headers["X-Auth-Token"] = token);
+
+export {
+  checkAuth,
+  csrfToken,
+  setAxiosXSRFTokenHeader,
+  setAxiosAuthTokenHeader,
+  logIn,
+  logOut,
+};
