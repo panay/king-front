@@ -17,7 +17,7 @@ function CompanyPanel() {
   const companies = useStore($companies);
 
   useEffect(() => {
-    if (!user?.company) {
+    if (!user?.company || !Object.keys(user?.company).length) {
       updateCompanyUser(companies[0]);
     }
   }, [user, companies]);
@@ -32,24 +32,32 @@ function CompanyPanel() {
     updateCompanyUser(item);
   };
 
-  // todo: если суперадмин - список, если юзер - название
-  return (
-    <>
-      <div className="text-xs text-icon-grey font-normal">Компания</div>
-      {user?.userRole ? (
-        user?.company?.name
-      ) : (
-        <TitleWithDropdown
-          current={user?.company as IKeyValue}
-          list={companies}
-          onOpen={handleOnOpenDropdown}
-          onSelectItem={handleSelectItem}
-        >
-          <CreateCompanyFormControl onCreate={createNewCompanyFx} />
-        </TitleWithDropdown>
-      )}
-    </>
-  );
+  if (user) {
+    if (companies && user.userRole.name === "Админ") {
+      return (
+        <>
+          <div className="text-xs text-icon-grey font-normal">Компания</div>
+          <TitleWithDropdown
+            current={user?.company as IKeyValue}
+            list={companies}
+            onOpen={handleOnOpenDropdown}
+            onSelectItem={handleSelectItem}
+          >
+            <CreateCompanyFormControl onCreate={createNewCompanyFx} />
+          </TitleWithDropdown>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <div className="text-xs text-icon-grey font-normal">Компания</div>
+        {user?.company?.name}
+      </>
+    );
+  }
+
+  return <></>;
 }
 
 export default CompanyPanel;

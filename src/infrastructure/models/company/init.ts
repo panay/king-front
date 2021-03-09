@@ -4,19 +4,15 @@ import {
   createNewCompany,
   getCompanies,
 } from "infrastructure/services/company-service";
+import { sample } from "effector";
 
-const companiesReducer = (state: IKeyValue[], payload: IKeyValue[]) => {
-  const companies = payload ? payload.slice() : [];
-  return {
-    ...state,
-    ...companies,
-  };
-};
+const companiesReducer = (state: IKeyValue[], payload: IKeyValue[]) =>
+  payload ? payload.slice() : [];
 
 const getCompanyList = async () => {
   const response = await getCompanies();
 
-  return response.data;
+  return response.data?.data;
 };
 
 const createCompany = async (name: string) => {
@@ -29,3 +25,8 @@ $companies.on(getCompaniesFx.doneData, companiesReducer);
 
 getCompaniesFx.use(getCompanyList);
 createNewCompanyFx.use(createCompany);
+
+sample({
+  source: createNewCompanyFx.doneData,
+  target: getCompaniesFx,
+});

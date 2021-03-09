@@ -6,6 +6,7 @@ export enum BgTypeEnum {
   primary,
   success,
   warning,
+  secondary,
 }
 
 type Props = ButtonHTMLAttributes<any> & {
@@ -22,6 +23,8 @@ function setBgType(bgType: BgTypeEnum): string {
       return "bg-success hover:bg-hover-success active:bg-active-success";
     case BgTypeEnum.warning:
       return "bg-success hover:bg-hover-success active:bg-active-success";
+    case BgTypeEnum.secondary:
+      return "bg-input-grey text-primary hover:bg-border-grey active:bg-icon-grey";
     default:
       return "bg-primary hover:bg-hover-primary active:bg-active-primary";
   }
@@ -34,7 +37,7 @@ function Button({
   ...props
 }: Props) {
   const className =
-    "flex items-center justify-center max-w-full font-bold text-center rounded-lg cursor-pointer outline-none focus:outline-none text-white disabled:bg-icon-grey disabled:pointer-events-none";
+    "flex items-center justify-center max-w-full font-semibold text-center rounded-lg cursor-pointer outline-none focus:outline-none text-white disabled:bg-icon-grey disabled:text-white disabled:pointer-events-none";
   let bgTypeClassName = setBgType(bgType);
 
   return icon ? (

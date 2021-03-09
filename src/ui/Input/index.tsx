@@ -9,7 +9,7 @@ function Input({ inputRef, ...props }: Props) {
     <input
       ref={inputRef}
       {...props}
-      className={`py-1.5 px-3 bg-input-grey rounded-lg placeholder-icon-grey text-default text-sm focus:outline-none ${props.className}`}
+      className={`py-1.5 px-3 bg-input-grey rounded-lg placeholder-icon-grey text-default text-sm focus:outline-none w-full ${props.className}`}
     />
   );
 }
