@@ -39,15 +39,15 @@ function AuthForm() {
     changeButtonValue(
       pending ? (
         <IcLoader className="w-7 h-7 m-auto" />
-      ) : Object.keys(error).length > 0 ? (
-        error.message
+      ) : error !== null ? (
+        error
       ) : (
         "Войти"
       )
     );
 
     changeButtonDisabled(
-      () => !isValid || Object.keys(error).length > 0 || pending
+      () => !isValid || error !== null || pending
     );
   }, [isValid, pending, error]);
 
@@ -62,7 +62,7 @@ function AuthForm() {
           <FluidLabelInput
             inputRef={register({
               required: true,
-              // pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+              pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
             })}
             type="text"
             id="login"

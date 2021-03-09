@@ -13,12 +13,11 @@ guard({
   target: getUserFx,
 });
 
-// todo: проверить как работает получение компаний при первом логине:
 guard({
   source: $user,
   clock: getUserFx.doneData,
   filter: (value) => {
-    return value.userRole.id !== "ADMIN";
+    return !value.company || !Object.keys(value.company).length;
   },
   target: getCompaniesFx,
 });

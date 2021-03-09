@@ -1,5 +1,6 @@
 import {
   $authenticated,
+  catchError,
   checkAuthFx,
   ILoginRequest,
   loginFx,
@@ -24,7 +25,7 @@ const isAuth = async (login: string) => {
       setAxiosXSRFTokenHeader(response.data["X-XSRF-TOKEN"]);
       setAxiosAuthTokenHeader(response.headers["x-auth-token"]);
     }
-  } catch (e) {
+  } catch (err) {
     $authenticated.reset();
   }
 
@@ -40,11 +41,17 @@ const getCSRFToken = async () => {
 
 const login = async (body: ILoginRequest) => {
   await getCSRFToken();
-  const response = await logIn(body);
-  if (response.status === 200) {
-    setAxiosAuthTokenHeader(response.headers["x-auth-token"]);
+  let response = null;
+  try {
+    response = await logIn(body);
+    if (response.status === 200) {
+      setAxiosAuthTokenHeader(response.headers["x-auth-token"]);
+    }
+  } catch (err) {
+    catchError("Неверный логин/пароль");
   }
-  return response.status === 200;
+
+  return response?.status === 200;
 };
 
 const logout = async () => {
