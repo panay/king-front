@@ -1,4 +1,4 @@
-import React, { FormEvent, ReactElement, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useStore } from "effector-react";
 import {
@@ -6,6 +6,7 @@ import {
   $usersError,
   $usersPending,
   changeForm,
+  createUserFx,
 } from "../../models";
 import { Button, FluidLabelInput } from "ui";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
@@ -18,12 +19,8 @@ import Select from "react-select";
 //TODO: написать тип для userData
 function UserInfoForm({ userData }: { userData: unknown }) {
   const [passwordHidden, togglePasswordHidden] = useState(true);
-  const [buttonValue, changeButtonValue] = useState<string | ReactElement>(
-    "Добавить"
-  );
-  const [buttonDisabled, changeButtonDisabled] = useState(false);
 
-  const { register, handleSubmit, formState, control } = useForm({
+  const { register, handleSubmit, formState, control, reset } = useForm({
     mode: "onChange",
   });
   const { isValid } = formState;
@@ -33,18 +30,29 @@ function UserInfoForm({ userData }: { userData: unknown }) {
   const formIsChanged = useStore($formIsChanged);
   const handleChangeForm = changeForm.prepend((e: FormEvent) => true);
 
-  useEffect(() => {
-    changeButtonValue(
-      pending ? <IcLoader /> : userData ? "Сохранить" : "Добавить"
-    );
-
-    changeButtonDisabled(
-      () => !isValid || Object.keys(error).length > 0 || pending
-    );
-  }, [isValid, pending, error, userData]);
+  const submitButtonRender = pending ? (
+    <Button
+      icon={<IcLoader className="w-7 h-7 m-auto" />}
+      type="submit"
+      disabled={!isValid || error !== null || pending}
+      className="w-full"
+    />
+  ) : (
+    <Button
+      value={userData ? "Сохранить" : "Добавить"}
+      type="submit"
+      disabled={!isValid || error !== null || pending}
+      className="w-full"
+    />
+  );
 
   const onSubmit = (body: any) => {
     console.log(body);
+    createUserFx(body).then((response) => {
+      if (response) {
+        reset();
+      }
+    });
   };
 
   return (
@@ -149,7 +157,7 @@ function UserInfoForm({ userData }: { userData: unknown }) {
               icon={<IcDelete />}
               type="button"
               bgType={BgTypeEnum.warning}
-              disabled={buttonDisabled || false}
+              disabled={!isValid || error !== null || pending}
               className="w-full"
             />
           </div>
@@ -158,18 +166,11 @@ function UserInfoForm({ userData }: { userData: unknown }) {
               value="Отменить"
               type="button"
               bgType={BgTypeEnum.secondary}
-              disabled={buttonDisabled || false}
+              disabled={!isValid || error !== null || pending}
               className="w-full"
             />
           </div>
-          <div className="mx-2.5 flex-auto">
-            <Button
-              icon={buttonValue as ReactElement}
-              type="submit"
-              disabled={buttonDisabled || false}
-              className={`w-full ${!pending ? "py-3" : ""}`}
-            />
-          </div>
+          <div className="mx-2.5 flex-auto">{submitButtonRender}</div>
         </div>
       </form>
     </>

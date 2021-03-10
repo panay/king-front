@@ -17,7 +17,7 @@ guard({
   source: $user,
   clock: getUserFx.doneData,
   filter: (value) => {
-    return !value.company || !Object.keys(value.company).length;
+    return !value?.company || !Object.keys(value?.company).length;
   },
   target: getCompaniesFx,
 });

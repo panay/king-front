@@ -13,6 +13,8 @@ export const logoutFx = authDomain.effect<void, boolean>();
 export const checkAuthFx = authDomain.effect<string, boolean>();
 
 export const catchError = authDomain.event<string>();
+export const loginSuccess = authDomain.event<boolean>();
 
+export const $afterLogin = authDomain.store<boolean>(false);
 export const $authenticated = authDomain.store<boolean>(false);
 persist({ store: $authenticated, key: "authenticated" });

@@ -5,7 +5,7 @@ import { Button, FluidLabelInput } from "ui";
 import { ReactComponent as IcInvisib } from "infrastructure/assets/images/svgs/ic-invisib.svg";
 import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic-vision.svg";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
-import React, { FormEvent, ReactElement, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ILoginRequest, loginFx } from "infrastructure/models/auth/login";
 import { useStore } from "effector-react";
@@ -18,10 +18,6 @@ import {
 
 function AuthForm() {
   const [passwordHidden, togglePasswordHidden] = useState(true);
-  const [buttonValue, changeButtonValue] = useState<string | ReactElement>(
-    "Войти"
-  );
-  const [buttonDisabled, changeButtonDisabled] = useState(false);
 
   const { register, handleSubmit, formState } = useForm({
     mode: "onChange",
@@ -33,23 +29,23 @@ function AuthForm() {
   const formIsChanged = useStore($formIsChanged);
   const handleChangeForm = changeForm.prepend((e: FormEvent) => true);
 
+  const submitButtonRender = pending ? (
+    <Button
+      icon={<IcLoader className="w-7 h-7 m-auto" />}
+      type="submit"
+      disabled={!isValid || error !== null || pending}
+      className="w-full"
+    />
+  ) : (
+    <Button
+      value={error !== null ? error : "Войти"}
+      type="submit"
+      disabled={!isValid || error !== null || pending}
+      className="w-full"
+    />
+  );
+
   const onSubmit = (body: ILoginRequest) => loginFx(body);
-
-  useEffect(() => {
-    changeButtonValue(
-      pending ? (
-        <IcLoader className="w-7 h-7 m-auto" />
-      ) : error !== null ? (
-        error
-      ) : (
-        "Войти"
-      )
-    );
-
-    changeButtonDisabled(
-      () => !isValid || error !== null || pending
-    );
-  }, [isValid, pending, error]);
 
   return (
     <>
@@ -99,14 +95,7 @@ function AuthForm() {
             }
           />
         </div>
-        <div className="mt-4">
-          <Button
-            icon={buttonValue as ReactElement}
-            type="submit"
-            disabled={buttonDisabled || false}
-            className={`w-full ${!pending ? "py-3" : ""}`}
-          />
-        </div>
+        <div className="mt-4">{submitButtonRender}</div>
       </form>
     </>
   );

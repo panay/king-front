@@ -2,25 +2,32 @@ import { $user, getUserFx, IUser, updateCompanyUser } from "./";
 import { getUserInfo } from "infrastructure/services/user-service";
 import { IKeyValue } from "infrastructure/types";
 
-const userReducer = (state: IUser, payload: IUser) => {
-  return {
-    ...state,
-    ...payload,
-  };
+const userReducer = (state: IUser | null, payload: IUser | null) => {
+  return payload
+    ? {
+        ...state,
+        ...payload,
+      }
+    : null;
 };
 
-const companyUserReducer = (state: IUser, payload: IKeyValue) => {
+const companyUserReducer = (state: IUser | null, payload: IKeyValue) => {
   const company = { ...payload };
-  return {
-    ...state,
-    company,
-  };
+  return state
+    ? {
+        ...state,
+        company,
+      }
+    : state;
 };
 
-const getUser = async () => {
-  const response = await getUserInfo();
+const getUser = async (): Promise<IUser | null> => {
+  let response = null;
+  try {
+    response = await getUserInfo();
+  } catch (err) {}
 
-  return response.data;
+  return response?.data || null;
 };
 
 $user

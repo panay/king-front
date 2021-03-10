@@ -6,7 +6,6 @@ import "infrastructure/models/company/init";
 import { updateCompanyUser } from "infrastructure/models/auth/user";
 import {
   $companies,
-  createNewCompanyFx,
   getCompaniesFx,
 } from "infrastructure/models/company";
 import { useStore } from "effector-react";
@@ -43,7 +42,7 @@ function CompanyPanel() {
             onOpen={handleOnOpenDropdown}
             onSelectItem={handleSelectItem}
           >
-            <CreateCompanyFormControl onCreate={createNewCompanyFx} />
+            <CreateCompanyFormControl />
           </TitleWithDropdown>
         </>
       );
