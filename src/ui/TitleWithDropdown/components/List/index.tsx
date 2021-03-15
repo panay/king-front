@@ -21,7 +21,7 @@ function List({ list, current, onSelect }: Props) {
     <>
       {list.map((item, index) => (
         <div
-          className={`text-primary text-sm mt-2 font-semibold cursor-pointer hover:text-hover-primary${
+          className={`text-primary text-sm mt-2 font-semibold cursor-pointer max-w-xs overflow-hidden overflow-ellipsis hover:text-hover-primary${
             selected === item.id ? " text-default pointer-events-none" : ""
           }`}
           key={index}

@@ -9,7 +9,7 @@ import AuthBg3x from "infrastructure/assets/images/pngs/auth-bg@3x.png";
 function Login() {
   useEffect(() => {
     document.title = "Авторизация – Spark [radar]";
-  });
+  }, []);
 
   return (
     <div className="bg-primary flex flex-col items-center justify-center p-3 h-full">

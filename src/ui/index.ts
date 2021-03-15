@@ -7,6 +7,7 @@ import Sidebar from "./Sidebar";
 import TitleWithDropdown from "./TitleWithDropdown";
 import Input from "./Input";
 import Table from "./Table";
+import CustomSelect from "./CustomSelect";
 
 export {
   Button,
@@ -18,4 +19,5 @@ export {
   TitleWithDropdown,
   Input,
   Table,
+  CustomSelect,
 };

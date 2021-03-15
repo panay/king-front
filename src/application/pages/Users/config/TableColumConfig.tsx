@@ -6,20 +6,33 @@ const TableColumnConfig = (): Array<Column<any>> => {
     () => [
       {
         Header: "Имя",
-        accessor: "userName",
+        accessor: "name",
+        width: 240,
       },
       {
         Header: "Роль",
-        accessor: "userRole",
+        accessor: "role",
+        Cell: (props: any) => {
+          return <span>{props.value?.name}</span>;
+        },
+          width: 160
       },
       {
         Header: "Почта",
-        accessor: "email",
+        accessor: "login",
+        Cell: (props: any) => {
+          return (
+            <span className="block max-w-xs whitespace-nowrap overflow-hidden overflow-ellipsis">
+              {props.value}
+            </span>
+          );
+        },
+          width: 180
       },
       {
         Header: "Признак активности",
-        accessor: "isActive",
-        Cell: (props) => {
+        accessor: "is_active",
+        Cell: (props: any) => {
           return (
             <span
               className={`text-xs bg-opacity-20 text-center px-2 py-1 rounded ${

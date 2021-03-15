@@ -5,7 +5,7 @@ import { CompanyPanel, TwoColumnLayout } from "domains";
 function Settings() {
   useEffect(() => {
     document.title = "Настройки пользователя – Spark [radar]";
-  });
+  }, []);
   const handleOnSearch = (value: string) => {
     console.log("Users Search :: ", value);
   };

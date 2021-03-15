@@ -62,7 +62,7 @@ function TitleWithDropdown({
   return (
     <>
       <div className="flex items-center relative z-50" ref={dropdownWrapperRef}>
-        <span className="mr-1 cursor-pointer" onClick={handleClickTitle}>
+        <span className="mr-1 cursor-pointer max-w-xs overflow-hidden overflow-ellipsis" onClick={handleClickTitle}>
           {current?.name}
         </span>
         <IcArrowDropdown
@@ -74,6 +74,7 @@ function TitleWithDropdown({
           opened={dropdownOpened}
           style={{
             minWidth: "284px",
+            maxWidth: "300px"
           }}
         >
           <Scrollbar maxHeight="240px">

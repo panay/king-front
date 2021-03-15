@@ -1,13 +1,69 @@
-import React from "react";
+import React, { CSSProperties, useCallback } from "react";
 import { Column, useTable } from "react-table";
+import { FixedSizeList } from "react-window";
+import InfiniteLoader from "react-window-infinite-loader";
+import { $paging, setPaging } from "infrastructure/models/paging";
+import { useStore } from "effector-react";
+import { IPagination } from "infrastructure/types";
+import NoUsers from "../../application/pages/Users/components/NoUsers";
 
 type Props = {
-  rowData: Array<Record<string, unknown>>;
+  items: any[];
+  rowCount: number;
   columns: Array<Column<Record<string, unknown>>>;
   rowClicked?: (value: unknown) => void;
+  loadNextPage?: (
+    startIndex: number,
+    stopIndex: number,
+    page: number
+  ) => Promise<any> | null;
 };
 
-function Table({ rowData, columns, rowClicked }: Props) {
+function Table({
+  items,
+  rowCount,
+  columns,
+  rowClicked,
+  loadNextPage = async (
+    startIndex: number,
+    stopIndex: number,
+    page: number
+  ) => {},
+}: Props) {
+  const paging = useStore<IPagination>($paging);
+
+  const loadMore = useCallback(
+    (startIndex: number, stopIndex: number) => {
+      const page = paging.perPage
+        ? Math.ceil(stopIndex / paging.perPage) + 1
+        : 1;
+
+      const loadingPage = setPaging({
+        isNextPageLoading: true,
+        hasNextPage: page === 1 ? true : items.length < rowCount,
+      });
+
+      if (loadingPage.hasNextPage && loadingPage.isNextPageLoading) {
+        return loadNextPage(startIndex, stopIndex, page);
+      }
+
+      return null;
+    },
+    [items.length, loadNextPage, paging.perPage, rowCount]
+  );
+
+  const itemCount = paging?.hasNextPage ? items.length + 1 : items.length;
+
+  const loadMoreItems = paging?.isNextPageLoading
+    ? async (startIndex: number, stopIndex: number) => {}
+    : loadMore;
+
+  const isItemLoaded = useCallback(
+    ({ index, style }: { index: number; style: CSSProperties }) =>
+      !!items[index],
+    [items]
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -15,15 +71,51 @@ function Table({ rowData, columns, rowClicked }: Props) {
     rows,
     prepareRow,
   } = useTable<Record<string, unknown>>({
-    data: rowData,
-    columns: columns,
+    data: items,
+    columns,
   });
 
-  const onClickRowHandler = (value: unknown) => {
-    if (rowClicked) {
-      rowClicked(value);
-    }
-  };
+  const RenderRow = useCallback(
+    ({ index, style }) => {
+      if (
+        !isItemLoaded({
+          index: index,
+          style: style,
+        })
+      ) {
+        if (paging.hasNextPage && !index) {
+          return <NoUsers />;
+        }
+        return <div className="h-10">Загрузка...</div>;
+      } else {
+        const onClickRowHandler = (value: unknown) => {
+          if (rowClicked) {
+            rowClicked(value);
+          }
+        };
+        const row = rows[index];
+        prepareRow(row);
+        return (
+          <div
+            {...row.getRowProps({
+              style,
+            })}
+            className="relative flex -mx-2.5 mt-2.5 cursor-pointer rounded-xl hover:bg-lighten-blue"
+            onClick={() => onClickRowHandler(row.original)}
+          >
+            {row.cells.map((cell) => {
+              return (
+                <div {...cell.getCellProps()} className="flex-1 px-2.5 py-4">
+                  {cell.render("Cell")}
+                </div>
+              );
+            })}
+          </div>
+        );
+      }
+    },
+    [isItemLoaded, paging.hasNextPage, rows, prepareRow, rowClicked]
+  );
 
   return (
     <section {...getTableProps()} className="table-fixed w-full">
@@ -40,26 +132,25 @@ function Table({ rowData, columns, rowClicked }: Props) {
         </header>
       ))}
 
-      <div {...getTableBodyProps()} className="">
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <div
-              {...row.getRowProps()}
-              className="relative flex -mx-2.5 mt-2.5 cursor-pointer rounded-xl hover:bg-lighten-blue"
-              onClick={() => onClickRowHandler(row.original)}
+      <div {...getTableBodyProps()}>
+        <InfiniteLoader
+          isItemLoaded={(index: number) => !!items[index]}
+          itemCount={itemCount}
+          loadMoreItems={loadMoreItems}
+        >
+          {({ onItemsRendered, ref }) => (
+            <FixedSizeList
+              height={600}
+              itemCount={itemCount}
+              itemSize={50}
+              onItemsRendered={onItemsRendered}
+              ref={ref}
+              width={"100%"}
             >
-              {row.cells.map((cell) => {
-                return (
-                  <div {...cell.getCellProps()} className="flex-1 px-2.5 py-4">
-                    {cell.render("Cell")}
-                  </div>
-                );
-              })}
-              <span className="absolute left-0 -bottom-1.5 w-full border-b border-border-grey" />
-            </div>
-          );
-        })}
+              {RenderRow}
+            </FixedSizeList>
+          )}
+        </InfiniteLoader>
       </div>
     </section>
   );

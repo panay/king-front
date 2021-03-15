@@ -1,57 +1,49 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Header, Table } from "ui";
 import UserInfoForm from "./components/UserInfoForm";
 import { CompanyPanel, TwoColumnLayout } from "domains";
 import { Column } from "react-table";
 import { TableColumnConfig } from "./config/TableColumConfig";
+import { IUserData } from "./types/UserData";
+import { useStore } from "effector-react";
+import "./models/table/init";
+import {$rowCount, $rowData, getUsersFx} from "./models/table";
+import { $user, IUser } from "infrastructure/models/auth/user";
+import { IPagination } from "infrastructure/types";
+import { $paging } from "infrastructure/models/paging";
 
 function Users() {
-  useEffect(() => {
-    document.title = "Пользователи – Spark [radar]";
-  });
-
-  const [userData, getUserData] = useState<unknown>(null);
+  const user = useStore<IUser | null>($user);
+  const [userData, setUserData] = useState<IUserData | null>(null);
+  const rowData = useStore<IUserData[]>($rowData);
+  const rowCount = useStore<number>($rowCount);
+  const paging = useStore<IPagination>($paging);
 
   const handleOnSearch = (value: string) => {
     console.log("Users Search :: ", value);
   };
 
-  const rowData = useMemo(
-    () => [
-      {
-        userName: "Жикина Берта Леонидовна",
-        userRole: "ADMIN",
-        email: "berta@yandex.ru",
-        isActive: true,
-      },
-      {
-        userName: "Жикина Берта Леонидовна",
-        userRole: "MARKETING",
-        email: "berta@yandex.ru",
-        isActive: false,
-      },
-      {
-        userName: "Рубашкин Филимон Андреевич ",
-        userRole: "ADMIN",
-        email: "filimobn@yandex.ru",
-        isActive: true,
-      },
-      {
-        userName: "Жикина Берта Леонидовна",
-        userRole: "MARKETING",
-        email: "berta@yandex.ru",
-        isActive: false,
-      },
-      {
-        userName: "Жикина Берта Леонидовна",
-        userRole: "ADMIN",
-        email: "berta@yandex.ru",
-        isActive: true,
-      },
-    ],
-    []
-  );
   const columns: Array<Column<any>> = TableColumnConfig();
+
+  const loadNextPage = useCallback(
+    (startIndex: number, stopIndex: number, page: number) => {
+      const companyId = user?.company.id;
+      if (companyId) {
+        return getUsersFx({
+          company_id: companyId || "",
+          page_number: page,
+          row_count: paging.perPage,
+        });
+      }
+
+      return null;
+    },
+    [paging.perPage, user?.company.id]
+  );
+
+  useEffect(() => {
+    document.title = "Пользователи – Spark [radar]";
+  }, []);
 
   return (
     <TwoColumnLayout
@@ -70,9 +62,11 @@ function Users() {
         }}
       >
         <Table
-          rowData={rowData}
+          items={rowData}
+          rowCount={rowCount}
           columns={columns}
-          rowClicked={(value) => getUserData(() => value)}
+          rowClicked={(value) => setUserData(() => value as IUserData)}
+          loadNextPage={loadNextPage}
         />
       </div>
     </TwoColumnLayout>

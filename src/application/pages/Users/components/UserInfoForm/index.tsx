@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useStore } from "effector-react";
 import {
   $formIsChanged,
@@ -7,20 +7,20 @@ import {
   $usersPending,
   changeForm,
   createUserFx,
-} from "../../models";
-import { Button, FluidLabelInput } from "ui";
+} from "../../models/form";
+import { Button, CustomSelect, FluidLabelInput } from "ui";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
 import { ReactComponent as IcInvisib } from "infrastructure/assets/images/svgs/ic-invisib.svg";
 import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic-vision.svg";
 import { ReactComponent as IcDelete } from "infrastructure/assets/images/svgs/ic-delete.svg";
 import { BgTypeEnum } from "ui/Button";
-import Select from "react-select";
+import {IUserData} from "../../types/UserData";
+import "../../models/form/init";
 
-//TODO: написать тип для userData
-function UserInfoForm({ userData }: { userData: unknown }) {
+function UserInfoForm({ userData }: { userData: IUserData | null }) {
   const [passwordHidden, togglePasswordHidden] = useState(true);
 
-  const { register, handleSubmit, formState, control, reset } = useForm({
+  const { register, handleSubmit, formState, reset } = useForm({
     mode: "onChange",
   });
   const { isValid } = formState;
@@ -28,7 +28,6 @@ function UserInfoForm({ userData }: { userData: unknown }) {
   const error = useStore($usersError);
   const pending = useStore($usersPending);
   const formIsChanged = useStore($formIsChanged);
-  const handleChangeForm = changeForm.prepend((e: FormEvent) => true);
 
   const submitButtonRender = pending ? (
     <Button
@@ -46,7 +45,7 @@ function UserInfoForm({ userData }: { userData: unknown }) {
     />
   );
 
-  const onSubmit = (body: any) => {
+  const onSubmit = (body: IUserData) => {
     console.log(body);
     createUserFx(body).then((response) => {
       if (response) {
@@ -60,7 +59,11 @@ function UserInfoForm({ userData }: { userData: unknown }) {
       <h2>Информация пользователя </h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        onChange={!formIsChanged ? handleChangeForm : undefined}
+        onChange={
+          !formIsChanged
+            ? changeForm?.prepend((e: FormEvent) => true)
+            : undefined
+        }
       >
         <div className="mt-4">
           <FluidLabelInput
@@ -75,7 +78,7 @@ function UserInfoForm({ userData }: { userData: unknown }) {
           />
         </div>
         <div className="mt-4 -mx-2.5 flex">
-          <div className="flex-auto mx-2.5">
+          <div className="flex-1 mx-2.5">
             <FluidLabelInput
               inputRef={register({
                 required: true,
@@ -88,23 +91,29 @@ function UserInfoForm({ userData }: { userData: unknown }) {
               required
             />
           </div>
-          <div className="flex-auto mx-2.5">
-            <FluidLabelInput
-              inputRef={register({
-                required: true,
-                pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-              })}
-              type="text"
-              id="email"
-              name="email"
-              placeholder="Роль"
-              required
+          <div className="flex-1 mx-2.5">
+            <CustomSelect
+                placeholder="Роль"
+                inputRef={register({
+                  required: true,
+                })}
+                isSearchable={false}
+                options={[
+                  {
+                    value: "1",
+                    label: "Активен",
+                  },
+                  {
+                    value: "0",
+                    label: "Не активен",
+                  },
+                ]}
             />
           </div>
         </div>
 
         <div className="mt-4 -mx-2.5 flex">
-          <div className="flex-auto mx-2.5">
+          <div className="flex-1 mx-2.5">
             <FluidLabelInput
               inputRef={register({
                 required: true,
@@ -132,22 +141,23 @@ function UserInfoForm({ userData }: { userData: unknown }) {
               }
             />
           </div>
-          <div className="flex-auto mx-2.5">
-            <Controller
-              name="isActive"
-              control={control}
-              defaultValue="1"
+          <div className="flex-1 mx-2.5">
+            <CustomSelect
+              placeholder="Признак"
+              inputRef={register({
+                required: true,
+              })}
+              isSearchable={false}
               options={[
                 {
-                  value: 1,
+                  value: "1",
                   label: "Активен",
                 },
                 {
-                  value: 2,
+                  value: "0",
                   label: "Не активен",
                 },
               ]}
-              as={Select}
             />
           </div>
         </div>

@@ -22,7 +22,6 @@ function CreateCompanyFormControl() {
   const error = useStore($companyError);
   const pending = useStore($companyPending);
   const formIsChanged = useStore($formIsChanged);
-  const handleChangeForm = changeForm.prepend((e: FormEvent) => true);
 
   const onSubmit = (body: { name: string }) => {
     createNewCompanyFx(body.name).then((response) => {
@@ -36,7 +35,7 @@ function CreateCompanyFormControl() {
     <form
       className="flex items-center font-normal -mx-2"
       onSubmit={handleSubmit(onSubmit)}
-      onChange={!formIsChanged ? handleChangeForm : undefined}
+      onChange={!formIsChanged ? changeForm?.prepend((e: FormEvent) => true) : undefined}
     >
       <div className="mx-2">
         <Input

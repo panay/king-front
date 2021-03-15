@@ -4,10 +4,7 @@ import { TitleWithDropdown } from "ui";
 import { IKeyValue } from "infrastructure/types";
 import "infrastructure/models/company/init";
 import { updateCompanyUser } from "infrastructure/models/auth/user";
-import {
-  $companies,
-  getCompaniesFx,
-} from "infrastructure/models/company";
+import { $companies, getCompaniesFx } from "infrastructure/models/company";
 import { useStore } from "effector-react";
 import CreateCompanyFormControl from "./components/CreateCompanyFormControl";
 
@@ -16,7 +13,10 @@ function CompanyPanel() {
   const companies = useStore($companies);
 
   useEffect(() => {
-    if (!user?.company || !Object.keys(user?.company).length) {
+    if (
+      companies.length &&
+      (!user?.company || !Object.keys(user?.company).length)
+    ) {
       updateCompanyUser(companies[0]);
     }
   }, [user, companies]);
