@@ -11,6 +11,7 @@ import {$rowCount, $rowData, getUsersFx} from "./models/table";
 import { $user, IUser } from "infrastructure/models/auth/user";
 import { IPagination } from "infrastructure/types";
 import { $paging } from "infrastructure/models/paging";
+import NoUsers from "./components/NoUsers";
 
 function Users() {
   const user = useStore<IUser | null>($user);
@@ -67,6 +68,7 @@ function Users() {
           columns={columns}
           rowClicked={(value) => setUserData(() => value as IUserData)}
           loadNextPage={loadNextPage}
+          noDataComponent={<NoUsers />}
         />
       </div>
     </TwoColumnLayout>

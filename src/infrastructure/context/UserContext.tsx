@@ -1,8 +1,8 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, createContext } from "react";
 import { useStore } from "effector-react";
 import { $user, IUser } from "../models/auth/user";
 
-const UserContext = React.createContext<IUser | null>(null);
+const UserContext = createContext<IUser | null>(null);
 
 const UserProvider = ({ children }: { children: ReactElement }) => {
   const user = useStore($user);

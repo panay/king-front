@@ -1,11 +1,15 @@
-import React, { CSSProperties, useCallback } from "react";
+import React, {
+  CSSProperties,
+  ReactElement,
+  useCallback,
+  useState,
+} from "react";
 import { Column, useTable } from "react-table";
 import { FixedSizeList } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
 import { $paging, setPaging } from "infrastructure/models/paging";
 import { useStore } from "effector-react";
 import { IPagination } from "infrastructure/types";
-import NoUsers from "../../application/pages/Users/components/NoUsers";
 
 type Props = {
   items: any[];
@@ -17,6 +21,7 @@ type Props = {
     stopIndex: number,
     page: number
   ) => Promise<any> | null;
+  noDataComponent?: ReactElement;
 };
 
 function Table({
@@ -29,8 +34,10 @@ function Table({
     stopIndex: number,
     page: number
   ) => {},
+  noDataComponent,
 }: Props) {
   const paging = useStore<IPagination>($paging);
+  const [isEmptyTable, setTableEmpty] = useState(false);
 
   const loadMore = useCallback(
     (startIndex: number, stopIndex: number) => {
@@ -83,9 +90,6 @@ function Table({
           style: style,
         })
       ) {
-        if (paging.hasNextPage && !index) {
-          return <NoUsers />;
-        }
         return <div className="h-10">Загрузка...</div>;
       } else {
         const onClickRowHandler = (value: unknown) => {
@@ -93,8 +97,10 @@ function Table({
             rowClicked(value);
           }
         };
+
         const row = rows[index];
         prepareRow(row);
+
         return (
           <div
             {...row.getRowProps({
@@ -114,8 +120,21 @@ function Table({
         );
       }
     },
-    [isItemLoaded, paging.hasNextPage, rows, prepareRow, rowClicked]
+    [isItemLoaded, rows, prepareRow, rowClicked]
   );
+
+  if (items.length === 0) {
+    const className =
+      "text-center flex justify-center items-center m-auto h-full w-full";
+    if (noDataComponent) {
+      return <div className={className}>{noDataComponent}</div>;
+    }
+    return (
+      <div className={className}>
+        <h2>Данных нет</h2>
+      </div>
+    );
+  }
 
   return (
     <section {...getTableProps()} className="table-fixed w-full">
