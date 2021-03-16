@@ -14,8 +14,8 @@ import { $paging } from "infrastructure/models/paging";
 import NoUsers from "./components/NoUsers";
 
 function Users() {
-  const user = useStore<IUser | null>($user);
   const [userData, setUserData] = useState<IUserData | null>(null);
+  const user = useStore<IUser | null>($user);
   const rowData = useStore<IUserData[]>($rowData);
   const rowCount = useStore<number>($rowCount);
   const paging = useStore<IPagination>($paging);

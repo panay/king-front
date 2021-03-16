@@ -1,4 +1,4 @@
-import { sample } from "effector";
+import { guard, sample } from "effector";
 import { getUserList } from "../../services/users-service";
 import { IUserData, IUsersRequest, IUsersResponse } from "../../types/UserData";
 import { $rowCount, $rowData, getUsersFx } from "./";
@@ -35,8 +35,11 @@ $rowCount.on(getUsersFx.doneData, countReducer);
 
 getUsersFx.use(getUsers);
 
-sample({
-  clock: $user,
-  fn: (user) => ({ company_id: user?.company.id } as IUsersRequest),
+guard({
+  source: sample({
+    source: $user,
+    fn: (user) => ({ company_id: user?.company.id } as IUsersRequest),
+  }),
+  filter: (user) => !!(user && user.company_id),
   target: getUsersFx,
 });
