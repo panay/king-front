@@ -6,6 +6,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { $paging, setPaging } from "infrastructure/models/paging";
 import { useStore } from "effector-react";
 import { IPagination } from "infrastructure/types";
+import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
 
 type Props = {
   items: any[];
@@ -77,20 +78,18 @@ function Table({
     columns,
   });
 
-  const noDataRender = () => {
-    if (items.length === 0) {
-      const className =
-        "text-center flex justify-center items-center m-auto h-full w-full";
-      if (noDataComponent) {
-        return <div className={className}>{noDataComponent}</div>;
-      }
-      return (
-        <div className={className}>
-          <h2>Данных нет</h2>
-        </div>
-      );
+  const noDataRender = useCallback(() => {
+    const className =
+      "absolute left-2/4 top-2/4 transform -translate-x-2/4 -translate-y-2/4 text-center";
+    if (noDataComponent) {
+      return <div className={className}>{noDataComponent}</div>;
     }
-  };
+    return (
+      <div className={className}>
+        <h2>Данных нет</h2>
+      </div>
+    );
+  }, [noDataComponent]);
 
   const RenderRow = useCallback(
     ({ index, style }) => {
@@ -100,7 +99,11 @@ function Table({
           style: style,
         })
       ) {
-        return <div className="h-10">Загрузка...</div>;
+        if (paging.hasNextPage) {
+          return <IcLoader className="w-10 h-10 my-5 text-primary" />;
+        } else {
+          return noDataRender();
+        }
       } else {
         const onClickRowHandler = (value: unknown) => {
           if (rowClicked) {
@@ -130,7 +133,14 @@ function Table({
         );
       }
     },
-    [isItemLoaded, rows, prepareRow, rowClicked]
+    [
+      isItemLoaded,
+      paging.hasNextPage,
+      noDataRender,
+      rows,
+      prepareRow,
+      rowClicked,
+    ]
   );
 
   return (
@@ -142,7 +152,7 @@ function Table({
               {...headerGroup.getHeaderGroupProps()}
               className="flex -mx-2.5"
               style={{
-                width: width + "px"
+                width: width + "px",
               }}
             >
               {headerGroup.headers.map((column) => (
@@ -176,6 +186,7 @@ function Table({
               )}
             </InfiniteLoader>
           </div>
+          {!paging.hasNextPage && !items.length ? noDataRender() : <></>}
         </section>
       )}
     </AutoSizer>

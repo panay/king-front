@@ -4,6 +4,7 @@ import { IUserData, IUsersRequest, IUsersResponse } from "../../types/UserData";
 import { $rowCount, $rowData, getUsersFx } from "./";
 import { $user } from "infrastructure/models/auth/user";
 import { setPaging } from "infrastructure/models/paging";
+import "infrastructure/models/paging/init";
 
 const usersReducer = (state: IUserData[], payload: IUsersResponse) => {
   const rowData = payload && payload.data ? payload.data.slice() : [];
