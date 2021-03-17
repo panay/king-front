@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Header, Table } from "ui";
 import UserInfoForm from "./components/UserInfoForm";
 import { CompanyPanel, TwoColumnLayout } from "domains";
@@ -6,15 +6,16 @@ import { Column } from "react-table";
 import { TableColumnConfig } from "./config/TableColumConfig";
 import { IUserData } from "./types/UserData";
 import { useStore } from "effector-react";
-import "./models/table/init";
 import {$rowCount, $rowData, getUsersFx} from "./models/table";
 import { $user, IUser } from "infrastructure/models/auth/user";
 import { IPagination } from "infrastructure/types";
 import { $paging } from "infrastructure/models/paging";
 import NoUsers from "./components/NoUsers";
+import { getUserDataFx } from "./models/form";
+
+import "./models/init";
 
 function Users() {
-  const [userData, setUserData] = useState<IUserData | null>(null);
   const user = useStore<IUser | null>($user);
   const rowData = useStore<IUserData[]>($rowData);
   const rowCount = useStore<number>($rowCount);
@@ -31,7 +32,7 @@ function Users() {
       const companyId = user?.company.id;
       if (companyId) {
         return getUsersFx({
-          company_id: companyId || "",
+          company_id: companyId,
           page_number: page,
           row_count: paging.perPage,
         });
@@ -49,7 +50,7 @@ function Users() {
   return (
     <TwoColumnLayout
       className="bg-input-grey"
-      asideContent={<UserInfoForm userData={userData} />}
+      asideContent={<UserInfoForm />}
     >
       <Header
         headerTitle={<CompanyPanel />}
@@ -66,7 +67,7 @@ function Users() {
           items={rowData}
           rowCount={rowCount}
           columns={columns}
-          rowClicked={(value) => setUserData(() => value as IUserData)}
+          rowClicked={(value) => getUserDataFx(value as IUserData)}
           loadNextPage={loadNextPage}
           noDataComponent={<NoUsers />}
         />

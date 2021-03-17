@@ -14,9 +14,16 @@ const createUser = (body: unknown) =>
     `${process.env.REACT_APP_USERS_ENDPOINT}`,
     JSON.stringify(body)
   );
-const updateUser = (id: string) =>
-  globalService.put(`${process.env.REACT_APP_USERS_ENDPOINT}?id=${id}`);
+const updateUser = (body: unknown) =>
+  globalService.put(
+    `${process.env.REACT_APP_USERS_ENDPOINT}`,
+    JSON.stringify(body)
+  );
 const deleteUser = (id: string) =>
-  globalService.delete(`${process.env.REACT_APP_USERS_ENDPOINT}?id=${id}`);
+  globalService.delete(`${process.env.REACT_APP_USERS_ENDPOINT}`, {
+    data: { id },
+  });
+const getRoles = () =>
+  globalService.get(`${process.env.REACT_APP_ROLE_ENDPOINT}/list`);
 
-export { getUserList, createUser, updateUser, deleteUser };
+export { getUserList, createUser, updateUser, deleteUser, getRoles };

@@ -16,7 +16,7 @@ function EmptyCampaignsWindow() {
         Пока нет созданных или проведённых кампаний
       </h2>
       <Button
-        onClick={handleCreateCampaign}
+        onButtonClick={handleCreateCampaign}
         value="Создать кампанию"
         className="mt-6"
       />

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { $authenticated } from "../models/auth/login";
 
 const globalService = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -16,7 +15,6 @@ globalService.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 403) {
       console.log(403);
-      $authenticated.reset();
     }
     return Promise.reject(error);
   }

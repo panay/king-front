@@ -1,33 +1,40 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useStore } from "effector-react";
 import {
   $formIsChanged,
+  $userData,
   $usersError,
   $usersPending,
   changeForm,
   createUserFx,
+  deleteUserFx, getUserDataFx,
 } from "../../models/form";
 import { Button, CustomSelect, FluidLabelInput } from "ui";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
-import { ReactComponent as IcInvisib } from "infrastructure/assets/images/svgs/ic-invisib.svg";
-import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic-vision.svg";
+import { ReactComponent as IcRefresh } from "infrastructure/assets/images/svgs/ic-refresh.svg";
 import { ReactComponent as IcDelete } from "infrastructure/assets/images/svgs/ic-delete.svg";
 import { BgTypeEnum } from "ui/Button";
-import {IUserData} from "../../types/UserData";
-import "../../models/form/init";
+import { IUserData } from "../../types/UserData";
+import "../../models/init";
 
-function UserInfoForm({ userData }: { userData: IUserData | null }) {
-  const [passwordHidden, togglePasswordHidden] = useState(true);
-
-  const { register, handleSubmit, formState, reset } = useForm({
+function UserInfoForm() {
+  const { register, handleSubmit, formState, reset, setValue } = useForm({
     mode: "onChange",
   });
   const { isValid } = formState;
 
+  const userData = useStore<IUserData | null>($userData);
   const error = useStore($usersError);
   const pending = useStore($usersPending);
   const formIsChanged = useStore($formIsChanged);
+  const defaultValues = {
+    company_id: null,
+    name: null,
+    login: null,
+    role: null,
+    is_active: null,
+  };
 
   const submitButtonRender = pending ? (
     <Button
@@ -45,18 +52,55 @@ function UserInfoForm({ userData }: { userData: IUserData | null }) {
     />
   );
 
+  const resetForm = () => {
+    reset(defaultValues);
+  };
+
+  const generatePassword = () => {
+    setValue(
+      "password",
+      Math.floor(100000 + Math.random() * 900000).toString(),
+      {
+        shouldDirty: true,
+        shouldValidate: true
+      }
+    );
+  };
+
+  const deleteUser = () => {
+    return deleteUserFx(userData!.id);
+  };
+
+  const cancelForm = () => {
+    resetForm();
+    return getUserDataFx(null)
+  }
+
   const onSubmit = (body: IUserData) => {
     console.log(body);
     createUserFx(body).then((response) => {
       if (response) {
-        reset();
+        resetForm();
       }
     });
   };
 
+  useEffect(() => {
+    reset({
+      company_id: userData?.id,
+      name: userData?.name,
+      login: userData?.login,
+      role: {
+        value: userData?.role.id,
+        label: userData?.role.name,
+      },
+      is_active: userData?.is_active,
+    });
+  }, [reset, userData]);
+
   return (
     <>
-      <h2>Информация пользователя </h2>
+      <h2>Информация пользователя</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
         onChange={
@@ -71,8 +115,8 @@ function UserInfoForm({ userData }: { userData: IUserData | null }) {
               required: true,
             })}
             type="text"
-            id="username"
-            name="username"
+            id="name"
+            name="name"
             placeholder="Имя"
             required
           />
@@ -85,29 +129,31 @@ function UserInfoForm({ userData }: { userData: IUserData | null }) {
                 pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
               })}
               type="text"
-              id="email"
-              name="email"
+              id="login"
+              name="login"
               placeholder="Почта"
               required
             />
           </div>
           <div className="flex-1 mx-2.5">
             <CustomSelect
-                placeholder="Роль"
-                inputRef={register({
-                  required: true,
-                })}
-                isSearchable={false}
-                options={[
-                  {
-                    value: "1",
-                    label: "Активен",
-                  },
-                  {
-                    value: "0",
-                    label: "Не активен",
-                  },
-                ]}
+              placeholder="Роль"
+              inputRef={register({
+                required: true,
+              })}
+              id="role"
+              name="role"
+              isSearchable={false}
+              options={[
+                {
+                  value: "1",
+                  label: "Активен",
+                },
+                {
+                  value: "0",
+                  label: "Не активен",
+                },
+              ]}
             />
           </div>
         </div>
@@ -118,26 +164,17 @@ function UserInfoForm({ userData }: { userData: IUserData | null }) {
               inputRef={register({
                 required: true,
               })}
-              type={passwordHidden ? "password" : "text"}
+              type="text"
               id="password"
               name="password"
               placeholder="Пароль"
               required
-              onIconClick={() =>
-                togglePasswordHidden((passwordHidden) => !passwordHidden)
-              }
+              onIconClick={generatePassword}
               icon={
-                passwordHidden ? (
-                  <IcInvisib
-                    className="text-primary hover:text-hover-primary"
-                    title="Показать пароль"
-                  />
-                ) : (
-                  <IcVision
-                    className="text-primary hover:text-hover-primary"
-                    title="Спрятать пароль"
-                  />
-                )
+                <IcRefresh
+                  className="text-primary hover:text-hover-primary"
+                  title="Новый пароль"
+                />
               }
             />
           </div>
@@ -148,6 +185,8 @@ function UserInfoForm({ userData }: { userData: IUserData | null }) {
                 required: true,
               })}
               isSearchable={false}
+              id="is_active"
+              name="is_active"
               options={[
                 {
                   value: "1",
@@ -164,11 +203,14 @@ function UserInfoForm({ userData }: { userData: IUserData | null }) {
         <div className="mt-6 -mx-2.5 flex items-center">
           <div className="mx-2.5 flex-auto">
             <Button
-              icon={<IcDelete />}
+              icon={
+                pending ? <IcLoader className="w-7 h-7 m-auto" /> : <IcDelete />
+              }
               type="button"
               bgType={BgTypeEnum.warning}
-              disabled={!isValid || error !== null || pending}
+              disabled={!userData || error !== null || pending}
               className="w-full"
+              onButtonClick={deleteUser}
             />
           </div>
           <div className="mx-2.5 flex-auto">
@@ -176,8 +218,9 @@ function UserInfoForm({ userData }: { userData: IUserData | null }) {
               value="Отменить"
               type="button"
               bgType={BgTypeEnum.secondary}
-              disabled={!isValid || error !== null || pending}
+              disabled={error !== null || pending}
               className="w-full"
+              onButtonClick={cancelForm}
             />
           </div>
           <div className="mx-2.5 flex-auto">{submitButtonRender}</div>

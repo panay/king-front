@@ -1,10 +1,8 @@
-import { guard, sample } from "effector";
 import { getUserList } from "../../services/users-service";
 import { IUserData, IUsersRequest, IUsersResponse } from "../../types/UserData";
-import { $rowCount, $rowData, getUsersFx } from "./";
-import { $user } from "infrastructure/models/auth/user";
+import { $rowCount, $rowData, getUsersFx, updateUsersFx } from "./";
 import { setPaging } from "infrastructure/models/paging";
-import "infrastructure/models/paging/init";
+import "../init";
 
 const usersReducer = (state: IUserData[], payload: IUsersResponse) => {
   const rowData = payload && payload.data ? payload.data.slice() : [];
@@ -16,6 +14,17 @@ const usersReducer = (state: IUserData[], payload: IUsersResponse) => {
   });
 
   return result;
+};
+
+const updateUsersReducer = (state: IUserData[], payload: IUsersResponse) => {
+  const rowData = payload && payload.data ? payload.data.slice() : [];
+
+  setPaging({
+    isNextPageLoading: false,
+    hasNextPage: rowData.length < payload.rowCount,
+  });
+
+  return rowData;
 };
 
 const countReducer = (state: number, payload: IUsersResponse) => {
@@ -31,16 +40,10 @@ const getUsers = async (request: IUsersRequest) => {
   return response?.data || [];
 };
 
-$rowData.on(getUsersFx.doneData, usersReducer);
+$rowData
+  .on(getUsersFx.doneData, usersReducer)
+  .on(updateUsersFx.doneData, updateUsersReducer);
 $rowCount.on(getUsersFx.doneData, countReducer);
 
 getUsersFx.use(getUsers);
-
-guard({
-  source: sample({
-    source: $user,
-    fn: (user) => ({ company_id: user?.company.id } as IUsersRequest),
-  }),
-  filter: (user) => !!(user && user.company_id),
-  target: getUsersFx,
-});
+updateUsersFx.use(getUsers);
