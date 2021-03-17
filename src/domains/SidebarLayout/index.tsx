@@ -7,7 +7,7 @@ import { ReactComponent as IcGeofence } from "infrastructure/assets/images/svgs/
 import { ReactComponent as IcMarketing } from "infrastructure/assets/images/svgs/ic-marketing.svg";
 import { ReactComponent as IcGeotrigger } from "infrastructure/assets/images/svgs/ic-geotriger.svg";
 import { ReactComponent as IcAnalytics } from "infrastructure/assets/images/svgs/ic-analytics.svg";
-import { logoutFx } from "infrastructure/models/auth/login";
+import { signOut } from "infrastructure/models/auth/login";
 import "infrastructure/models/auth/init";
 import {Sidebar} from "ui";
 
@@ -46,13 +46,10 @@ function SidebarLayout({ children }: { children: ReactElement }) {
       content: <IcAnalytics />,
     },
   ];
-  const handleLogout = () => {
-    return logoutFx();
-  };
 
   return (
     <div className="flex min-h-full">
-      <Sidebar nav={nav} onLogout={handleLogout} />
+      <Sidebar nav={nav} onLogout={signOut} />
       {children}
     </div>
   );

@@ -1,6 +1,6 @@
 import React, {useEffect, ReactElement, createContext} from "react";
 import { useStore } from "effector-react";
-import {$authenticated, $afterLogin, checkAuthFx} from "../models/auth/login";
+import {$authenticated, $afterLogin, checkUserAuth} from "../models/auth/login";
 import {$user} from "../models/auth/user";
 
 const AuthContext = createContext<boolean>(false);
@@ -12,7 +12,7 @@ const AuthProvider = ({ children }: { children: ReactElement }) => {
 
   useEffect(() => {
     if (!afterLogin && user?.id && authenticated) {
-      checkAuthFx(user?.login || "admin@gmail.com").then();
+      checkUserAuth(user?.login)
     }
   }, [afterLogin, authenticated, user]);
 

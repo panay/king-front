@@ -3,10 +3,13 @@ import {
   $authenticated,
   catchError,
   checkAuthFx,
+  checkUserAuth,
   ILoginRequest,
   loginFx,
   loginSuccess,
   logoutFx,
+  submitLogin,
+  signOut
 } from "./";
 import {
   checkAuth,
@@ -68,6 +71,10 @@ const logout = async () => {
   }
   return response.status !== 200;
 };
+
+checkUserAuth.watch((login) => checkAuthFx(login));
+submitLogin.watch((request) => loginFx(request));
+signOut.watch(logoutFx);
 
 $afterLogin.on(loginSuccess, authReducer);
 

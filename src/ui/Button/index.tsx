@@ -1,7 +1,6 @@
 import React, {
   ButtonHTMLAttributes,
   ReactElement,
-  SyntheticEvent,
 } from "react";
 import InputButton from "./InputButton";
 import IconButton from "./IconButton";
@@ -11,6 +10,7 @@ export enum BgTypeEnum {
   success,
   warning,
   secondary,
+  none
 }
 
 type Props = ButtonHTMLAttributes<any> & {
@@ -29,6 +29,8 @@ function setBgType(bgType: BgTypeEnum): string {
       return "bg-warning hover:bg-hover-warning active:bg-active-warning";
     case BgTypeEnum.secondary:
       return "bg-input-grey text-primary hover:bg-border-grey active:bg-icon-grey";
+      case BgTypeEnum.none:
+      return "bg-transparent text-primary hover:bg-border-grey active:bg-icon-grey";
     default:
       return "bg-primary hover:bg-hover-primary active:bg-active-primary";
   }
@@ -44,8 +46,7 @@ function Button({
     "flex items-center justify-center max-w-full font-semibold text-center rounded-lg cursor-pointer outline-none focus:outline-none text-white disabled:bg-icon-grey disabled:text-white disabled:pointer-events-none";
   let bgTypeClassName = setBgType(bgType);
 
-  const handleOnClick = (event: SyntheticEvent) => {
-    event.preventDefault();
+  const handleOnClick = () => {
     if (onButtonClick) {
       onButtonClick();
     }

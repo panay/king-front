@@ -7,9 +7,12 @@ import {
   catchError,
   changeForm,
   createUserFx,
+  deleteUserForm,
   deleteUserFx,
+  getAllRoles,
   getRolesFx,
   getUserDataFx,
+  resetUserData,
 } from "./";
 import { IKeyValue } from "infrastructure/types";
 import { createUser, deleteUser, getRoles } from "../../services/users-service";
@@ -49,6 +52,10 @@ const createNewUser = async (user: IUserData) => {
 
   return response?.data || [];
 };
+
+getAllRoles.watch(getRolesFx);
+resetUserData.watch(() => getUserDataFx(null));
+deleteUserForm.watch((id) => deleteUserFx(id));
 
 $usersError.on(catchError, failReducer).reset(changeForm);
 $usersPending

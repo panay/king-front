@@ -4,21 +4,6 @@ import { ReactComponent as IcArrowDropdown } from "infrastructure/assets/images/
 
 type P = Props & NamedProps;
 
-// const Control = (props: ControlProps<any, any>) => {
-//     return (
-//         <components.Control {...props} theme={(theme: any) => ({
-//             ...theme,
-//             borderRadius: 12,
-//             colors: {
-//                 ...theme.colors
-//             },
-//             spacing: {
-//                 ...theme.spacing
-//             }
-//         })}>{props.children}</components.Control>
-//     );
-// };
-
 const DropdownIndicator = (props: any): ReactElement => {
   return (
     <components.DropdownIndicator {...props}>

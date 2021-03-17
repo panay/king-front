@@ -1,6 +1,6 @@
 import { getUserList } from "../../services/users-service";
 import { IUserData, IUsersRequest, IUsersResponse } from "../../types/UserData";
-import { $rowCount, $rowData, getUsersFx, updateUsersFx } from "./";
+import { $rowCount, $rowData, getUsersFx, updateUsersFx, getUsersList } from "./";
 import { setPaging } from "infrastructure/models/paging";
 import "../init";
 
@@ -39,6 +39,8 @@ const getUsers = async (request: IUsersRequest) => {
 
   return response?.data || [];
 };
+
+getUsersList.watch(body => getUsersFx(body));
 
 $rowData
   .on(getUsersFx.doneData, usersReducer)

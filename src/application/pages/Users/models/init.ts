@@ -8,12 +8,14 @@ import { $user } from "infrastructure/models/auth/user";
 import { IUsersRequest } from "../types/UserData";
 import { getUsersFx, updateUsersFx } from "./table";
 
+// to reset userData after delete of a user
 sample({
   clock: deleteUserFx.doneData,
   fn: () => null,
   target: getUserDataFx,
 });
 
+// to update table after delete of a user
 guard({
   clock: deleteUserFx.doneData,
   source: sample({
@@ -24,6 +26,7 @@ guard({
   target: updateUsersFx,
 });
 
+// to get table after getting user
 guard({
   source: sample({
     source: $user,

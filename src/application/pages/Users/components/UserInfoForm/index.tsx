@@ -1,14 +1,16 @@
-import React, { FormEvent, useEffect } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useStore } from "effector-react";
 import {
   $formIsChanged,
+  $roles,
   $userData,
   $usersError,
   $usersPending,
   changeForm,
   createUserFx,
-  deleteUserFx, getUserDataFx,
+  deleteUserForm,
+  resetUserData,
 } from "../../models/form";
 import { Button, CustomSelect, FluidLabelInput } from "ui";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
@@ -17,6 +19,8 @@ import { ReactComponent as IcDelete } from "infrastructure/assets/images/svgs/ic
 import { BgTypeEnum } from "ui/Button";
 import { IUserData } from "../../types/UserData";
 import "../../models/init";
+import ConfirmPanel from "../ConfirmPanel";
+import { IKeyValue } from "infrastructure/types";
 
 function UserInfoForm() {
   const { register, handleSubmit, formState, reset, setValue } = useForm({
@@ -24,16 +28,77 @@ function UserInfoForm() {
   });
   const { isValid } = formState;
 
+  const [readyToDelete, confirmToDelete] = useState(false);
   const userData = useStore<IUserData | null>($userData);
+  const roles = useStore<IKeyValue[]>($roles);
   const error = useStore($usersError);
   const pending = useStore($usersPending);
   const formIsChanged = useStore($formIsChanged);
   const defaultValues = {
-    company_id: null,
+    id: null,
     name: null,
     login: null,
     role: null,
     is_active: null,
+  };
+  const roleOptions = roles.map((role) => ({
+    value: role.id,
+    label: role.name,
+  }));
+
+  const isActiveOptions = [
+    {
+      value: "1",
+      label: "Активен",
+    },
+    {
+      value: "0",
+      label: "Не активен",
+    },
+  ];
+
+  const roleValue =
+    roleOptions.find((option) => userData?.role.id === option.value) || null;
+
+  const isActiveValue = isActiveOptions.find((option) =>
+      userData?.is_active
+          ? option.value === "1"
+          : option.value === "0"
+  );
+
+  const resetForm = () => {
+    reset(defaultValues);
+  };
+
+  const generatePassword = () => {
+    setValue(
+      "password",
+      Math.floor(100000 + Math.random() * 900000).toString(),
+      {
+        shouldDirty: true,
+        shouldValidate: true,
+      }
+    );
+  };
+
+  const deleteUser = () => {
+    confirmToDelete(false);
+    deleteUserForm(userData!.id);
+  };
+
+  const cancelForm = () => {
+    resetUserData();
+    resetForm();
+  };
+
+  const onSubmit = (body: any) => {
+    console.log(body);
+
+    createUserFx(body).then((response) => {
+      if (response) {
+        resetForm();
+      }
+    });
   };
 
   const submitButtonRender = pending ? (
@@ -52,49 +117,55 @@ function UserInfoForm() {
     />
   );
 
-  const resetForm = () => {
-    reset(defaultValues);
-  };
-
-  const generatePassword = () => {
-    setValue(
-      "password",
-      Math.floor(100000 + Math.random() * 900000).toString(),
-      {
-        shouldDirty: true,
-        shouldValidate: true
+  const buttonsPanelRender = readyToDelete ? (
+    <ConfirmPanel
+      confirmed={(isConfirmed) =>
+        isConfirmed ? deleteUser() : confirmToDelete(false)
       }
-    );
-  };
-
-  const deleteUser = () => {
-    return deleteUserFx(userData!.id);
-  };
-
-  const cancelForm = () => {
-    resetForm();
-    return getUserDataFx(null)
-  }
-
-  const onSubmit = (body: IUserData) => {
-    console.log(body);
-    createUserFx(body).then((response) => {
-      if (response) {
-        resetForm();
-      }
-    });
-  };
+    />
+  ) : (
+    <>
+      <div className="mx-2.5 flex-auto">
+        <Button
+          icon={
+            pending ? <IcLoader className="w-7 h-7 m-auto" /> : <IcDelete />
+          }
+          type="button"
+          bgType={BgTypeEnum.warning}
+          disabled={!userData || error !== null || pending}
+          className="w-full"
+          onButtonClick={() => confirmToDelete(true)}
+        />
+      </div>
+      <div className="mx-2.5 flex-auto">
+        <Button
+          value="Отменить"
+          type="button"
+          bgType={BgTypeEnum.secondary}
+          disabled={pending}
+          className="w-full"
+          onButtonClick={cancelForm}
+        />
+      </div>
+      <div className="mx-2.5 flex-auto">{submitButtonRender}</div>
+    </>
+  );
 
   useEffect(() => {
     reset({
-      company_id: userData?.id,
+      id: userData?.id,
       name: userData?.name,
       login: userData?.login,
-      role: {
-        value: userData?.role.id,
-        label: userData?.role.name,
+      role: userData
+        ? {
+            value: userData.role.id,
+            label: userData.role.name,
+          }
+        : null,
+      is_active: {
+        value: userData?.is_active ? "1" : "0",
+        label: userData?.is_active ? "Активен" : "Не активен",
       },
-      is_active: userData?.is_active,
     });
   }, [reset, userData]);
 
@@ -144,16 +215,9 @@ function UserInfoForm() {
               id="role"
               name="role"
               isSearchable={false}
-              options={[
-                {
-                  value: "1",
-                  label: "Активен",
-                },
-                {
-                  value: "0",
-                  label: "Не активен",
-                },
-              ]}
+              required
+              value={roleValue}
+              options={roleOptions}
             />
           </div>
         </div>
@@ -187,43 +251,14 @@ function UserInfoForm() {
               isSearchable={false}
               id="is_active"
               name="is_active"
-              options={[
-                {
-                  value: "1",
-                  label: "Активен",
-                },
-                {
-                  value: "0",
-                  label: "Не активен",
-                },
-              ]}
+              required
+              value={isActiveValue}
+              options={isActiveOptions}
             />
           </div>
         </div>
         <div className="mt-6 -mx-2.5 flex items-center">
-          <div className="mx-2.5 flex-auto">
-            <Button
-              icon={
-                pending ? <IcLoader className="w-7 h-7 m-auto" /> : <IcDelete />
-              }
-              type="button"
-              bgType={BgTypeEnum.warning}
-              disabled={!userData || error !== null || pending}
-              className="w-full"
-              onButtonClick={deleteUser}
-            />
-          </div>
-          <div className="mx-2.5 flex-auto">
-            <Button
-              value="Отменить"
-              type="button"
-              bgType={BgTypeEnum.secondary}
-              disabled={error !== null || pending}
-              className="w-full"
-              onButtonClick={cancelForm}
-            />
-          </div>
-          <div className="mx-2.5 flex-auto">{submitButtonRender}</div>
+          {buttonsPanelRender}
         </div>
       </form>
     </>

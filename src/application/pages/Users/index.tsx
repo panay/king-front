@@ -6,12 +6,12 @@ import { Column } from "react-table";
 import { TableColumnConfig } from "./config/TableColumConfig";
 import { IUserData } from "./types/UserData";
 import { useStore } from "effector-react";
-import {$rowCount, $rowData, getUsersFx} from "./models/table";
+import {$rowCount, $rowData, getUsersList} from "./models/table";
 import { $user, IUser } from "infrastructure/models/auth/user";
 import { IPagination } from "infrastructure/types";
 import { $paging } from "infrastructure/models/paging";
 import NoUsers from "./components/NoUsers";
-import { getUserDataFx } from "./models/form";
+import {getAllRoles, getUserDataFx} from "./models/form";
 
 import "./models/init";
 
@@ -31,7 +31,7 @@ function Users() {
     (startIndex: number, stopIndex: number, page: number) => {
       const companyId = user?.company.id;
       if (companyId) {
-        return getUsersFx({
+        getUsersList({
           company_id: companyId,
           page_number: page,
           row_count: paging.perPage,
@@ -45,6 +45,7 @@ function Users() {
 
   useEffect(() => {
     document.title = "Пользователи – Spark [radar]";
+    getAllRoles();
   }, []);
 
   return (

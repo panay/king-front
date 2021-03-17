@@ -7,7 +7,7 @@ import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
 import React, { FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
-import { ILoginRequest, loginFx } from "infrastructure/models/auth/login";
+import { ILoginRequest, submitLogin } from "infrastructure/models/auth/login";
 import { useStore } from "effector-react";
 import {
   $formIsChanged,
@@ -45,7 +45,9 @@ function AuthForm() {
     />
   );
 
-  const onSubmit = (body: ILoginRequest) => loginFx(body);
+  const onSubmit = (body: ILoginRequest) => {
+    submitLogin(body);
+  }
 
   return (
     <>

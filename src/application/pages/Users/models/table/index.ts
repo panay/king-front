@@ -13,5 +13,7 @@ export const updateUsersFx = usersTableDomain.effect<
   IUsersResponse
 >();
 
+export const getUsersList = usersTableDomain.event<IUsersRequest>();
+
 export const $rowData = usersTableDomain.store<IUserData[]>([]);
 export const $rowCount = usersTableDomain.store<number>(0);

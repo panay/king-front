@@ -21,6 +21,7 @@ module.exports = {
         "icon-grey": "#8f92a1",
         "border-grey": "#ebecf0",
         "icon-white": "#ffffff",
+        "lighten-grey": "#fcfcff",
 
         "ic-violet": "#5243aa",
         "ic-orange": "#ff991f",
