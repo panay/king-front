@@ -26,7 +26,7 @@ function UserInfoForm() {
   const { register, handleSubmit, formState, reset, setValue } = useForm({
     mode: "onChange",
   });
-  const { isValid } = formState;
+  const { isValid, isDirty } = formState;
 
   const [readyToDelete, confirmToDelete] = useState(false);
   const userData = useStore<IUserData | null>($userData);
@@ -105,14 +105,14 @@ function UserInfoForm() {
     <Button
       icon={<IcLoader className="w-7 h-7 m-auto" />}
       type="submit"
-      disabled={!isValid || error !== null || pending}
+      disabled={!isDirty || !isValid || error !== null || pending}
       className="w-full"
     />
   ) : (
     <Button
       value={userData ? "Сохранить" : "Добавить"}
       type="submit"
-      disabled={!isValid || error !== null || pending}
+      disabled={!isDirty || !isValid || error !== null || pending}
       className="w-full"
     />
   );
@@ -226,13 +226,12 @@ function UserInfoForm() {
           <div className="flex-1 mx-2.5">
             <FluidLabelInput
               inputRef={register({
-                required: true,
+                required: !userData,
               })}
               type="text"
               id="password"
               name="password"
               placeholder="Пароль"
-              required
               onIconClick={generatePassword}
               icon={
                 <IcRefresh

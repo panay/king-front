@@ -9,7 +9,8 @@ import {
   loginSuccess,
   logoutFx,
   submitLogin,
-  signOut
+  signOut,
+  $checkedAuth
 } from "./";
 import {
   checkAuth,
@@ -82,6 +83,8 @@ $authenticated
   .on(checkAuthFx.doneData, authReducer)
   .on(loginFx.doneData, authReducer)
   .on(logoutFx.doneData, authReducer);
+
+$checkedAuth.on(checkAuthFx.doneData, authReducer);
 
 $user.on(clearUser, clearUserReducer);
 

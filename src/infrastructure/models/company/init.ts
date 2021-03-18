@@ -7,6 +7,7 @@ import {
   changeForm,
   createNewCompanyFx,
   getCompaniesFx,
+  getCompaniesList,
 } from "./";
 import { IKeyValue } from "infrastructure/types";
 import {
@@ -41,6 +42,8 @@ const createCompany = async (name: string) => {
 
   return response?.data;
 };
+
+getCompaniesList.watch(_ => getCompaniesFx)
 
 $companies.on(getCompaniesFx.doneData, companiesReducer);
 

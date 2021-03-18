@@ -6,7 +6,7 @@ import { guard, sample } from "effector";
 import { deleteUserFx, getUserDataFx } from "./form";
 import { $user } from "infrastructure/models/auth/user";
 import { IUsersRequest } from "../types/UserData";
-import { getUsersFx, updateUsersFx } from "./table";
+import { updateUsersFx } from "./table";
 
 // to reset userData after delete of a user
 sample({
@@ -24,14 +24,4 @@ guard({
   }),
   filter: (user) => !!(user && user.company_id),
   target: updateUsersFx,
-});
-
-// to get table after getting user
-guard({
-  source: sample({
-    source: $user,
-    fn: (user) => ({ company_id: user?.company.id } as IUsersRequest),
-  }),
-  filter: (user) => !!(user && user.company_id),
-  target: getUsersFx,
 });

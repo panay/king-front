@@ -19,6 +19,7 @@ export const signOut = authDomain.event<void>();
 export const catchError = authDomain.event<string>();
 export const loginSuccess = authDomain.event<boolean>();
 
+export const $checkedAuth = authDomain.store<boolean>(false);
 export const $afterLogin = authDomain.store<boolean>(false);
 export const $authenticated = authDomain.store<boolean>(false);
 persist({ store: $authenticated, key: "authenticated" });

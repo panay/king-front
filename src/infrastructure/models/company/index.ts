@@ -8,6 +8,7 @@ export const createNewCompanyFx = companyDomain.effect<string, string>();
 
 export const changeForm = companyDomain.event<boolean>();
 export const catchError = companyDomain.event<boolean>();
+export const getCompaniesList = companyDomain.event<void>();
 
 export const $formIsChanged = restore<boolean>(changeForm, true);
 export const $companyError = companyDomain.store<boolean>(false);

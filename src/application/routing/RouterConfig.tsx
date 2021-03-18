@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { Switch } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
-import AuthContext from "infrastructure/context/AuthContext";
+import AuthContext, { CheckAuthContext } from "infrastructure/context/AuthContext";
 import { SidebarLayout } from "domains";
 
 interface Route {
@@ -47,6 +47,7 @@ const routes: Route[] = [
 
 export const RouterConfig = () => {
   const authenticated = useContext(AuthContext);
+  const isAuthCheck = useContext(CheckAuthContext);
   const loading = <div>Loading...</div>;
   const result = useMemo(
     () =>
@@ -60,12 +61,17 @@ export const RouterConfig = () => {
       )),
     []
   );
+
   if (!authenticated) {
     return (
       <Suspense fallback={loading}>
         <Switch>{result}</Switch>
       </Suspense>
     );
+  }
+
+  if (!isAuthCheck) {
+    return loading;
   }
 
   return (

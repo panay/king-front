@@ -4,7 +4,7 @@ import { TitleWithDropdown } from "ui";
 import { IKeyValue } from "infrastructure/types";
 import "infrastructure/models/company/init";
 import { updateCompanyUser } from "infrastructure/models/auth/user";
-import { $companies, getCompaniesFx } from "infrastructure/models/company";
+import { $companies, getCompaniesList } from "infrastructure/models/company";
 import { useStore } from "effector-react";
 import CreateCompanyFormControl from "./components/CreateCompanyFormControl";
 
@@ -22,9 +22,7 @@ function CompanyPanel() {
   }, [user, companies]);
 
   const handleOnOpenDropdown = (opened: boolean) => {
-    if (opened) {
-      return getCompaniesFx();
-    }
+    if (opened) getCompaniesList();
   };
 
   const handleSelectItem = (item: IKeyValue) => {
