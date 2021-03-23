@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect } from "react";
 import UserContext from "infrastructure/context/UserContext";
 import { TitleWithDropdown } from "ui";
 import { IKeyValue } from "infrastructure/types";
@@ -11,18 +11,16 @@ import CreateCompanyFormControl from "./components/CreateCompanyFormControl";
 function CompanyPanel() {
   const user = useContext(UserContext);
   const companies = useStore($companies);
-  const isRootAdmin = useRef(false);
+  const isRootAdmin =
+    companies.length > 0 &&
+    user?.role.name === "ADMIN" &&
+    (!user?.company || !Object.keys(user?.company).length);
 
   useEffect(() => {
-    isRootAdmin.current =
-      companies.length > 0 &&
-      user?.role.name === "ADMIN" &&
-      (!user?.company || !Object.keys(user?.company).length);
-
-    if (isRootAdmin.current) {
+    if (isRootAdmin) {
       updateCompanyUser(companies[0]);
     }
-  }, [user, companies]);
+  }, [isRootAdmin, companies]);
 
   const handleOnOpenDropdown = (opened: boolean) => {
     if (opened) getCompaniesList();
@@ -33,7 +31,7 @@ function CompanyPanel() {
   };
 
   if (user) {
-    if (isRootAdmin.current) {
+    if (isRootAdmin) {
       return (
         <>
           <div className="text-xs text-icon-grey font-normal">Компания</div>
