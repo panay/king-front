@@ -1,6 +1,7 @@
 import {
   $afterLogin,
   $authenticated,
+  $checkedAuth,
   catchError,
   checkAuthFx,
   checkUserAuth,
@@ -8,9 +9,8 @@ import {
   loginFx,
   loginSuccess,
   logoutFx,
-  submitLogin,
   signOut,
-  $checkedAuth
+  submitLogin,
 } from "./";
 import {
   checkAuth,
@@ -20,11 +20,9 @@ import {
   setAxiosAuthTokenHeader,
   setAxiosXSRFTokenHeader,
 } from "infrastructure/services/auth-service";
-import { $user, clearUser, IUser } from "../user";
+import { clearUser } from "../user";
 
 const authReducer = (state: boolean, payload: boolean) => payload;
-const clearUserReducer = (state: IUser | null, payload: boolean) =>
-  payload ? null : state;
 
 const isAuth = async (login: string) => {
   let response = null;
@@ -61,7 +59,7 @@ const login = async (body: ILoginRequest) => {
     catchError("Неверный логин/пароль");
   }
 
-  return response?.status === 200;
+  return response?.data;
 };
 
 const logout = async () => {
@@ -81,12 +79,12 @@ $afterLogin.on(loginSuccess, authReducer);
 
 $authenticated
   .on(checkAuthFx.doneData, authReducer)
-  .on(loginFx.doneData, authReducer)
+  .on(loginSuccess, authReducer)
   .on(logoutFx.doneData, authReducer);
 
-$checkedAuth.on(checkAuthFx.doneData, authReducer);
-
-$user.on(clearUser, clearUserReducer);
+$checkedAuth
+  .on(checkAuthFx.doneData, authReducer)
+  .on(loginSuccess, authReducer);
 
 checkAuthFx.use(isAuth);
 loginFx.use(login);

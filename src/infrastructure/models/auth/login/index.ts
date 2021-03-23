@@ -1,5 +1,6 @@
 import { createDomain } from "effector";
 import { persist } from "effector-storage/local";
+import { IUser } from "../user";
 
 export interface ILoginRequest {
   login: string;
@@ -8,7 +9,7 @@ export interface ILoginRequest {
 
 const authDomain = createDomain("Auth");
 
-export const loginFx = authDomain.effect<ILoginRequest, boolean>();
+export const loginFx = authDomain.effect<ILoginRequest, IUser>();
 export const logoutFx = authDomain.effect<void, boolean>();
 export const checkAuthFx = authDomain.effect<string, boolean>();
 

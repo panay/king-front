@@ -1,6 +1,6 @@
-import { $user, getUserFx, IUser, updateCompanyUser } from "./";
-import { getUserInfo } from "infrastructure/services/user-service";
+import { $user, clearUser, IUser, updateCompanyUser } from "./";
 import { IKeyValue } from "infrastructure/types";
+import { loginFx } from "../login";
 
 const userReducer = (state: IUser | null, payload: IUser | null) => {
   return payload
@@ -12,26 +12,18 @@ const userReducer = (state: IUser | null, payload: IUser | null) => {
 };
 
 const companyUserReducer = (state: IUser | null, payload: IKeyValue) => {
-  const company = { ...payload };
   return state
     ? {
         ...state,
-        company,
+        ...payload,
       }
     : state;
 };
 
-const getUser = async (): Promise<IUser | null> => {
-  let response = null;
-  try {
-    response = await getUserInfo();
-  } catch (err) {}
-
-  return response?.data || null;
-};
+const clearUserReducer = (state: IUser | null, payload: boolean) =>
+  payload ? null : state;
 
 $user
-  .on(getUserFx.doneData, userReducer)
-  .on(updateCompanyUser, companyUserReducer);
-
-getUserFx.use(getUser);
+  .on(loginFx.doneData, userReducer)
+  .on(updateCompanyUser, companyUserReducer)
+  .on(clearUser, clearUserReducer);
