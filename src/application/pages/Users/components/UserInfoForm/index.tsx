@@ -72,9 +72,9 @@ function UserInfoForm() {
     roleOptions.find((option) => userData?.role.id === option.value) ||
     roleOptions[0];
 
-  // const isActiveValue = isActiveOptions.find((option) =>
-  //   userData?.is_active ? option.value === "1" : option.value === "0"
-  // );
+  const isActiveValue = isActiveOptions.find((option) =>
+    userData?.is_active ? option.value === "1" : option.value === "0"
+  );
 
   const resetForm = () => {
     reset(defaultValues);
@@ -241,7 +241,7 @@ function UserInfoForm() {
               name="role_id"
               control={control}
               defaultValue={roleValue}
-              rules={{ required: true, setValueAs: (value) => value.value }}
+              rules={{ required: true, setValueAs: (value) => value?.value }}
               render={(props) => (
                 <CustomSelect
                   placeholder="Роль"
@@ -280,14 +280,14 @@ function UserInfoForm() {
             <Controller
               name="is_active"
               control={control}
-              defaultValue={isActiveOptions[0]}
-              rules={{ required: true, setValueAs: (value) => !!value.value }}
+              defaultValue={isActiveValue}
+              rules={{ required: true, setValueAs: (value) => !!value?.value }}
               render={(props) => (
                 <CustomSelect
                   placeholder="Признак"
                   isSearchable={false}
                   name="is_active"
-                  defaultValue={isActiveOptions[0]}
+                  defaultValue={isActiveValue}
                   options={isActiveOptions}
                   value={props.value}
                   onChange={(e) => props.onChange(e)}
