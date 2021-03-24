@@ -17,6 +17,7 @@ interface IUsersRequest {
   company_id: string;
   page_number?: number;
   row_count?: number;
+  name?: string;
 }
 
 export type { IUserData, IUsersResponse, IUsersRequest };

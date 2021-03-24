@@ -5,9 +5,10 @@ const getUserList = ({
   company_id,
   page_number = 1,
   row_count = 50,
+  name,
 }: IUsersRequest) =>
   globalService.get(
-    `${process.env.REACT_APP_USERS_ENDPOINT}/list?company_id=${company_id}&page_number=${page_number}&row_count=${row_count}`
+    `${process.env.REACT_APP_USERS_ENDPOINT}/list?company_id=${company_id}&page_number=${page_number}&row_count=${row_count}&name=${name || ""}`
   );
 const createUser = (body: unknown) =>
   globalService.post(

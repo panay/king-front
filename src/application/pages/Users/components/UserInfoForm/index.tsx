@@ -1,18 +1,19 @@
-import React, { FormEvent, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { FormEvent, useContext, useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useStore } from "effector-react";
 import {
   $formIsChanged,
   $roles,
   $userData,
-  $usersError,
-  $usersPending,
+  $userError,
+  $userPending,
   changeForm,
   createUserFx,
   deleteUserForm,
   resetUserData,
+  updateUserFx,
 } from "../../models/form";
-import { Button, CustomSelect, FluidLabelInput } from "ui";
+import { Button, CustomSelect, FluidLabelInput, FormErrorMessage } from "ui";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
 import { ReactComponent as IcRefresh } from "infrastructure/assets/images/svgs/ic-refresh.svg";
 import { ReactComponent as IcDelete } from "infrastructure/assets/images/svgs/ic-delete.svg";
@@ -21,24 +22,34 @@ import { IUserData } from "../../types/UserData";
 import "../../models/init";
 import ConfirmPanel from "../ConfirmPanel";
 import { IKeyValue } from "infrastructure/types";
+import UserContext from "infrastructure/context/UserContext";
 
 function UserInfoForm() {
-  const { register, handleSubmit, formState, reset, setValue } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState,
+    reset,
+    setValue,
+    control,
+  } = useForm({
     mode: "onChange",
   });
   const { isValid, isDirty } = formState;
 
+  const user = useContext(UserContext);
   const [readyToDelete, confirmToDelete] = useState(false);
   const userData = useStore<IUserData | null>($userData);
   const roles = useStore<IKeyValue[]>($roles);
-  const error = useStore($usersError);
-  const pending = useStore($usersPending);
+  const error = useStore($userError);
+  const pending = useStore($userPending);
   const formIsChanged = useStore($formIsChanged);
   const defaultValues = {
-    id: null,
+    id: userData?.id,
+    company_id: user?.company.id,
     name: null,
     login: null,
-    role: null,
+    role_id: null,
     is_active: null,
   };
   const roleOptions = roles.map((role) => ({
@@ -58,13 +69,12 @@ function UserInfoForm() {
   ];
 
   const roleValue =
-    roleOptions.find((option) => userData?.role.id === option.value) || null;
+    roleOptions.find((option) => userData?.role.id === option.value) ||
+    roleOptions[0];
 
-  const isActiveValue = isActiveOptions.find((option) =>
-      userData?.is_active
-          ? option.value === "1"
-          : option.value === "0"
-  );
+  // const isActiveValue = isActiveOptions.find((option) =>
+  //   userData?.is_active ? option.value === "1" : option.value === "0"
+  // );
 
   const resetForm = () => {
     reset(defaultValues);
@@ -91,14 +101,28 @@ function UserInfoForm() {
     resetForm();
   };
 
-  const onSubmit = (body: any) => {
-    console.log(body);
+  const onSubmit = (formData: any) => {
+    console.log("formData :: ", formData);
+    const body = {
+      ...defaultValues,
+      ...formData,
+    };
 
-    createUserFx(body).then((response) => {
-      if (response) {
-        resetForm();
-      }
-    });
+    console.log("body :: ", body);
+
+    if (userData?.id) {
+      updateUserFx(body).then((response) => {
+        if (response) {
+          resetForm();
+        }
+      });
+    } else {
+      createUserFx(body).then((response) => {
+        if (response) {
+          resetForm();
+        }
+      });
+    }
   };
 
   const submitButtonRender = pending ? (
@@ -151,12 +175,18 @@ function UserInfoForm() {
     </>
   );
 
+  const errorRender = error && (
+    <div className="mt-10">
+      <FormErrorMessage message={error} />
+    </div>
+  );
+
   useEffect(() => {
     reset({
       id: userData?.id,
       name: userData?.name,
       login: userData?.login,
-      role: userData
+      role_id: userData
         ? {
             value: userData.role.id,
             label: userData.role.name,
@@ -207,17 +237,22 @@ function UserInfoForm() {
             />
           </div>
           <div className="flex-1 mx-2.5">
-            <CustomSelect
-              placeholder="Роль"
-              inputRef={register({
-                required: true,
-              })}
-              id="role"
-              name="role"
-              isSearchable={false}
-              required
-              value={roleValue}
-              options={roleOptions}
+            <Controller
+              name="role_id"
+              control={control}
+              defaultValue={roleValue}
+              rules={{ required: true, setValueAs: (value) => value.value }}
+              render={(props) => (
+                <CustomSelect
+                  placeholder="Роль"
+                  name="role_id"
+                  defaultValue={roleValue}
+                  value={props.value}
+                  isSearchable={false}
+                  options={roleOptions}
+                  onChange={(e) => props.onChange(e)}
+                />
+              )}
             />
           </div>
         </div>
@@ -242,23 +277,29 @@ function UserInfoForm() {
             />
           </div>
           <div className="flex-1 mx-2.5">
-            <CustomSelect
-              placeholder="Признак"
-              inputRef={register({
-                required: true,
-              })}
-              isSearchable={false}
-              id="is_active"
+            <Controller
               name="is_active"
-              required
-              value={isActiveValue}
-              options={isActiveOptions}
+              control={control}
+              defaultValue={isActiveOptions[0]}
+              rules={{ required: true, setValueAs: (value) => !!value.value }}
+              render={(props) => (
+                <CustomSelect
+                  placeholder="Признак"
+                  isSearchable={false}
+                  name="is_active"
+                  defaultValue={isActiveOptions[0]}
+                  options={isActiveOptions}
+                  value={props.value}
+                  onChange={(e) => props.onChange(e)}
+                />
+              )}
             />
           </div>
         </div>
         <div className="mt-6 -mx-2.5 flex items-center">
           {buttonsPanelRender}
         </div>
+        {errorRender}
       </form>
     </>
   );

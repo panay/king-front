@@ -2,21 +2,22 @@ import {createDomain, restore} from "effector";
 import { IUserData } from "../../types/UserData";
 import {IKeyValue} from "infrastructure/types";
 
-const usersDomain = createDomain("UserForm");
+const userDomain = createDomain("UserForm");
 
-export const changeForm = usersDomain.event<boolean>();
-export const catchError = usersDomain.event<string>();
-export const getAllRoles = usersDomain.event<void>();
-export const resetUserData = usersDomain.event<void>();
-export const deleteUserForm = usersDomain.event<string>();
+export const changeForm = userDomain.event<boolean>();
+export const catchError = userDomain.event<string>();
+export const getAllRoles = userDomain.event<void>();
+export const resetUserData = userDomain.event<void>();
+export const deleteUserForm = userDomain.event<string>();
 export const $formIsChanged = restore<boolean>(changeForm, true);
 
-export const getUserDataFx = usersDomain.effect<IUserData | null, IUserData | null>();
-export const createUserFx = usersDomain.effect<IUserData, boolean>();
-export const deleteUserFx = usersDomain.effect<string, string>();
-export const getRolesFx = usersDomain.effect<void, IKeyValue[]>();
+export const getUserDataFx = userDomain.effect<IUserData | null, IUserData | null>();
+export const createUserFx = userDomain.effect<IUserData, boolean>();
+export const updateUserFx = userDomain.effect<IUserData, boolean>();
+export const deleteUserFx = userDomain.effect<string, string>();
+export const getRolesFx = userDomain.effect<void, IKeyValue[]>();
 
-export const $usersError = usersDomain.store<string | null>(null);
-export const $usersPending = usersDomain.store<boolean>(false);
-export const $roles = usersDomain.store<IKeyValue[]>([]);
-export const $userData = usersDomain.store<IUserData | null>(null);
+export const $userError = userDomain.store<string | null>(null);
+export const $userPending = userDomain.store<boolean>(false);
+export const $roles = userDomain.store<IKeyValue[]>([]);
+export const $userData = userDomain.store<IUserData | null>(null);

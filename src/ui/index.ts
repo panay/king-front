@@ -8,6 +8,7 @@ import TitleWithDropdown from "./TitleWithDropdown";
 import Input from "./Input";
 import Table from "./Table";
 import CustomSelect from "./CustomSelect";
+import FormErrorMessage from "./FormErrorMessage";
 
 export {
   Button,
@@ -20,4 +21,5 @@ export {
   Input,
   Table,
   CustomSelect,
+  FormErrorMessage
 };

@@ -2,8 +2,8 @@ import {
   $formIsChanged,
   $roles,
   $userData,
-  $usersError,
-  $usersPending,
+  $userError,
+  $userPending,
   catchError,
   changeForm,
   createUserFx,
@@ -13,9 +13,15 @@ import {
   getRolesFx,
   getUserDataFx,
   resetUserData,
+  updateUserFx,
 } from "./";
 import { IKeyValue } from "infrastructure/types";
-import { createUser, deleteUser, getRoles } from "../../services/users-service";
+import {
+  createUser,
+  deleteUser,
+  getRoles,
+  updateUser,
+} from "../../services/users-service";
 import { IUserData } from "../../types/UserData";
 import "infrastructure/models/paging/init";
 
@@ -30,7 +36,9 @@ const getUsersRoles = async () => {
   let response = null;
   try {
     response = await getRoles();
-  } catch (err) {}
+  } catch (err) {
+    return null;
+  }
 
   return response?.data || [];
 };
@@ -39,7 +47,14 @@ const deleteCurrentUser = async (id: string) => {
   let response = null;
   try {
     response = await deleteUser(id);
-  } catch (err) {}
+  } catch (err) {
+    catchError(
+      err.response && err.response.data
+        ? err.response.data.message
+        : "Ошибка сервера"
+    );
+    return null;
+  }
 
   return response?.data;
 };
@@ -48,7 +63,30 @@ const createNewUser = async (user: IUserData) => {
   let response = null;
   try {
     response = await createUser(user);
-  } catch (err) {}
+  } catch (err) {
+    catchError(
+      err.response && err.response.data
+        ? err.response.data.message
+        : "Ошибка сервера"
+    );
+    return null;
+  }
+
+  return response?.data || [];
+};
+
+const updateCurrentUser = async (user: IUserData) => {
+  let response = null;
+  try {
+    response = await updateUser(user);
+  } catch (err) {
+    catchError(
+      err.response && err.response.data
+        ? err.response.data.message
+        : "Ошибка сервера"
+    );
+    return null;
+  }
 
   return response?.data || [];
 };
@@ -57,15 +95,17 @@ getAllRoles.watch(getRolesFx);
 resetUserData.watch(() => getUserDataFx(null));
 deleteUserForm.watch((id) => deleteUserFx(id));
 
-$usersError.on(catchError, failReducer).reset(changeForm);
-$usersPending
+$userError.on(catchError, failReducer).reset(changeForm);
+$userPending
   .on(createUserFx.pending || deleteUserFx.pending, pendingReducer)
-  .reset(changeForm);
+  .reset(changeForm)
+  .reset($userError);
 
 $formIsChanged.on(createUserFx || deleteUserFx, () => false);
 $roles.on(getRolesFx.doneData, rolesReducer);
 $userData.on(getUserDataFx, userDataReducer);
 
 createUserFx.use(createNewUser);
+updateUserFx.use(updateCurrentUser);
 getRolesFx.use(getUsersRoles);
 deleteUserFx.use(deleteCurrentUser);

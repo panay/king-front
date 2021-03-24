@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import { ReactComponent as IcSearch } from "infrastructure/assets/images/svgs/ic-search.svg";
 import styles from "./SearchInput.module.scss";
+import { useDebouncedCallback } from "use-debounce";
 
 type Props = InputHTMLAttributes<unknown> & {
   onSearch: (value: string) => void;
@@ -14,7 +15,7 @@ type Props = InputHTMLAttributes<unknown> & {
 function SearchInput({ onSearch, ...props }: Props) {
   const inputSearchRef = useRef<HTMLInputElement>(null);
 
-  const handleOnClick = (event: SyntheticEvent) => {
+  const handleSearchEvent = (event: SyntheticEvent) => {
     event.preventDefault();
     onSearch(inputSearchRef.current!.value);
   };
@@ -25,11 +26,21 @@ function SearchInput({ onSearch, ...props }: Props) {
     }
   };
 
+  const debouncedSearchEvent = useDebouncedCallback(
+    () => onSearch(inputSearchRef.current!.value),
+    400
+  );
+
   return (
     <label className={styles.label}>
-      <input ref={inputSearchRef} {...props} onKeyDown={handleKeyDown} />
+      <input
+        ref={inputSearchRef}
+        {...props}
+        onChange={debouncedSearchEvent}
+        onKeyDown={handleKeyDown}
+      />
       <span className={styles.placeholder}>{props.placeholder || "Поиск"}</span>
-      <button type="button" className={styles.icon} onClick={handleOnClick}>
+      <button type="button" className={styles.icon} onClick={handleSearchEvent}>
         <IcSearch className="text-icon-grey" />
       </button>
     </label>

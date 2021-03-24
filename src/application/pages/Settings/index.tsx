@@ -7,7 +7,7 @@ function Settings() {
     document.title = "Настройки пользователя – Spark [radar]";
   }, []);
   const handleOnSearch = (value: string) => {
-    console.log("Users Search :: ", value);
+    console.log("Settings Search :: ", value);
   };
   return (
     <TwoColumnLayout

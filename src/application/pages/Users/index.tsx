@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { Header, Table } from "ui";
 import UserInfoForm from "./components/UserInfoForm";
 import { CompanyPanel, TwoColumnLayout } from "domains";
@@ -6,30 +6,42 @@ import { Column } from "react-table";
 import { TableColumnConfig } from "./config/TableColumConfig";
 import { IUserData } from "./types/UserData";
 import { useStore } from "effector-react";
-import {$rowCount, $rowData, getUsersList} from "./models/table";
-import { $user, IUser } from "infrastructure/models/auth/user";
+import {
+  $rowCount,
+  $rowData,
+  getUsersList,
+  searchUsersByName,
+} from "./models/table";
 import { IPagination } from "infrastructure/types";
 import { $paging } from "infrastructure/models/paging";
 import NoUsers from "./components/NoUsers";
-import {getAllRoles, getUserDataFx} from "./models/form";
+import { getAllRoles, getUserDataFx } from "./models/form";
+import UserContext from "infrastructure/context/UserContext";
 
 import "./models/init";
 
 function Users() {
-  const user = useStore<IUser | null>($user);
+  const user = useContext(UserContext);
   const rowData = useStore<IUserData[]>($rowData);
   const rowCount = useStore<number>($rowCount);
   const paging = useStore<IPagination>($paging);
+  const companyId = user?.company.id;
 
   const handleOnSearch = (value: string) => {
-    console.log("Users Search :: ", value);
+    if (companyId) {
+      searchUsersByName({
+        company_id: companyId,
+        page_number: 1,
+        row_count: paging.perPage,
+        name: value,
+      });
+    }
   };
 
   const columns: Array<Column<any>> = TableColumnConfig();
 
   const loadNextPage = useCallback(
     (startIndex: number, stopIndex: number, page: number) => {
-      const companyId = user?.company.id;
       if (companyId) {
         getUsersList({
           company_id: companyId,
@@ -40,7 +52,7 @@ function Users() {
 
       return null;
     },
-    [paging.perPage, user?.company.id]
+    [companyId, paging.perPage]
   );
 
   useEffect(() => {
@@ -49,10 +61,7 @@ function Users() {
   }, []);
 
   return (
-    <TwoColumnLayout
-      className="bg-input-grey"
-      asideContent={<UserInfoForm />}
-    >
+    <TwoColumnLayout className="bg-input-grey" asideContent={<UserInfoForm />}>
       <Header
         headerTitle={<CompanyPanel />}
         placeholder="Поиск пользователя"

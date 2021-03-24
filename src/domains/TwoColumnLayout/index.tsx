@@ -21,7 +21,7 @@ function TwoColumnLayout({ asideContent, ...props }: Props) {
         {props.children}
       </div>
       {asideContent ? (
-        <div className="p-6 xl:w-4/12 md:w-5/12">{asideContent}</div>
+        <div className="p-6 xl:w-4/12 md:w-5/12 relative">{asideContent}</div>
       ) : (
         ""
       )}

@@ -16,7 +16,7 @@ function Header({ headerTitle, onSearch, ...props }: Props) {
   const isAdmin = user?.role.name === "ADMIN";
 
   const handleSearch = (value: string) => {
-    if (onSearch && value && value.trim() !== "") {
+    if (onSearch) {
       onSearch(value);
     }
   };
