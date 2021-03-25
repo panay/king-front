@@ -12,6 +12,7 @@ import {
   getAllRoles,
   getRolesFx,
   getUserDataFx,
+  resetErrorForm,
   resetUserData,
   updateUserFx,
 } from "./";
@@ -26,7 +27,7 @@ import { IUserData } from "../../types/UserData";
 import "infrastructure/models/paging/init";
 
 const pendingReducer = (state: boolean, payload: boolean) => payload;
-const failReducer = (state: string | null, payload: string) => payload;
+const failReducer = (state: string | null, payload: string | null) => payload;
 const rolesReducer = (state: IKeyValue[], payload: IKeyValue[]) =>
   payload ? payload.slice() : [];
 const userDataReducer = (state: IUserData | null, payload: IUserData | null) =>
@@ -94,14 +95,20 @@ const updateCurrentUser = async (user: IUserData) => {
 getAllRoles.watch(getRolesFx);
 resetUserData.watch(() => getUserDataFx(null));
 deleteUserForm.watch((id) => deleteUserFx(id));
+resetErrorForm.watch(() => catchError(null));
 
 $userError.on(catchError, failReducer).reset(changeForm);
 $userPending
-  .on(createUserFx.pending || deleteUserFx.pending, pendingReducer)
+  .on(createUserFx.pending, pendingReducer)
+  .on(updateUserFx.pending, pendingReducer)
+  .on(deleteUserFx.pending, pendingReducer)
   .reset(changeForm)
   .reset($userError);
 
-$formIsChanged.on(createUserFx || deleteUserFx, () => false);
+$formIsChanged
+  .on(createUserFx, () => false)
+  .on(updateUserFx, () => false)
+  .on(deleteUserFx, () => false);
 $roles.on(getRolesFx.doneData, rolesReducer);
 $userData.on(getUserDataFx, userDataReducer);
 

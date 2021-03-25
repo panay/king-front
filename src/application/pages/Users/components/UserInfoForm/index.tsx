@@ -10,6 +10,7 @@ import {
   changeForm,
   createUserFx,
   deleteUserForm,
+  resetErrorForm,
   resetUserData,
   updateUserFx,
 } from "../../models/form";
@@ -78,6 +79,7 @@ function UserInfoForm() {
 
   const resetForm = () => {
     reset(defaultValues);
+    resetErrorForm();
   };
 
   const generatePassword = () => {
@@ -101,14 +103,17 @@ function UserInfoForm() {
     resetForm();
   };
 
+  const handleChangeForm = () => {
+    return !formIsChanged
+        ? changeForm?.prepend((e: FormEvent) => true)
+        : undefined
+  }
+
   const onSubmit = (formData: any) => {
-    console.log("formData :: ", formData);
     const body = {
       ...defaultValues,
       ...formData,
     };
-
-    console.log("body :: ", body);
 
     if (userData?.id) {
       updateUserFx(body).then((response) => {
@@ -197,6 +202,8 @@ function UserInfoForm() {
         label: userData?.is_active ? "Активен" : "Не активен",
       },
     });
+
+    resetErrorForm();
   }, [reset, userData]);
 
   return (
@@ -204,11 +211,7 @@ function UserInfoForm() {
       <h2>Информация пользователя</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        onChange={
-          !formIsChanged
-            ? changeForm?.prepend((e: FormEvent) => true)
-            : undefined
-        }
+        onChange={handleChangeForm}
       >
         <div className="mt-4">
           <FluidLabelInput
