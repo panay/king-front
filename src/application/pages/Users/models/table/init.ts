@@ -3,13 +3,13 @@ import { IUserData, IUsersRequest, IUsersResponse } from "../../types/UserData";
 import {
   $rowCount,
   $rowData,
+  updateUserListSuccess,
   getUsersFx,
   getUsersList,
   searchUsersByName,
   updateUsersFx,
 } from "./";
 import { setPaging } from "infrastructure/models/paging";
-import "../init";
 
 const usersReducer = (state: IUserData[], payload: IUsersResponse) => {
   const rowData = payload && payload.data ? payload.data.slice() : [];
@@ -49,13 +49,21 @@ const getUsers = async (request: IUsersRequest) => {
 
 getUsersList.watch((body) => getUsersFx(body));
 searchUsersByName.watch((body) => updateUsersFx(body));
+updateUserListSuccess.watch(() => {
+  setPaging({
+    isNextPageLoading: false,
+    hasNextPage: true,
+  });
+});
 
 $rowData
   .on(getUsersFx.doneData, usersReducer)
-  .on(updateUsersFx.doneData, updateUsersReducer);
+  .on(updateUsersFx.doneData, updateUsersReducer)
+  .on(updateUserListSuccess, () => []);
 $rowCount
   .on(getUsersFx.doneData, countReducer)
-  .on(updateUsersFx.doneData, countReducer);
+  .on(updateUsersFx.doneData, countReducer)
+  .on(updateUserListSuccess, () => 0);
 
 getUsersFx.use(getUsers);
 updateUsersFx.use(getUsers);

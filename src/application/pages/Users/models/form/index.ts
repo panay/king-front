@@ -8,7 +8,6 @@ export const changeForm = userDomain.event<boolean>();
 export const catchError = userDomain.event<string | null>();
 export const getAllRoles = userDomain.event<void>();
 export const resetUserData = userDomain.event<void>();
-export const deleteUserForm = userDomain.event<string>();
 export const resetErrorForm = userDomain.event<void>();
 export const $formIsChanged = restore<boolean>(changeForm, true);
 

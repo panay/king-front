@@ -7,7 +7,6 @@ import {
   catchError,
   changeForm,
   createUserFx,
-  deleteUserForm,
   deleteUserFx,
   getAllRoles,
   getRolesFx,
@@ -94,7 +93,6 @@ const updateCurrentUser = async (user: IUserData) => {
 
 getAllRoles.watch(getRolesFx);
 resetUserData.watch(() => getUserDataFx(null));
-deleteUserForm.watch((id) => deleteUserFx(id));
 resetErrorForm.watch(() => catchError(null));
 
 $userError.on(catchError, failReducer).reset(changeForm);
@@ -109,6 +107,7 @@ $formIsChanged
   .on(createUserFx, () => false)
   .on(updateUserFx, () => false)
   .on(deleteUserFx, () => false);
+
 $roles.on(getRolesFx.doneData, rolesReducer);
 $userData.on(getUserDataFx, userDataReducer);
 

@@ -9,7 +9,7 @@ import {
   $userPending,
   changeForm,
   createUserFx,
-  deleteUserForm,
+  deleteUserFx,
   resetErrorForm,
   resetUserData,
   updateUserFx,
@@ -45,14 +45,7 @@ function UserInfoForm() {
   const error = useStore($userError);
   const pending = useStore($userPending);
   const formIsChanged = useStore($formIsChanged);
-  const defaultValues = {
-    id: userData?.id,
-    company_id: user?.company.id,
-    name: null,
-    login: null,
-    role_id: null,
-    is_active: null,
-  };
+
   const roleOptions = roles.map((role) => ({
     value: role.id,
     label: role.name,
@@ -77,6 +70,15 @@ function UserInfoForm() {
     userData?.is_active ? option.value === "1" : option.value === "0"
   );
 
+  const defaultValues = {
+    id: userData?.id,
+    company_id: user?.company.id,
+    name: null,
+    login: null,
+    role_id: null,
+    is_active: isActiveValue,
+  };
+
   const resetForm = () => {
     reset(defaultValues);
     resetErrorForm();
@@ -95,7 +97,11 @@ function UserInfoForm() {
 
   const deleteUser = () => {
     confirmToDelete(false);
-    deleteUserForm(userData!.id);
+    deleteUserFx(userData!.id).then((response) => {
+      if (response) {
+        cancelForm();
+      }
+    });
   };
 
   const cancelForm = () => {
@@ -105,9 +111,9 @@ function UserInfoForm() {
 
   const handleChangeForm = () => {
     return !formIsChanged
-        ? changeForm?.prepend((e: FormEvent) => true)
-        : undefined
-  }
+      ? changeForm?.prepend((e: FormEvent) => true)
+      : undefined;
+  };
 
   const onSubmit = (formData: any) => {
     const body = {
@@ -118,13 +124,13 @@ function UserInfoForm() {
     if (userData?.id) {
       updateUserFx(body).then((response) => {
         if (response) {
-          resetForm();
+          cancelForm();
         }
       });
     } else {
       createUserFx(body).then((response) => {
         if (response) {
-          resetForm();
+          cancelForm();
         }
       });
     }
@@ -209,10 +215,7 @@ function UserInfoForm() {
   return (
     <>
       <h2>Информация пользователя</h2>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        onChange={handleChangeForm}
-      >
+      <form onSubmit={handleSubmit(onSubmit)} onChange={handleChangeForm}>
         <div className="mt-4">
           <FluidLabelInput
             inputRef={register({
@@ -284,7 +287,7 @@ function UserInfoForm() {
               name="is_active"
               control={control}
               defaultValue={isActiveValue}
-              rules={{ required: true, setValueAs: (value) => !!value?.value }}
+              rules={{ required: true, setValueAs: (value) => +value?.value }}
               render={(props) => (
                 <CustomSelect
                   placeholder="Признак"

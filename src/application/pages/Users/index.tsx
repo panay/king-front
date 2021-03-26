@@ -15,7 +15,7 @@ import {
 import { IPagination } from "infrastructure/types";
 import { $paging } from "infrastructure/models/paging";
 import NoUsers from "./components/NoUsers";
-import { getAllRoles, getUserDataFx } from "./models/form";
+import {$formIsChanged, getAllRoles, getUserDataFx} from "./models/form";
 import UserContext from "infrastructure/context/UserContext";
 
 import "./models/init";
@@ -25,6 +25,7 @@ function Users() {
   const rowData = useStore<IUserData[]>($rowData);
   const rowCount = useStore<number>($rowCount);
   const paging = useStore<IPagination>($paging);
+  const userFormIsChanged = useStore($formIsChanged);
   const companyId = user?.company.id;
 
   const handleOnSearch = (value: string) => {
@@ -80,6 +81,7 @@ function Users() {
           rowClicked={(value) => getUserDataFx(value as IUserData)}
           loadNextPage={loadNextPage}
           noDataComponent={<NoUsers />}
+          reload={userFormIsChanged}
         />
       </div>
     </TwoColumnLayout>

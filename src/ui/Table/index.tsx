@@ -1,4 +1,10 @@
-import React, { CSSProperties, ReactElement, useCallback } from "react";
+import React, {
+  CSSProperties,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { Column, useTable } from "react-table";
 import { FixedSizeList } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
@@ -19,6 +25,7 @@ type Props = {
     page: number
   ) => Promise<any> | null;
   noDataComponent?: ReactElement;
+  reload?: boolean;
 };
 
 function Table({
@@ -32,8 +39,11 @@ function Table({
     page: number
   ) => {},
   noDataComponent,
+  reload,
 }: Props) {
   const paging = useStore<IPagination>($paging);
+  const listRef = useRef<InfiniteLoader>(null);
+  const hasMountedRef = useRef<boolean>(false);
 
   const loadMore = useCallback(
     (startIndex: number, stopIndex: number) => {
@@ -143,6 +153,15 @@ function Table({
     ]
   );
 
+  useEffect(() => {
+    if (reload) {
+      if (listRef.current && hasMountedRef.current) {
+        listRef.current?.resetloadMoreItemsCache(true);
+      }
+      hasMountedRef.current = true;
+    }
+  }, [reload]);
+
   return (
     <AutoSizer defaultHeight={600} defaultWidth={600}>
       {({ height, width }) => (
@@ -168,9 +187,12 @@ function Table({
 
           <div {...getTableBodyProps()}>
             <InfiniteLoader
-              isItemLoaded={(index: number) => !!items[index]}
+              isItemLoaded={(index: number) => {
+                return !paging.hasNextPage || !!items[index];
+              }}
               itemCount={itemCount}
               loadMoreItems={loadMoreItems}
+              ref={listRef}
             >
               {({ onItemsRendered, ref }) => (
                 <FixedSizeList

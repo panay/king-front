@@ -10,7 +10,7 @@ guard({
   source: $user,
   clock: loginFx.doneData,
   filter: (value) => {
-    return !value?.company || !Object.keys(value?.company).length;
+    return !!value && (!value.company || !Object.keys(value.company).length);
   },
   target: getCompaniesFx,
 });
