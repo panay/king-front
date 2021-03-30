@@ -9,6 +9,7 @@ import Input from "./Input";
 import Table from "./Table";
 import CustomSelect from "./CustomSelect";
 import FormErrorMessage from "./FormErrorMessage";
+import LoginLoader from "./Loaders/LoginLoader";
 
 export {
   Button,
@@ -21,5 +22,6 @@ export {
   Input,
   Table,
   CustomSelect,
-  FormErrorMessage
+  FormErrorMessage,
+  LoginLoader,
 };

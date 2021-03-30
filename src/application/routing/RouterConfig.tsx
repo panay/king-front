@@ -8,8 +8,12 @@ import React, {
 } from "react";
 import { Switch } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
-import AuthContext, { CheckAuthContext } from "infrastructure/context/AuthContext";
+import AuthContext, {
+  CheckAuthContext,
+} from "infrastructure/context/AuthContext";
 import { SidebarLayout } from "domains";
+import { LoginLoader } from "ui";
+import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
 
 interface Route {
   path: string;
@@ -49,6 +53,16 @@ export const RouterConfig = () => {
   const authenticated = useContext(AuthContext);
   const isAuthCheck = useContext(CheckAuthContext);
   const loading = <div>Loading...</div>;
+  const emptyResultLoader = (
+    <div className="bg-input-grey flex flex-col items-center justify-center p-3 h-full">
+      <IcLoader className="text-primary" />
+    </div>
+  );
+  const loginLoader = (
+    <div className="bg-input-grey flex flex-col items-center justify-center p-3 h-full">
+      <LoginLoader />
+    </div>
+  );
   const result = useMemo(
     () =>
       routes.map((route: Route, index: number) => (
@@ -64,22 +78,20 @@ export const RouterConfig = () => {
 
   if (!authenticated) {
     return (
-      <Suspense fallback={loading}>
+      <Suspense fallback={loginLoader}>
         <Switch>{result}</Switch>
       </Suspense>
     );
   }
 
   if (!isAuthCheck) {
-    return loading;
+    return emptyResultLoader;
   }
 
   return (
     <SidebarLayout>
       <Suspense fallback={loading}>
-        <Switch>
-          {result}
-        </Switch>
+        <Switch>{result}</Switch>
       </Suspense>
     </SidebarLayout>
   );

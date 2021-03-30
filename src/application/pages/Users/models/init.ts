@@ -3,8 +3,8 @@ import "./form/init";
 import "infrastructure/models/paging/init";
 
 import { sample } from "effector";
-import { createUserFx, deleteUserFx } from "./form";
-import { updateUserListSuccess, updateUsersFx } from "./table";
+import { createUserFx, deleteUserFx, updateUserFx } from "./form";
+import { updateUserListSuccess } from "./table";
 
 sample({
   clock: deleteUserFx.doneData,
@@ -17,6 +17,6 @@ sample({
 });
 
 sample({
-  clock: updateUsersFx.doneData,
+  clock: updateUserFx.doneData,
   target: updateUserListSuccess,
 });

@@ -77,6 +77,7 @@ function UserInfoForm() {
     login: null,
     role_id: null,
     is_active: isActiveValue,
+    password: null
   };
 
   const resetForm = () => {
@@ -119,6 +120,7 @@ function UserInfoForm() {
     const body = {
       ...defaultValues,
       ...formData,
+      password: userData?.id && !formData.password ? null : formData.password
     };
 
     if (userData?.id) {
@@ -203,6 +205,7 @@ function UserInfoForm() {
             label: userData.role.name,
           }
         : null,
+      password: null,
       is_active: {
         value: userData?.is_active ? "1" : "0",
         label: userData?.is_active ? "Активен" : "Не активен",
