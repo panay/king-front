@@ -67,6 +67,7 @@ function Home() {
         markers: {
           fillColors: ["#0052cc", "#c9dfff"],
         },
+        horizontalAlign: "left"
       },
       plotOptions: {
         bar: {
@@ -133,6 +134,7 @@ function Home() {
         markers: {
           fillColors: ["#0052cc"],
         },
+        horizontalAlign: "left"
       },
       plotOptions: {
         bar: {
