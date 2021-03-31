@@ -18,14 +18,12 @@ function Card({ icon, color, title, growth, to, totalAmount }: Props) {
     >
       <div className="flex items-center justify-between">
         <div
-          className={`p-3 rounded-xl bg-opacity-20 ${"bg-" + color} ${
-            "text-" + color
-          }`}
+          className={`p-3 rounded-xl bg-opacity-20 bg-icon-violet text-icon-violet`}
         >
           {icon}
         </div>
         <div className="text-right">
-          <div className={`shadow w-14 h-0.5 ${"bg-" + color}`} />
+          <div className={`shadow w-14 h-0.5 bg-icon-violet`} />
           <p className="text-xs text-icon-grey mt-1.5">{growth}</p>
         </div>
       </div>
