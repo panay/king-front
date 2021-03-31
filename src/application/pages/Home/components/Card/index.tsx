@@ -15,6 +15,7 @@ function Card({ icon, color, title, growth, to, totalAmount }: Props) {
   const textColor = `text-${color}`;
   const firstClassName = `p-3 rounded-xl bg-opacity-20 ${bgColor} ${textColor}`;
   const secondClassName = `shadow w-14 h-0.5 ${bgColor}`;
+
   return (
     <Link
       to={to}
