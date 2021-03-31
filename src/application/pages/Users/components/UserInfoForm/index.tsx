@@ -23,7 +23,7 @@ import { IUserData } from "../../types/UserData";
 import "../../models/init";
 import ConfirmPanel from "../ConfirmPanel";
 import { IKeyValue } from "infrastructure/types";
-import UserContext from "infrastructure/context/UserContext";
+import {$currentCompany} from "infrastructure/models/auth/user";
 
 function UserInfoForm() {
   const {
@@ -38,13 +38,13 @@ function UserInfoForm() {
   });
   const { isValid, isDirty } = formState;
 
-  const user = useContext(UserContext);
   const [readyToDelete, confirmToDelete] = useState(false);
   const userData = useStore<IUserData | null>($userData);
   const roles = useStore<IKeyValue[]>($roles);
   const error = useStore($userError);
   const pending = useStore($userPending);
   const formIsChanged = useStore($formIsChanged);
+  const currentCompany = useStore($currentCompany);
 
   const roleOptions = roles.map((role) => ({
     value: role.id,
@@ -72,7 +72,7 @@ function UserInfoForm() {
 
   const defaultValues = {
     id: userData?.id,
-    company_id: user?.company.id,
+    company_id: currentCompany,
     name: null,
     login: null,
     role_id: null,

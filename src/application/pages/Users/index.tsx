@@ -16,17 +16,17 @@ import { IPagination } from "infrastructure/types";
 import { $paging } from "infrastructure/models/paging";
 import NoUsers from "./components/NoUsers";
 import {$formIsChanged, getAllRoles, getUserDataFx} from "./models/form";
-import UserContext from "infrastructure/context/UserContext";
+import {$currentCompany} from "infrastructure/models/auth/user";
 
 import "./models/init";
 
 function Users() {
-  const user = useContext(UserContext);
   const rowData = useStore<IUserData[]>($rowData);
   const rowCount = useStore<number>($rowCount);
   const paging = useStore<IPagination>($paging);
+  const currentCompany = useStore($currentCompany);
   const userFormIsChanged = useStore($formIsChanged);
-  const companyId = user?.company.id;
+  const companyId = currentCompany?.id;
 
   const handleOnSearch = (value: string) => {
     if (companyId) {

@@ -43,7 +43,7 @@ const createCompany = async (name: string) => {
   return response?.data;
 };
 
-getCompaniesList.watch(_ => getCompaniesFx)
+getCompaniesList.watch(() => getCompaniesFx());
 
 $companies.on(getCompaniesFx.doneData, companiesReducer);
 
