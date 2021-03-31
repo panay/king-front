@@ -32,5 +32,4 @@ const clearUserReducer = (state: IUser | null, payload: boolean) =>
   payload ? null : state;
 
 $user.on(loginFx.doneData, userReducer).on(clearUser, clearUserReducer);
-
 $currentCompany.on(updateCurrentCompany, currentCompanyReducer);

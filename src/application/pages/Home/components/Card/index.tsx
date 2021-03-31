@@ -6,13 +6,14 @@ type Props = {
   color: string;
   title: string;
   growth: string;
+  to: string;
   totalAmount?: string;
 };
 
-function Card({ icon, color, title, growth, totalAmount }: Props) {
+function Card({ icon, color, title, growth, to, totalAmount }: Props) {
   return (
     <Link
-      to="/apps"
+      to={to}
       className={`group block p-4 bg-white rounded-xl transition-shadow hover:shadow-lg`}
     >
       <div className="flex items-center justify-between">

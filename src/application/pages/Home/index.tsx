@@ -27,25 +27,28 @@ function Home() {
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcGeo />}
-            color="violet"
+            color="icon-violet"
             title="Местоположения"
             growth="0%"
+            to="/geo"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcApp />}
-            color="orange"
+            color="icon-orange"
             title="Приложения"
             growth="0%"
+            to="/apps"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcTrack />}
-            color="green"
+            color="icon-green"
             title="Маршруты"
             growth="0%"
+            to="/routes"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">
@@ -54,22 +57,25 @@ function Home() {
             color="primary"
             title="Геофенсы"
             growth="0%"
+            to="/geofence"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcCampaigns />}
-            color="lawngreen"
+            color="icon-lawngreen"
             title="Кампании"
             growth="0%"
+            to="/campaigns"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcGeotrigger />}
-            color="purple"
+            color="icon-purple"
             title="Геотриггеры"
             growth="0%"
+            to="/geotrigger"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/2">

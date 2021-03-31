@@ -23,11 +23,11 @@ module.exports = {
         "icon-white": "#ffffff",
         "lighten-grey": "#fcfcff",
 
-        violet: "#5243aa",
-        orange: "#ff991f",
-        green: "#00875a",
-        lawngreen: "#6acd00",
-        purple: "#ec31ff",
+        "icon-violet": "#5243aa",
+        "icon-orange": "#ff991f",
+        "icon-green": "#00875a",
+        "icon-lawngreen": "#6acd00",
+        "icon-purple": "#ec31ff",
 
         "off-white": "#fdf0ba",
         brown: "#3f2e00",

@@ -18,13 +18,17 @@ function CompanyPanel() {
 
   useEffect(() => {
     if (user?.isRootAdmin) {
-      if (companies?.length) {
+      if (
+        (!currentCompany ||
+          (currentCompany && !Object.keys(currentCompany).length)) &&
+        companies?.length
+      ) {
         updateCurrentCompany(companies[0]);
       }
     } else {
       updateCurrentCompany(user?.company as IKeyValue);
     }
-  }, [companies, user?.company, user?.isRootAdmin]);
+  }, [currentCompany, companies, user?.company, user?.isRootAdmin]);
 
   const handleOnOpenDropdown = (opened: boolean) => {
     if (opened) {
