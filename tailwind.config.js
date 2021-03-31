@@ -4,9 +4,18 @@ module.exports = {
   purge: {
     content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
     options: {
-      safelist: {
-        greedy: ["/safe$/"],
-      },
+      safelist: [
+        "bg-icon-violet",
+        "bg-icon-orange",
+        "bg-icon-green",
+        "bg-icon-lawngreen",
+        "bg-icon-purple",
+        "text-icon-violet",
+        "text-icon-orange",
+        "text-icon-green",
+        "text-icon-lawngreen",
+        "text-icon-purple",
+      ],
     },
   },
   darkMode: false, // or 'media' or 'class'
