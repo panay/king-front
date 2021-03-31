@@ -16,6 +16,142 @@ function Home() {
     console.log("Home Search :: ", value);
   };
 
+  const tempChartOptions1 = {
+    options: {
+      chart: {
+        id: "basic-bar1",
+      },
+      xaxis: {
+        categories: ["Мар 9", "Мар 16", "Мар 23", "Мар 30"],
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          shade: "light",
+          type: "vertical",
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.9,
+          colorStops: [
+            [
+              {
+                offset: 0,
+                color: "#41b2ff",
+                opacity: 1,
+              },
+              {
+                offset: 100,
+                color: "#0052cc",
+                opacity: 1,
+              },
+            ],
+            [
+              {
+                offset: 0,
+                color: "#e6f1ff",
+                opacity: 1,
+              },
+              {
+                offset: 100,
+                color: "#c9dfff",
+                opacity: 1,
+              },
+            ],
+          ],
+        },
+      },
+      legend: {
+        markers: {
+          fillColors: ["#0052cc", "#c9dfff"],
+        },
+      },
+      plotOptions: {
+        bar: {
+          columnWidth: "30%",
+          borderRadius: 4,
+        },
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+    series: [
+      {
+        name: "Отправлено",
+        data: [220, 110, 40, 160],
+      },
+      {
+        name: "Открыто",
+        data: [100, 160, 15, 20],
+      },
+    ],
+  };
+
+  const tempChartOptions2 = {
+    options: {
+      chart: {
+        id: "basic-bar2",
+      },
+      xaxis: {
+        categories: ["Мар 9", "Мар 16", "Мар 23", "Мар 30"],
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          shade: "light",
+          type: "vertical",
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.9,
+          colorStops: [
+            [
+              {
+                offset: 0,
+                color: "#41b2ff",
+                opacity: 1,
+              },
+              {
+                offset: 100,
+                color: "#0052cc",
+                opacity: 1,
+              },
+            ]
+          ],
+        },
+      },
+      legend: {
+        show: true,
+        showForSingleSeries: true,
+        showForNullSeries: true,
+        showForZeroSeries: true,
+        markers: {
+          fillColors: ["#0052cc"],
+        },
+      },
+      plotOptions: {
+        bar: {
+          columnWidth: "15%",
+          borderRadius: 4,
+        },
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+    series: [
+      {
+        name: "Количество устройств",
+        data: [0.2, 0.2, 7, 5],
+      }
+    ],
+  };
+
   useEffect(() => {
     document.title = "Главная – Spark [radar]";
   }, []);
@@ -38,8 +174,9 @@ function Home() {
             icon={<IcApp />}
             color="icon-orange"
             title="Приложения"
-            growth="0%"
+            growth="+5%"
             to="/apps"
+            totalAmount="23 установки"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">
@@ -49,6 +186,7 @@ function Home() {
             title="Маршруты"
             growth="0%"
             to="/routes"
+            totalAmount="Всего 3 записи"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">
@@ -56,8 +194,9 @@ function Home() {
             icon={<IcGeofence />}
             color="primary"
             title="Геофенсы"
-            growth="0%"
+            growth="-3%"
             to="/geofence"
+            totalAmount="Всего 159 записей"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">
@@ -65,8 +204,9 @@ function Home() {
             icon={<IcCampaigns />}
             color="icon-lawngreen"
             title="Кампании"
-            growth="0%"
+            growth="-7%"
             to="/campaigns"
+            totalAmount="Проведенных 47"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">
@@ -74,15 +214,23 @@ function Home() {
             icon={<IcGeotrigger />}
             color="icon-purple"
             title="Геотриггеры"
-            growth="0%"
+            growth="+6%"
             to="/geotrigger"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/2">
-          <ChartCard title="Уведомление" options={{}} />
+          <ChartCard
+            title="Уведомление"
+            data={tempChartOptions1.series}
+            options={tempChartOptions1.options}
+          />
         </div>
         <div className="px-2.5 pt-5 w-1/2">
-          <ChartCard title="Подключенные устройства" options={{}} />
+          <ChartCard
+            title="Подключенные устройства"
+            data={tempChartOptions2.series}
+            options={tempChartOptions2.options}
+          />
         </div>
       </div>
     </TwoColumnLayout>
