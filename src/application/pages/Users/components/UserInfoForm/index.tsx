@@ -243,6 +243,7 @@ function UserInfoForm() {
               name="login"
               placeholder="Почта"
               required
+              pattern="^[\w\d._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             />
           </div>
           <div className="flex-1 mx-2.5">
