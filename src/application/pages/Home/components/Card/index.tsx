@@ -11,6 +11,8 @@ type Props = {
 };
 
 function Card({ icon, color, title, growth, to, totalAmount }: Props) {
+  const bgColor = `bg-${color}`;
+  const textColor = `text-${color}`;
   return (
     <Link
       to={to}
@@ -18,12 +20,12 @@ function Card({ icon, color, title, growth, to, totalAmount }: Props) {
     >
       <div className="flex items-center justify-between">
         <div
-          className={`p-3 rounded-xl bg-opacity-20 bg-icon-violet text-icon-violet`}
+          className={`p-3 rounded-xl bg-opacity-20 ${bgColor} ${textColor}`}
         >
           {icon}
         </div>
         <div className="text-right">
-          <div className={`shadow w-14 h-0.5 bg-icon-violet`} />
+          <div className={`shadow w-14 h-0.5 ${bgColor}`} />
           <p className="text-xs text-icon-grey mt-1.5">{growth}</p>
         </div>
       </div>
