@@ -71,7 +71,7 @@ function Users() {
       <div
         className="bg-white rounded-xl p-4 mt-6"
         style={{
-          height: "calc(100vh - 70px)",
+          height: "calc(100vh - 130px)",
         }}
       >
         <Table

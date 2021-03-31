@@ -27,7 +27,7 @@ function Home() {
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcGeo />}
-            color="ic-violet"
+            color="violet"
             title="Местоположения"
             growth="0%"
           />
@@ -35,7 +35,7 @@ function Home() {
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcApp />}
-            color="ic-orange"
+            color="orange"
             title="Приложения"
             growth="0%"
           />
@@ -43,7 +43,7 @@ function Home() {
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcTrack />}
-            color="ic-green"
+            color="green"
             title="Маршруты"
             growth="0%"
           />
@@ -59,7 +59,7 @@ function Home() {
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcCampaigns />}
-            color="ic-lawngreen"
+            color="lawngreen"
             title="Кампании"
             growth="0%"
           />
@@ -67,7 +67,7 @@ function Home() {
         <div className="px-2.5 pt-5 w-1/3">
           <Card
             icon={<IcGeotrigger />}
-            color="ic-purple"
+            color="purple"
             title="Геотриггеры"
             growth="0%"
           />

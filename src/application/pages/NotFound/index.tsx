@@ -9,14 +9,16 @@ function NotFound() {
   }, []);
 
   return (
-    <div className="text-center py-14 mx-auto">
-      <h1>Страница не&nbsp;найдена</h1>
-      <img
-        src={NotFoundBg}
-        srcSet={`${NotFoundBg} 1x, ${NotFoundBg2x} 2x, ${NotFoundBg3x} 3x`}
-        alt="404 Page Not Found"
-        className="mt-8"
-      />
+    <div className="text-center py-14 flex flex-col items-center justify-center m-auto">
+      <div>
+        <h1>Страница не&nbsp;найдена</h1>
+        <img
+          src={NotFoundBg}
+          srcSet={`${NotFoundBg} 1x, ${NotFoundBg2x} 2x, ${NotFoundBg3x} 3x`}
+          alt="404 Page Not Found"
+          className="mt-8"
+        />
+      </div>
     </div>
   );
 }

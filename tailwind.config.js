@@ -7,7 +7,7 @@ module.exports = {
     extend: {
       colors: {
         primary: "#0052cc",
-        "default": "#181818",
+        default: "#181818",
         success: "#3bcf7e",
         warning: "#ff531d",
         "hover-warning": "#ff7145",
@@ -23,17 +23,17 @@ module.exports = {
         "icon-white": "#ffffff",
         "lighten-grey": "#fcfcff",
 
-        "ic-violet": "#5243aa",
-        "ic-orange": "#ff991f",
-        "ic-green": "#00875a",
-        "ic-lawngreen": "#6acd00",
-        "ic-purple": "#ec31ff",
+        violet: "#5243aa",
+        orange: "#ff991f",
+        green: "#00875a",
+        lawngreen: "#6acd00",
+        purple: "#ec31ff",
 
         "off-white": "#fdf0ba",
         brown: "#3f2e00",
         orangered: "#f2461f",
         seagreen: "#2e8b58",
-        "lighten-blue": "#f7faff"
+        "lighten-blue": "#f7faff",
       },
       fontFamily: {
         ...fontFamily,
@@ -43,14 +43,12 @@ module.exports = {
   },
   variants: {
     extend: {
-      backgroundColor: ['active', 'disabled'],
-      textColor: ['group-hover', 'disabled'],
-      opacity: ['disabled'],
-      pointerEvents: ['disabled'],
-      display: ['group-hover']
+      backgroundColor: ["active", "disabled"],
+      textColor: ["group-hover", "disabled"],
+      opacity: ["disabled"],
+      pointerEvents: ["disabled"],
+      display: ["group-hover"],
     },
   },
-  plugins: [
-    require('tailwind-scrollbar'),
-  ],
+  plugins: [require("tailwind-scrollbar")],
 };
