@@ -67,7 +67,7 @@ $rowCount
   .on(updateUserListSuccess, () => 0);
 $usersIsChanged
   .on(getUsersFx.doneData, () => true)
-  .on(updateUserListSuccess, () => false);
+  .on(updateUsersFx.doneData, () => true);
 
 getUsersFx.use(getUsers);
 updateUsersFx.use(getUsers);

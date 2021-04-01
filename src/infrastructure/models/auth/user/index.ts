@@ -17,7 +17,7 @@ export interface IUser {
 
 export const userDomain = createDomain("User");
 
-export const updateCurrentCompany = userDomain.event<IKeyValue>();
+export const updateCurrentCompany = userDomain.event<IKeyValue | null>();
 export const clearUser = userDomain.event<boolean>();
 
 export const $user = userDomain.store<IUser | null>(null);

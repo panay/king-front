@@ -14,7 +14,7 @@ interface IUsersResponse {
 }
 
 interface IUsersRequest {
-  company_id: string;
+  company_id?: string;
   page_number?: number;
   row_count?: number;
   name?: string;

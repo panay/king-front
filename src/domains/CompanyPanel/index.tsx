@@ -17,16 +17,20 @@ function CompanyPanel() {
   const currentCompany = useStore($currentCompany);
 
   useEffect(() => {
+    const currentCompanyIsEmpty =
+      !currentCompany ||
+      (currentCompany && !Object.keys(currentCompany).length);
+
     if (user?.isRootAdmin) {
-      if (
-        (!currentCompany ||
-          (currentCompany && !Object.keys(currentCompany).length)) &&
-        companies?.length
-      ) {
+      if (currentCompanyIsEmpty && companies?.length) {
         updateCurrentCompany(companies[0]);
       }
-    } else {
-      updateCurrentCompany(user?.company as IKeyValue);
+    } else if (currentCompanyIsEmpty) {
+      const company =
+        user?.company && Object.keys(user?.company).length
+          ? user?.company
+          : null;
+      updateCurrentCompany(company);
     }
   }, [currentCompany, companies, user?.company, user?.isRootAdmin]);
 

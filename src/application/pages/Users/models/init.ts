@@ -3,10 +3,13 @@ import "./form/init";
 import "infrastructure/models/paging/init";
 import "infrastructure/models/auth/init";
 
-import { sample } from "effector";
+import { guard, sample } from "effector";
 import { createUserFx, deleteUserFx, updateUserFx } from "./form";
 import { changeUsers, getUsersList, updateUserListSuccess } from "./table";
-import { updateCurrentCompany } from "infrastructure/models/auth/user";
+import {
+  $currentCompany,
+  updateCurrentCompany,
+} from "infrastructure/models/auth/user";
 import { IKeyValue } from "infrastructure/types";
 
 sample({
@@ -24,15 +27,22 @@ sample({
   target: updateUserListSuccess,
 });
 
-sample({
-  source: updateCurrentCompany,
-  fn: (company: IKeyValue) => {
-    updateUserListSuccess();
+guard({
+  source: sample(
+    $currentCompany,
+    updateCurrentCompany,
+    (value: IKeyValue | null) => {
+      if (!value) return null;
 
-    return {
-      company_id: company.id,
-      page_number: 1,
-    };
-  },
+      updateUserListSuccess();
+      changeUsers(false);
+
+      return {
+        company_id: value?.id,
+        page_number: 1,
+      };
+    }
+  ),
+  filter: (value) => !!value,
   target: getUsersList,
 });

@@ -10,7 +10,6 @@ import {
   $rowCount,
   $rowData,
   $usersIsChanged,
-  changeUsers,
   getUsersList,
   searchUsersByName,
 } from "./models/table";

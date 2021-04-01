@@ -24,12 +24,21 @@ const userReducer = (state: IUser | null, payload: IUser | null) => {
   return null;
 };
 
-const currentCompanyReducer = (state: IKeyValue | null, payload: IKeyValue) => {
-  return { ...payload };
+const currentCompanyReducer = (
+  state: IKeyValue | null,
+  payload: IKeyValue | null
+) => {
+  return payload ? { ...payload } : null;
 };
 
 const clearUserReducer = (state: IUser | null, payload: boolean) =>
   payload ? null : state;
+const clearCurrentCompanyReducer = (
+  state: IKeyValue | null,
+  payload: boolean
+) => (payload ? null : state);
 
 $user.on(loginFx.doneData, userReducer).on(clearUser, clearUserReducer);
-$currentCompany.on(updateCurrentCompany, currentCompanyReducer);
+$currentCompany
+  .on(updateCurrentCompany, currentCompanyReducer)
+  .on(clearUser, clearCurrentCompanyReducer);

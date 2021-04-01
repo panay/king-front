@@ -24,6 +24,7 @@ import "../../models/init";
 import ConfirmPanel from "../ConfirmPanel";
 import { IKeyValue } from "infrastructure/types";
 import {$currentCompany} from "infrastructure/models/auth/user";
+import UserContext from "infrastructure/context/UserContext";
 
 function UserInfoForm() {
   const {
@@ -38,6 +39,7 @@ function UserInfoForm() {
   });
   const { isValid, isDirty } = formState;
 
+  const user = useContext(UserContext);
   const [readyToDelete, confirmToDelete] = useState(false);
   const userData = useStore<IUserData | null>($userData);
   const roles = useStore<IKeyValue[]>($roles);
@@ -213,7 +215,11 @@ function UserInfoForm() {
     });
 
     resetErrorForm();
-  }, [reset, userData]);
+
+    if (!user) {
+      cancelForm();
+    }
+  }, [reset, userData, user]);
 
   return (
     <>
