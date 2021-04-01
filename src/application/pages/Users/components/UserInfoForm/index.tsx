@@ -74,7 +74,7 @@ function UserInfoForm() {
 
   const defaultValues = {
     id: userData?.id,
-    company_id: currentCompany,
+    company_id: currentCompany?.id,
     name: null,
     login: null,
     role_id: null,
