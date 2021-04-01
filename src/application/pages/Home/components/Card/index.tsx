@@ -8,9 +8,18 @@ type Props = {
   growth: string;
   to: string;
   totalAmount?: string;
+  graphIcon?: ReactElement;
 };
 
-function Card({ icon, color, title, growth, to, totalAmount }: Props) {
+function Card({
+  icon,
+  color,
+  title,
+  growth,
+  to,
+  totalAmount,
+  graphIcon,
+}: Props) {
   const bgColor = `bg-${color}`;
   const textColor = `text-${color}`;
   const firstClassName = `p-3 rounded-xl bg-opacity-20 ${bgColor} ${textColor}`;
@@ -22,13 +31,9 @@ function Card({ icon, color, title, growth, to, totalAmount }: Props) {
       className={`group block p-4 bg-white rounded-xl transition-shadow hover:shadow-lg`}
     >
       <div className="flex items-center justify-between">
-        <div
-          className={firstClassName}
-        >
-          {icon}
-        </div>
+        <div className={firstClassName}>{icon}</div>
         <div className="text-right">
-          <div className={secondClassName} />
+          {growth === "0%" ? <div className={secondClassName} /> : graphIcon}
           <p className="text-xs text-icon-grey mt-1.5">{growth}</p>
         </div>
       </div>

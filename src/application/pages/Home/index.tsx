@@ -9,6 +9,10 @@ import { ReactComponent as IcTrack } from "infrastructure/assets/images/svgs/ic-
 import { ReactComponent as IcGeofence } from "infrastructure/assets/images/svgs/ic-geofence.svg";
 import { ReactComponent as IcCampaigns } from "infrastructure/assets/images/svgs/ic-marketing.svg";
 import { ReactComponent as IcGeotrigger } from "infrastructure/assets/images/svgs/ic-geotriger.svg";
+import { ReactComponent as GraphApps } from "infrastructure/assets/images/svgs/graph-apps.svg";
+import { ReactComponent as GraphCampaigns } from "infrastructure/assets/images/svgs/graph-campaigns.svg";
+import { ReactComponent as GraphFence } from "infrastructure/assets/images/svgs/graph-geofence.svg";
+import { ReactComponent as GraphTrigger } from "infrastructure/assets/images/svgs/graph-geotrigger.svg";
 import ChartCard from "domains/ChartCard";
 
 function Home() {
@@ -178,6 +182,7 @@ function Home() {
             title="Приложения"
             growth="+5%"
             to="/apps"
+            graphIcon={<GraphApps />}
             totalAmount="23 установки"
           />
         </div>
@@ -198,6 +203,7 @@ function Home() {
             title="Геофенсы"
             growth="-3%"
             to="/geofence"
+            graphIcon={<GraphFence />}
             totalAmount="Всего 159 записей"
           />
         </div>
@@ -208,6 +214,7 @@ function Home() {
             title="Кампании"
             growth="-7%"
             to="/campaigns"
+            graphIcon={<GraphCampaigns />}
             totalAmount="Проведенных 47"
           />
         </div>
@@ -217,6 +224,7 @@ function Home() {
             color="icon-purple"
             title="Геотриггеры"
             growth="+6%"
+            graphIcon={<GraphTrigger />}
             to="/geotrigger"
           />
         </div>
