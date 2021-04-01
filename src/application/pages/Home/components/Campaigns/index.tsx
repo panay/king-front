@@ -1,9 +1,10 @@
 import React from "react";
 import {EmptyCampaignsWindow} from "ui";
+import { ReactComponent as MockCampaignsImg } from "infrastructure/assets/images/svgs/mock-campaigns.svg";
 
 function Campaigns() {
     return (
-        <EmptyCampaignsWindow />
+        <MockCampaignsImg style={{width: "100%"}} />
     )
 }
 
