@@ -12,14 +12,15 @@ const TableColumnConfig = (): Array<Column<any>> => {
       {
         Header: "Роль",
         accessor: "role",
+        width: 160,
         Cell: (props: any) => {
           return <span>{props.value?.name}</span>;
         },
-          width: 160
       },
       {
         Header: "Почта",
         accessor: "login",
+        width: 180,
         Cell: (props: any) => {
           return (
             <span className="block max-w-xs whitespace-nowrap overflow-hidden overflow-ellipsis">
@@ -27,7 +28,6 @@ const TableColumnConfig = (): Array<Column<any>> => {
             </span>
           );
         },
-          width: 180
       },
       {
         Header: "Признак активности",

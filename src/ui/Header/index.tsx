@@ -50,7 +50,7 @@ function Header({ headerTitle, onSearch, ...props }: Props) {
         )}
       </div>
       <div className="px-2.5 w-1/3">
-        <SearchInput onSearch={handleSearch} placeholder={props.placeholder} />
+        <SearchInput onSearch={handleSearch} placeholder={props.placeholder || "Поиск"} />
       </div>
     </header>
   );

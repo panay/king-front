@@ -129,7 +129,7 @@ function Table({
             {...row.getRowProps({
               style,
             })}
-            className="relative flex -mx-2.5 mt-2.5 cursor-pointer rounded-xl hover:bg-lighten-blue"
+            className="relative flex mt-2.5 cursor-pointer rounded-xl hover:bg-lighten-blue"
             onClick={() => onClickRowHandler(row.original)}
           >
             {row.cells.map((cell) => {
@@ -169,7 +169,7 @@ function Table({
           {headerGroups.map((headerGroup) => (
             <header
               {...headerGroup.getHeaderGroupProps()}
-              className="flex -mx-2.5"
+              className="flex"
               style={{
                 width: width + "px",
               }}
@@ -202,6 +202,7 @@ function Table({
                   onItemsRendered={onItemsRendered}
                   ref={ref}
                   width={width}
+                  className="overflow-auto scrollbar-thin scrollbar-thumb-border-grey scrollbar-track-input-grey"
                 >
                   {RenderRow}
                 </FixedSizeList>

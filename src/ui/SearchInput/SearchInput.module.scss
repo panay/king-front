@@ -12,11 +12,13 @@
   > input {
     @apply placeholder-transparent bg-white block p-2.5 pr-8 w-full border-2 border-input-grey rounded-xl focus:outline-none;
 
-    &:focus {
+    &:focus,
+    &:not(:placeholder-shown) {
       @apply pt-4 pb-1;
     }
 
-    &:focus ~ .placeholder {
+    &:focus ~ .placeholder,
+    &:not(:placeholder-shown) ~ .placeholder {
       @apply -translate-y-full;
     }
   }
