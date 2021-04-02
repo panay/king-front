@@ -10,6 +10,9 @@ import Table from "./Table";
 import CustomSelect from "./CustomSelect";
 import FormErrorMessage from "./FormErrorMessage";
 import LoginLoader from "./Loaders/LoginLoader";
+import DashboardLoader from "./Loaders/DashboardLoader";
+import TableLoader from "./Loaders/TableLoader";
+import UsersLoader from "./Loaders/UsersLoader";
 
 export {
   Button,
@@ -24,4 +27,7 @@ export {
   CustomSelect,
   FormErrorMessage,
   LoginLoader,
+  DashboardLoader,
+  TableLoader,
+  UsersLoader,
 };

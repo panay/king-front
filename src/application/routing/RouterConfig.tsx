@@ -1,7 +1,7 @@
 import React, {
   ComponentType,
   lazy,
-  LazyExoticComponent,
+  LazyExoticComponent, ReactNode,
   Suspense,
   useContext,
   useMemo,
@@ -12,13 +12,14 @@ import AuthContext, {
   CheckAuthContext,
 } from "infrastructure/context/AuthContext";
 import { SidebarLayout } from "domains";
-import { LoginLoader } from "ui";
+import {LoginLoader, DashboardLoader, UsersLoader} from "ui";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
 
 interface Route {
   path: string;
   component: LazyExoticComponent<ComponentType<any>>;
   exact: boolean;
+  fallback?: NonNullable<ReactNode>|null;
 }
 
 const routes: Route[] = [
@@ -26,6 +27,7 @@ const routes: Route[] = [
     path: "/",
     component: lazy(() => import("../pages/Home")),
     exact: true,
+    fallback: DashboardLoader()
   },
   {
     path: "/login",
@@ -36,6 +38,7 @@ const routes: Route[] = [
     path: "/users",
     component: lazy(() => import("../pages/Users")),
     exact: true,
+    fallback: UsersLoader()
   },
   {
     path: "/settings",
@@ -52,7 +55,6 @@ const routes: Route[] = [
 export const RouterConfig = () => {
   const authenticated = useContext(AuthContext);
   const isAuthCheck = useContext(CheckAuthContext);
-  const loading = <div>Loading...</div>;
   const emptyResultLoader = (
     <div className="bg-input-grey flex flex-col items-center justify-center p-3 h-full">
       <IcLoader className="text-primary" />
@@ -71,6 +73,7 @@ export const RouterConfig = () => {
           exact={route.exact}
           path={route.path}
           component={route.component}
+          fallback={route.fallback}
         />
       )),
     []
@@ -90,9 +93,7 @@ export const RouterConfig = () => {
 
   return (
     <SidebarLayout>
-      <Suspense fallback={loading}>
-        <Switch>{result}</Switch>
-      </Suspense>
+      <Switch>{result}</Switch>
     </SidebarLayout>
   );
 };
