@@ -53,10 +53,9 @@ const deleteCurrentUser = async (id: string) => {
         ? err.response.data.message
         : "Ошибка сервера"
     );
-    return null;
   }
 
-  return response?.data;
+  return response?.status === 200;
 };
 
 const createNewUser = async (user: IUserData) => {
@@ -69,10 +68,9 @@ const createNewUser = async (user: IUserData) => {
         ? err.response.data.message
         : "Ошибка сервера"
     );
-    return null;
   }
 
-  return response?.data || [];
+  return response?.status === 200;
 };
 
 const updateCurrentUser = async (user: IUserData) => {
@@ -85,10 +83,9 @@ const updateCurrentUser = async (user: IUserData) => {
         ? err.response.data.message
         : "Ошибка сервера"
     );
-    return null;
   }
 
-  return response?.data || [];
+  return response?.status === 200;
 };
 
 getAllRoles.watch(getRolesFx);

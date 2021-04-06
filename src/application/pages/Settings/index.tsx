@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import {Header, EmptyCampaignsWindow} from "ui";
 import { CompanyPanel, TwoColumnLayout } from "domains";
-import {ReactComponent as MockCampaignsImg} from "../../../infrastructure/assets/images/svgs/mock-campaigns.svg";
 
 function Settings() {
   useEffect(() => {
@@ -13,7 +12,7 @@ function Settings() {
   return (
     <TwoColumnLayout
       className="bg-input-grey"
-      asideContent={<MockCampaignsImg style={{width: "100%"}} />}
+      asideContent={<EmptyCampaignsWindow />}
     >
       <Header
         headerTitle={<CompanyPanel />}

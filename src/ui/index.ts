@@ -13,6 +13,7 @@ import LoginLoader from "./Loaders/LoginLoader";
 import DashboardLoader from "./Loaders/DashboardLoader";
 import TableLoader from "./Loaders/TableLoader";
 import UsersLoader from "./Loaders/UsersLoader";
+import ConfirmPanel from "./ConfirmPanel";
 
 export {
   Button,
@@ -30,4 +31,5 @@ export {
   DashboardLoader,
   TableLoader,
   UsersLoader,
+  ConfirmPanel,
 };

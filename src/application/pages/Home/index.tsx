@@ -172,7 +172,7 @@ function Home() {
             color="icon-violet"
             title="Местоположения"
             growth="0%"
-            to="/geo"
+            to="/location"
           />
         </div>
         <div className="px-2.5 pt-5 w-1/3">

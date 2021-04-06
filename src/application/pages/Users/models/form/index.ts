@@ -17,7 +17,7 @@ export const getUserDataFx = userDomain.effect<
 >();
 export const createUserFx = userDomain.effect<IUserData, boolean>();
 export const updateUserFx = userDomain.effect<IUserData, boolean>();
-export const deleteUserFx = userDomain.effect<string, string>();
+export const deleteUserFx = userDomain.effect<string, boolean>();
 export const getRolesFx = userDomain.effect<void, IKeyValue[]>();
 
 export const $userError = userDomain.store<string | null>(null);

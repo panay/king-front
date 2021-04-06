@@ -18,7 +18,7 @@ function SidebarLayout({ children }: { children: ReactElement }) {
       content: <IcHome />,
     },
     {
-      to: "/geo",
+      to: "/location",
       content: <IcGeo />,
     },
     {

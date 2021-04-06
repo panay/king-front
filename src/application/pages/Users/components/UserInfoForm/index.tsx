@@ -14,16 +14,21 @@ import {
   resetUserData,
   updateUserFx,
 } from "../../models/form";
-import { Button, CustomSelect, FluidLabelInput, FormErrorMessage } from "ui";
+import {
+  Button,
+  CustomSelect,
+  FluidLabelInput,
+  FormErrorMessage,
+  ConfirmPanel,
+} from "ui";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
 import { ReactComponent as IcRefresh } from "infrastructure/assets/images/svgs/ic-refresh.svg";
 import { ReactComponent as IcDelete } from "infrastructure/assets/images/svgs/ic-delete.svg";
 import { BgTypeEnum } from "ui/Button";
 import { IUserData } from "../../types/UserData";
 import "../../models/init";
-import ConfirmPanel from "../ConfirmPanel";
 import { IKeyValue } from "infrastructure/types";
-import {$currentCompany} from "infrastructure/models/auth/user";
+import { $currentCompany } from "infrastructure/models/auth/user";
 import UserContext from "infrastructure/context/UserContext";
 
 function UserInfoForm() {
@@ -79,7 +84,7 @@ function UserInfoForm() {
     login: null,
     role_id: null,
     is_active: isActiveValue,
-    password: null
+    password: null,
   };
 
   const resetForm = () => {
@@ -122,7 +127,7 @@ function UserInfoForm() {
     const body = {
       ...defaultValues,
       ...formData,
-      password: userData?.id && !formData.password ? null : formData.password
+      password: userData?.id && !formData.password ? null : formData.password,
     };
 
     if (userData?.id) {
@@ -158,6 +163,7 @@ function UserInfoForm() {
 
   const buttonsPanelRender = readyToDelete ? (
     <ConfirmPanel
+      message="Вы уверены, что хотите удалить пользователя из&nbsp;списка?"
       confirmed={(isConfirmed) =>
         isConfirmed ? deleteUser() : confirmToDelete(false)
       }
