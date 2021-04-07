@@ -16,9 +16,9 @@ globalService.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 403) {
-      // debugger;
-      $authenticated.reset();
+      window.location.replace("/login");
     }
+
     return Promise.reject(error);
   }
 );
