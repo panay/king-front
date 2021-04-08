@@ -3,14 +3,9 @@ import "./form/init";
 import "infrastructure/models/paging/init";
 import "infrastructure/models/auth/init";
 
-import { guard, sample } from "effector";
+import { sample } from "effector";
 import { createUserFx, deleteUserFx, updateUserFx } from "./form";
-import { changeUsers, getUsersList, updateUserListSuccess } from "./table";
-import {
-  $currentCompany,
-  updateCurrentCompany,
-} from "infrastructure/models/auth/user";
-import { IKeyValue } from "infrastructure/types";
+import { updateUserListSuccess } from "./table";
 
 sample({
   clock: deleteUserFx.doneData,
@@ -25,24 +20,4 @@ sample({
 sample({
   clock: updateUserFx.doneData,
   target: updateUserListSuccess,
-});
-
-guard({
-  source: sample(
-    $currentCompany,
-    updateCurrentCompany,
-    (value: IKeyValue | null) => {
-      if (!value) return null;
-
-      updateUserListSuccess();
-      changeUsers(false);
-
-      return {
-        company_id: value?.id,
-        page_number: 1,
-      };
-    }
-  ),
-  filter: (value) => !!value,
-  target: getUsersList,
 });

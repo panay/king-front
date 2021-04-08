@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from "react";
+import React, { useCallback, useEffect } from "react";
 import { Header, Table } from "ui";
 import UserInfoForm from "./components/UserInfoForm";
 import { CompanyPanel, TwoColumnLayout } from "domains";
@@ -11,12 +11,18 @@ import {
   $rowData,
   $usersIsChanged,
   getUsersList,
-  searchUsersByName, updateUserListSuccess,
+  searchUsersByName,
+  updateUserListSuccess,
 } from "./models/table";
 import { IKeyValue, IPagination } from "infrastructure/types";
-import {$paging, setPaging} from "infrastructure/models/paging";
+import { $paging } from "infrastructure/models/paging";
 import NoUsers from "./components/NoUsers";
-import {$formIsChanged, getAllRoles, getUserDataFx, resetUserData} from "./models/form";
+import {
+  $formIsChanged,
+  getAllRoles,
+  getUserDataFx,
+  resetUserData,
+} from "./models/form";
 import { $currentCompany } from "infrastructure/models/auth/user";
 
 import "./models/init";
@@ -29,7 +35,6 @@ function Users() {
   const usersIsChanged = useStore<boolean>($usersIsChanged);
   const formIsChanged = useStore<boolean>($formIsChanged);
   const companyId = currentCompany?.id;
-  const updatedPage = useRef(false);
 
   const handleOnSearch = (value: string) => {
     if (companyId) {
@@ -46,7 +51,7 @@ function Users() {
 
   const loadNextPage = useCallback(
     (startIndex: number, stopIndex: number, page: number) => {
-      if (usersIsChanged && companyId) {
+      if (usersIsChanged && companyId && page > 1) {
         getUsersList({
           company_id: companyId,
           page_number: page,
@@ -63,9 +68,16 @@ function Users() {
     document.title = "Пользователи – Spark [radar]";
     getAllRoles();
 
-    updateUserListSuccess();
-    resetUserData();
-  }, []);
+    if (companyId) {
+      updateUserListSuccess();
+      resetUserData();
+
+      getUsersList({
+        company_id: companyId,
+        page_number: 1,
+      });
+    }
+  }, [companyId]);
 
   return (
     <TwoColumnLayout className="bg-input-grey" asideContent={<UserInfoForm />}>

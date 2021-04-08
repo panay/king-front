@@ -11,11 +11,16 @@ import {
   $rowCount,
   $rowData,
   getLocationsList,
-  searchLocationsByName, updateLocationListSuccess,
+  searchLocationsByName,
+  updateLocationListSuccess,
 } from "./models/table";
 import { ILocationData } from "./types/LocationData";
 import { $currentCompany } from "infrastructure/models/auth/user";
-import {$formIsChanged, getLocationDataFx, resetLocationData} from "./models/form";
+import {
+  $formIsChanged,
+  getLocationDataFx,
+  resetLocationData,
+} from "./models/form";
 import LocationInfoForm from "./components/LocationInfoForm";
 
 import "./models/init";
@@ -30,7 +35,6 @@ function Location() {
   const companyId = currentCompany?.id;
 
   const handleOnSearch = (value: string) => {
-    console.log("поиск по местоположениям :: ", value);
     if (companyId) {
       searchLocationsByName({
         company_id: companyId,
@@ -45,7 +49,7 @@ function Location() {
 
   const loadNextPage = useCallback(
     (startIndex: number, stopIndex: number, page: number) => {
-      if (locationsIsChanged && companyId) {
+      if (locationsIsChanged && companyId && page > 1) {
         getLocationsList({
           company_id: companyId,
           page_number: page,
@@ -61,12 +65,22 @@ function Location() {
   useEffect(() => {
     document.title = "Местоположения – Spark [radar]";
 
-    updateLocationListSuccess();
-    resetLocationData();
-  }, []);
+    if (companyId) {
+      updateLocationListSuccess();
+      resetLocationData();
+
+      getLocationsList({
+        company_id: companyId,
+        page_number: 1,
+      });
+    }
+  }, [companyId]);
 
   return (
-    <TwoColumnLayout className="bg-input-grey" asideContent={<LocationInfoForm />}>
+    <TwoColumnLayout
+      className="bg-input-grey"
+      asideContent={<LocationInfoForm />}
+    >
       <Header
         headerTitle={"Местоположения"}
         placeholder="Поиск по местоположению"
