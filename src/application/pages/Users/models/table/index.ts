@@ -20,4 +20,4 @@ export const updateUserListSuccess = usersTableDomain.event<void>();
 
 export const $rowData = usersTableDomain.store<IUserData[]>([]);
 export const $rowCount = usersTableDomain.store<number>(0);
-export const $usersIsChanged = restore<boolean>(changeUsers, true);
+export const $usersIsChanged = restore<boolean>(changeUsers, false);

@@ -21,6 +21,7 @@ import "../../models/init";
 import { IKeyValue } from "infrastructure/types";
 import { $currentCompany } from "infrastructure/models/auth/user";
 import { ILocationData } from "../../types/LocationData";
+import {changeLocations} from "../../models/table";
 
 function LocationInfoForm() {
   const { register, handleSubmit, formState, reset } = useForm({
@@ -47,6 +48,7 @@ function LocationInfoForm() {
 
   const deleteLocation = () => {
     confirmToDelete(false);
+    changeLocations(true);
     deleteLocationFx(locationData!.id).then((response) => {
       if (response) {
         cancelForm();
@@ -72,6 +74,7 @@ function LocationInfoForm() {
       company_id: currentCompany?.id,
     };
 
+    changeLocations(true);
     if (locationData?.id) {
       updateLocationFx(body).then((response) => {
         if (response) {

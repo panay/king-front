@@ -9,7 +9,7 @@ import { TableColumnConfig } from "./config/TableColumConfig";
 import {
   $locationsIsChanged,
   $rowCount,
-  $rowData,
+  $rowData, changeLocations,
   getLocationsList,
   searchLocationsByName,
   updateLocationListSuccess,
@@ -49,7 +49,7 @@ function Location() {
 
   const loadNextPage = useCallback(
     (startIndex: number, stopIndex: number, page: number) => {
-      if (locationsIsChanged && companyId && page > 1) {
+      if (locationsIsChanged && companyId) {
         getLocationsList({
           company_id: companyId,
           page_number: page,
@@ -73,6 +73,8 @@ function Location() {
         company_id: companyId,
         page_number: 1,
       });
+
+      changeLocations(false);
     }
   }, [companyId]);
 

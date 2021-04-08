@@ -24,4 +24,4 @@ export const updateLocationListSuccess = locationsTableDomain.event<void>();
 
 export const $rowData = locationsTableDomain.store<ILocationData[]>([]);
 export const $rowCount = locationsTableDomain.store<number>(0);
-export const $locationsIsChanged = restore<boolean>(changeLocations, true);
+export const $locationsIsChanged = restore<boolean>(changeLocations, false);

@@ -30,6 +30,7 @@ import "../../models/init";
 import { IKeyValue } from "infrastructure/types";
 import { $currentCompany } from "infrastructure/models/auth/user";
 import UserContext from "infrastructure/context/UserContext";
+import {changeUsers} from "../../models/table";
 
 function UserInfoForm() {
   const {
@@ -105,6 +106,7 @@ function UserInfoForm() {
 
   const deleteUser = () => {
     confirmToDelete(false);
+    changeUsers(true);
     deleteUserFx(userData!.id).then((response) => {
       if (response) {
         cancelForm();
@@ -130,6 +132,7 @@ function UserInfoForm() {
       password: userData?.id && !formData.password ? null : formData.password,
     };
 
+    changeUsers(true);
     if (userData?.id) {
       updateUserFx(body).then((response) => {
         if (response) {

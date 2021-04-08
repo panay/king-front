@@ -9,7 +9,7 @@ import { useStore } from "effector-react";
 import {
   $rowCount,
   $rowData,
-  $usersIsChanged,
+  $usersIsChanged, changeUsers,
   getUsersList,
   searchUsersByName,
   updateUserListSuccess,
@@ -51,7 +51,7 @@ function Users() {
 
   const loadNextPage = useCallback(
     (startIndex: number, stopIndex: number, page: number) => {
-      if (usersIsChanged && companyId && page > 1) {
+      if (usersIsChanged && companyId) {
         getUsersList({
           company_id: companyId,
           page_number: page,
@@ -76,6 +76,8 @@ function Users() {
         company_id: companyId,
         page_number: 1,
       });
+
+      changeUsers(false);
     }
   }, [companyId]);
 
