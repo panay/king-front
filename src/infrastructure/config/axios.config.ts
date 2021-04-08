@@ -1,5 +1,4 @@
 import axios from "axios";
-import { $authenticated } from "../models/auth/login";
 import "../models/auth/init";
 
 const globalService = axios.create({

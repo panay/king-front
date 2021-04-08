@@ -1,4 +1,4 @@
-import React, {ReactElement, ReactNode, Suspense, useContext} from "react";
+import React, {ReactNode, Suspense, useContext} from "react";
 import { Route, RouteProps } from "react-router";
 import { Redirect } from "react-router-dom";
 import AuthContext from "infrastructure/context/AuthContext";

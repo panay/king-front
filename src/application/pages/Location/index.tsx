@@ -11,12 +11,13 @@ import {
   $rowCount,
   $rowData,
   getLocationsList,
-  searchLocationsByName,
+  searchLocationsByName, updateLocationListSuccess,
 } from "./models/table";
 import { ILocationData } from "./types/LocationData";
 import { $currentCompany } from "infrastructure/models/auth/user";
-import { $formIsChanged, getLocationDataFx } from "./models/form";
+import {$formIsChanged, getLocationDataFx, resetLocationData} from "./models/form";
 import LocationInfoForm from "./components/LocationInfoForm";
+
 import "./models/init";
 
 function Location() {
@@ -25,7 +26,7 @@ function Location() {
   const paging = useStore<IPagination>($paging);
   const currentCompany = useStore<IKeyValue | null>($currentCompany);
   const locationsIsChanged = useStore<boolean>($locationsIsChanged);
-  const userFormIsChanged = useStore<boolean>($formIsChanged);
+  const formIsChanged = useStore<boolean>($formIsChanged);
   const companyId = currentCompany?.id;
 
   const handleOnSearch = (value: string) => {
@@ -59,6 +60,9 @@ function Location() {
 
   useEffect(() => {
     document.title = "Местоположения – Spark [radar]";
+
+    updateLocationListSuccess();
+    resetLocationData();
   }, []);
 
   return (
@@ -80,7 +84,7 @@ function Location() {
           columns={columns}
           rowClicked={(value) => getLocationDataFx(value as IKeyValue)}
           loadNextPage={loadNextPage}
-          reload={userFormIsChanged || !locationsIsChanged}
+          reload={formIsChanged || !locationsIsChanged}
         />
       </div>
     </TwoColumnLayout>

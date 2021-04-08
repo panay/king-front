@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, {useCallback, useEffect, useRef} from "react";
 import { Header, Table } from "ui";
 import UserInfoForm from "./components/UserInfoForm";
 import { CompanyPanel, TwoColumnLayout } from "domains";
@@ -11,12 +11,12 @@ import {
   $rowData,
   $usersIsChanged,
   getUsersList,
-  searchUsersByName,
+  searchUsersByName, updateUserListSuccess,
 } from "./models/table";
 import { IKeyValue, IPagination } from "infrastructure/types";
-import { $paging } from "infrastructure/models/paging";
+import {$paging, setPaging} from "infrastructure/models/paging";
 import NoUsers from "./components/NoUsers";
-import { $formIsChanged, getAllRoles, getUserDataFx } from "./models/form";
+import {$formIsChanged, getAllRoles, getUserDataFx, resetUserData} from "./models/form";
 import { $currentCompany } from "infrastructure/models/auth/user";
 
 import "./models/init";
@@ -27,8 +27,9 @@ function Users() {
   const paging = useStore<IPagination>($paging);
   const currentCompany = useStore<IKeyValue | null>($currentCompany);
   const usersIsChanged = useStore<boolean>($usersIsChanged);
-  const userFormIsChanged = useStore<boolean>($formIsChanged);
+  const formIsChanged = useStore<boolean>($formIsChanged);
   const companyId = currentCompany?.id;
+  const updatedPage = useRef(false);
 
   const handleOnSearch = (value: string) => {
     if (companyId) {
@@ -61,6 +62,9 @@ function Users() {
   useEffect(() => {
     document.title = "Пользователи – Spark [radar]";
     getAllRoles();
+
+    updateUserListSuccess();
+    resetUserData();
   }, []);
 
   return (
@@ -83,7 +87,7 @@ function Users() {
           rowClicked={(value) => getUserDataFx(value as IUserData)}
           loadNextPage={loadNextPage}
           noDataComponent={<NoUsers />}
-          reload={userFormIsChanged || !usersIsChanged}
+          reload={formIsChanged || !usersIsChanged}
         />
       </div>
     </TwoColumnLayout>
