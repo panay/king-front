@@ -106,10 +106,10 @@ function UserInfoForm() {
 
   const deleteUser = () => {
     confirmToDelete(false);
-    changeUsers(true);
     deleteUserFx(userData!.id).then((response) => {
       if (response) {
         cancelForm();
+        changeUsers(true);
       }
     });
   };
@@ -132,17 +132,18 @@ function UserInfoForm() {
       password: userData?.id && !formData.password ? null : formData.password,
     };
 
-    changeUsers(true);
     if (userData?.id) {
       updateUserFx(body).then((response) => {
         if (response) {
           cancelForm();
+          changeUsers(true);
         }
       });
     } else {
       createUserFx(body).then((response) => {
         if (response) {
           cancelForm();
+          changeUsers(true);
         }
       });
     }
@@ -190,7 +191,7 @@ function UserInfoForm() {
           value="Отменить"
           type="button"
           bgType={BgTypeEnum.secondary}
-          disabled={pending}
+          disabled={!userData || pending}
           className="w-full"
           onButtonClick={cancelForm}
         />

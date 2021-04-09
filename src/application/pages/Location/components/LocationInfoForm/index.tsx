@@ -48,10 +48,10 @@ function LocationInfoForm() {
 
   const deleteLocation = () => {
     confirmToDelete(false);
-    changeLocations(true);
     deleteLocationFx(locationData!.id).then((response) => {
       if (response) {
         cancelForm();
+        changeLocations(true);
       }
     });
   };
@@ -74,17 +74,18 @@ function LocationInfoForm() {
       company_id: currentCompany?.id,
     };
 
-    changeLocations(true);
     if (locationData?.id) {
       updateLocationFx(body).then((response) => {
         if (response) {
           cancelForm();
+          changeLocations(true);
         }
       });
     } else {
       createLocationFx(body).then((response) => {
         if (response) {
           cancelForm();
+          changeLocations(true);
         }
       });
     }
@@ -132,7 +133,7 @@ function LocationInfoForm() {
           value="Отменить"
           type="button"
           bgType={BgTypeEnum.secondary}
-          disabled={pending}
+          disabled={!locationData || pending}
           className="w-full"
           onButtonClick={cancelForm}
         />

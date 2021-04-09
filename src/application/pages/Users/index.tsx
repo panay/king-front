@@ -69,17 +69,19 @@ function Users() {
     getAllRoles();
 
     if (companyId) {
-      updateUserListSuccess();
-      resetUserData();
+      if (!usersIsChanged) {
+        updateUserListSuccess();
+        resetUserData();
 
-      getUsersList({
-        company_id: companyId,
-        page_number: 1,
-      });
-
-      changeUsers(false);
+        getUsersList({
+          company_id: companyId,
+          page_number: 1,
+        });
+      } else {
+        changeUsers(false);
+      }
     }
-  }, [companyId]);
+  }, [companyId, usersIsChanged]);
 
   return (
     <TwoColumnLayout className="bg-input-grey" asideContent={<UserInfoForm />}>

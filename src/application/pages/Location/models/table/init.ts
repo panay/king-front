@@ -1,7 +1,6 @@
 import {
   $rowCount,
   $rowData,
-  $locationsIsChanged,
   updateLocationListSuccess,
   getLocationsFx,
   getLocationsList,
@@ -75,9 +74,6 @@ $rowCount
   .on(getLocationsFx.doneData, countReducer)
   .on(updateLocationsFx.doneData, countReducer)
   .on(updateLocationListSuccess, () => 0);
-$locationsIsChanged
-  .on(getLocationsFx.doneData, () => true)
-  .on(updateLocationsFx.doneData, () => true);
 
 getLocationsFx.use(getLocations);
 updateLocationsFx.use(getLocations);

@@ -3,7 +3,6 @@ import { IUserData, IUsersRequest, IUsersResponse } from "../../types/UserData";
 import {
   $rowCount,
   $rowData,
-  $usersIsChanged,
   updateUserListSuccess,
   getUsersFx,
   getUsersList,
@@ -65,9 +64,6 @@ $rowCount
   .on(getUsersFx.doneData, countReducer)
   .on(updateUsersFx.doneData, countReducer)
   .on(updateUserListSuccess, () => 0);
-$usersIsChanged
-  .on(getUsersFx.doneData, () => true)
-  .on(updateUsersFx.doneData, () => true);
 
 getUsersFx.use(getUsers);
 updateUsersFx.use(getUsers);

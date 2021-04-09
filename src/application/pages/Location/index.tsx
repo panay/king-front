@@ -66,17 +66,19 @@ function Location() {
     document.title = "Местоположения – Spark [radar]";
 
     if (companyId) {
-      updateLocationListSuccess();
-      resetLocationData();
+      if (!locationsIsChanged) {
+        updateLocationListSuccess();
+        resetLocationData();
 
-      getLocationsList({
-        company_id: companyId,
-        page_number: 1,
-      });
-
-      changeLocations(false);
+        getLocationsList({
+          company_id: companyId,
+          page_number: 1,
+        });
+      } else {
+        changeLocations(false);
+      }
     }
-  }, [companyId]);
+  }, [companyId, locationsIsChanged]);
 
   return (
     <TwoColumnLayout
