@@ -4,8 +4,9 @@ import React, {
   useCallback,
   useEffect,
   useRef,
+  useState,
 } from "react";
-import { Column, useTable } from "react-table";
+import { Column, useSortBy, useTable } from "react-table";
 import { FixedSizeList } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -17,13 +18,14 @@ import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic
 type Props = {
   items: any[];
   rowCount: number;
-  columns: Array<Column<Record<string, unknown>>>;
+  columns: Array<Column<any>>;
   rowClicked?: (value: unknown) => void;
   loadNextPage?: (
     startIndex: number,
     stopIndex: number,
     page: number
   ) => Promise<any> | null;
+  onSort?: (field: any) => void;
   noDataComponent?: ReactElement;
   reload?: boolean;
 };
@@ -38,6 +40,7 @@ function Table({
     stopIndex: number,
     page: number
   ) => {},
+  onSort,
   noDataComponent,
   reload,
 }: Props) {
@@ -83,10 +86,20 @@ function Table({
     headerGroups,
     rows,
     prepareRow,
-  } = useTable<Record<string, unknown>>({
-    data: items,
-    columns,
-  });
+    state: { sortBy },
+  } = useTable(
+    {
+      data: items,
+      columns,
+      manualSortBy: true,
+      manualPagination: true,
+      autoResetPage: false,
+      autoResetSortBy: false,
+      disableMultiSort: true,
+      disableSortRemove: true,
+    } as any,
+    useSortBy
+  ) as any;
 
   const noDataRender = useCallback(() => {
     const className =
@@ -132,9 +145,17 @@ function Table({
             className="relative flex mt-2.5 cursor-pointer rounded-xl hover:bg-lighten-blue"
             onClick={() => onClickRowHandler(row.original)}
           >
-            {row.cells.map((cell) => {
+            {row.cells.map((cell: any) => {
               return (
-                <div {...cell.getCellProps()} className="flex-1 px-2.5 py-4">
+                <div
+                  {...cell.getCellProps()}
+                  style={{
+                    maxWidth: cell.column.maxWidth
+                      ? cell.column.maxWidth + "px"
+                      : "100%",
+                  }}
+                  className="px-2.5 py-4 w-full"
+                >
                   {cell.render("Cell")}
                 </div>
               );
@@ -160,13 +181,17 @@ function Table({
       }
       hasMountedRef.current = true;
     }
-  }, [reload]);
+
+    if (onSort && sortBy && sortBy[0]) {
+      onSort(sortBy[0]);
+    }
+  }, [onSort, reload, sortBy]);
 
   return (
     <AutoSizer defaultHeight={600} defaultWidth={600}>
       {({ height, width }) => (
         <section {...getTableProps()} className="table-fixed w-full">
-          {headerGroups.map((headerGroup) => (
+          {headerGroups.map((headerGroup: any) => (
             <header
               {...headerGroup.getHeaderGroupProps()}
               className="flex"
@@ -174,12 +199,22 @@ function Table({
                 width: width + "px",
               }}
             >
-              {headerGroup.headers.map((column) => (
+              {headerGroup.headers.map((column: any) => (
                 <div
-                  {...column.getHeaderProps()}
-                  className="flex-1 text-icon-grey text-xs px-2.5 text-left font-normal"
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className="text-icon-grey text-xs px-2.5 text-left font-normal w-full"
+                  style={{
+                    maxWidth: column.maxWidth ? column.maxWidth + "px" : "100%",
+                  }}
                 >
                   {column.render("Header")}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? " 🔽"
+                        : " 🔼"
+                      : ""}
+                  </span>
                 </div>
               ))}
             </header>

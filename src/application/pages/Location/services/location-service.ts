@@ -6,11 +6,13 @@ const getLocationList = ({
   page_number = 1,
   row_count = 50,
   name,
+  asc_sort = true,
+  sort_field = "name",
 }: ILocationRequest) =>
   globalService.get(
     `${
       process.env.REACT_APP_LOCATION_ENDPOINT
-    }/list?company_id=${company_id}&page_number=${page_number}&row_count=${row_count}&name=${
+    }/list?company_id=${company_id}&page_number=${page_number}&row_count=${row_count}&asc_sort=${asc_sort}&sort_field=${sort_field}&name=${
       name || ""
     }`
   );

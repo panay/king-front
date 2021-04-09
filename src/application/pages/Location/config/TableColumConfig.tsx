@@ -1,5 +1,5 @@
 import { Column } from "react-table";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 const TableColumnConfig = (): Array<Column<any>> => {
   return useMemo(
@@ -7,17 +7,19 @@ const TableColumnConfig = (): Array<Column<any>> => {
       {
         Header: "Имя",
         accessor: "name",
-        width: 300,
+        maxWidth: 400,
       },
       {
-        Header: "Геофенс",
-        accessor: "geofence",
-        width: 100,
+        Header: () => <div className="text-center">Геофенс</div>,
+        accessor: "geofence_count",
+        maxWidth: 100,
+        Cell: (row) => <span className="text-center">{row.value}</span>,
       },
       {
-        Header: "Кампании",
-        accessor: "campaigns",
-        width: 200,
+        Header: () => <div className="text-center">Кампании</div>,
+        accessor: "campaign_count",
+        maxWidth: 100,
+        Cell: (row) => <span className="text-center">{row.value}</span>,
       },
     ],
     []

@@ -8,8 +8,11 @@ import { Column } from "react-table";
 import { TableColumnConfig } from "./config/TableColumConfig";
 import {
   $locationsIsChanged,
+  $locationsSorting,
   $rowCount,
-  $rowData, changeLocations,
+  $rowData,
+  changeLocations,
+  changeLocationsSorting,
   getLocationsList,
   searchLocationsByName,
   updateLocationListSuccess,
@@ -24,6 +27,7 @@ import {
 import LocationInfoForm from "./components/LocationInfoForm";
 
 import "./models/init";
+import { ISorting } from "infrastructure/types/Sorting";
 
 function Location() {
   const rowData = useStore<ILocationData[]>($rowData);
@@ -31,6 +35,7 @@ function Location() {
   const paging = useStore<IPagination>($paging);
   const currentCompany = useStore<IKeyValue | null>($currentCompany);
   const locationsIsChanged = useStore<boolean>($locationsIsChanged);
+  const locationsSorting = useStore<ISorting>($locationsSorting);
   const formIsChanged = useStore<boolean>($formIsChanged);
   const companyId = currentCompany?.id;
 
@@ -62,23 +67,39 @@ function Location() {
     [companyId, paging.perPage, locationsIsChanged]
   );
 
+  const onSortHandler = useCallback((value: any) => {
+    if (
+      value &&
+      (locationsSorting.sort_field !== value.id ||
+        locationsSorting.asc_sort !== !value.desc)
+    ) {
+      changeLocationsSorting({
+        sort_field: value.id,
+        asc_sort: !value.desc,
+      });
+
+      changeLocations(false);
+    }
+  }, [locationsSorting.asc_sort, locationsSorting.sort_field]);
+
   useEffect(() => {
     document.title = "Местоположения – Spark [radar]";
 
     if (companyId) {
-      if (!locationsIsChanged) {
+      if (!locationsIsChanged || locationsSorting) {
         updateLocationListSuccess();
         resetLocationData();
 
         getLocationsList({
           company_id: companyId,
           page_number: 1,
+          ...locationsSorting,
         });
       } else {
         changeLocations(false);
       }
     }
-  }, [companyId, locationsIsChanged]);
+  }, [companyId, locationsIsChanged, locationsSorting]);
 
   return (
     <TwoColumnLayout
@@ -103,6 +124,7 @@ function Location() {
           rowClicked={(value) => getLocationDataFx(value as IKeyValue)}
           loadNextPage={loadNextPage}
           reload={formIsChanged || !locationsIsChanged}
+          onSort={onSortHandler}
         />
       </div>
     </TwoColumnLayout>

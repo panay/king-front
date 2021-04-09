@@ -16,6 +16,8 @@ interface ILocationRequest {
   page_number?: number;
   row_count?: number;
   name?: string;
+  asc_sort?: boolean;
+  sort_field?: string;
 }
 
 export type { ILocationData, ILocationResponse, ILocationRequest };
