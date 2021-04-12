@@ -4,7 +4,6 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useState,
 } from "react";
 import { Column, useSortBy, useTable } from "react-table";
 import { FixedSizeList } from "react-window";
@@ -14,6 +13,7 @@ import { $paging, setPaging } from "infrastructure/models/paging";
 import { useStore } from "effector-react";
 import { IPagination } from "infrastructure/types";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
+import { ReactComponent as IcSortColumn } from "infrastructure/assets/images/svgs/ic-sort-colum.svg";
 
 type Props = {
   items: any[];
@@ -92,8 +92,6 @@ function Table({
       data: items,
       columns,
       manualSortBy: true,
-      manualPagination: true,
-      autoResetPage: false,
       autoResetSortBy: false,
       disableMultiSort: true,
       disableSortRemove: true,
@@ -201,18 +199,18 @@ function Table({
             >
               {headerGroup.headers.map((column: any) => (
                 <div
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className="text-icon-grey text-xs px-2.5 text-left font-normal w-full"
+                  {...column.getHeaderProps(onSort ? column.getSortByToggleProps() : undefined)}
+                  className="flex items-center text-icon-grey text-xs px-2.5 text-left font-normal w-full"
                   style={{
                     maxWidth: column.maxWidth ? column.maxWidth + "px" : "100%",
                   }}
                 >
                   {column.render("Header")}
-                  <span>
+                  <span className="block">
                     {column.isSorted
                       ? column.isSortedDesc
-                        ? " 🔽"
-                        : " 🔼"
+                        ? <IcSortColumn />
+                        : <IcSortColumn className="transform rotate-180" />
                       : ""}
                   </span>
                 </div>

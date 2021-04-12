@@ -51,7 +51,7 @@ function Users() {
 
   const loadNextPage = useCallback(
     (startIndex: number, stopIndex: number, page: number) => {
-      if (usersIsChanged && companyId) {
+      if ((usersIsChanged && companyId) || (companyId && page > 1)) {
         getUsersList({
           company_id: companyId,
           page_number: page,

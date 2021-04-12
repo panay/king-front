@@ -54,7 +54,7 @@ function Location() {
 
   const loadNextPage = useCallback(
     (startIndex: number, stopIndex: number, page: number) => {
-      if (locationsIsChanged && companyId) {
+      if ((locationsIsChanged && companyId) || (companyId && page > 1)) {
         getLocationsList({
           company_id: companyId,
           page_number: page,
@@ -86,15 +86,17 @@ function Location() {
     document.title = "Местоположения – Spark [radar]";
 
     if (companyId) {
-      if (!locationsIsChanged || locationsSorting) {
-        updateLocationListSuccess();
-        resetLocationData();
+      if (!locationsIsChanged) {
+        if (locationsSorting) {
+          updateLocationListSuccess();
+          resetLocationData();
 
-        getLocationsList({
-          company_id: companyId,
-          page_number: 1,
-          ...locationsSorting,
-        });
+          getLocationsList({
+            company_id: companyId,
+            page_number: 1,
+            ...locationsSorting,
+          });
+        }
       } else {
         changeLocations(false);
       }
