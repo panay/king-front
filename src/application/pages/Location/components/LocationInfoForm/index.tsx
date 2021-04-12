@@ -30,6 +30,8 @@ function LocationInfoForm() {
   const { isValid, isDirty } = formState;
 
   const [readyToDelete, confirmToDelete] = useState(false);
+  const [formIsEmpty, emptyForm] = useState(true);
+
   const locationData = useStore<IKeyValue | null>($locationData);
   const error = useStore($locationError);
   const pending = useStore($locationPending);
@@ -59,9 +61,11 @@ function LocationInfoForm() {
   const cancelForm = () => {
     resetLocationData();
     resetForm();
+    emptyForm(true);
   };
 
   const handleChangeForm = () => {
+    emptyForm(false);
     return !formIsChanged
       ? changeForm?.prepend((e: FormEvent) => true)
       : undefined;
@@ -133,7 +137,7 @@ function LocationInfoForm() {
           value="Отменить"
           type="button"
           bgType={BgTypeEnum.secondary}
-          disabled={!locationData || pending}
+          disabled={formIsEmpty || pending}
           className="w-full"
           onButtonClick={cancelForm}
         />
@@ -153,6 +157,8 @@ function LocationInfoForm() {
       id: locationData?.id,
       name: locationData?.name,
     });
+
+    emptyForm(!locationData);
 
     resetErrorForm();
   }, [reset, locationData]);

@@ -46,7 +46,10 @@ function UserInfoForm() {
   const { isValid, isDirty } = formState;
 
   const user = useContext(UserContext);
+
   const [readyToDelete, confirmToDelete] = useState(false);
+  const [formIsEmpty, emptyForm] = useState(true);
+
   const userData = useStore<IUserData | null>($userData);
   const roles = useStore<IKeyValue[]>($roles);
   const error = useStore($userError);
@@ -117,9 +120,11 @@ function UserInfoForm() {
   const cancelForm = () => {
     resetUserData();
     resetForm();
+    emptyForm(true);
   };
 
   const handleChangeForm = () => {
+    emptyForm(false);
     return !formIsChanged
       ? changeForm?.prepend((e: FormEvent) => true)
       : undefined;
@@ -191,7 +196,7 @@ function UserInfoForm() {
           value="Отменить"
           type="button"
           bgType={BgTypeEnum.secondary}
-          disabled={!userData || pending}
+          disabled={formIsEmpty || pending}
           className="w-full"
           onButtonClick={cancelForm}
         />
@@ -223,6 +228,8 @@ function UserInfoForm() {
         label: userData?.is_active ? "Активен" : "Не активен",
       },
     });
+
+    emptyForm(!userData);
 
     resetErrorForm();
 
