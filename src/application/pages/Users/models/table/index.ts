@@ -15,7 +15,6 @@ export const updateUsersFx = usersTableDomain.effect<
 
 export const changeUsers = usersTableDomain.event<boolean>();
 export const getUsersList = usersTableDomain.event<IUsersRequest>();
-export const searchUsersByName = usersTableDomain.event<IUsersRequest>();
 export const updateUserListSuccess = usersTableDomain.event<void>();
 
 export const $rowData = usersTableDomain.store<IUserData[]>([]);

@@ -21,7 +21,6 @@ export const updateLocationsFx = locationsTableDomain.effect<
 export const changeLocations = locationsTableDomain.event<boolean>();
 export const changeLocationsSorting = locationsTableDomain.event<ISorting>();
 export const getLocationsList = locationsTableDomain.event<ILocationRequest>();
-export const searchLocationsByName = locationsTableDomain.event<ILocationRequest>();
 export const updateLocationListSuccess = locationsTableDomain.event<void>();
 
 export const $rowData = locationsTableDomain.store<ILocationData[]>([]);

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { Header, Table } from "ui";
 import UserInfoForm from "./components/UserInfoForm";
 import { CompanyPanel, TwoColumnLayout } from "domains";
@@ -11,7 +11,6 @@ import {
   $rowData,
   $usersIsChanged, changeUsers,
   getUsersList,
-  searchUsersByName,
   updateUserListSuccess,
 } from "./models/table";
 import { IKeyValue, IPagination } from "infrastructure/types";
@@ -28,6 +27,8 @@ import { $currentCompany } from "infrastructure/models/auth/user";
 import "./models/init";
 
 function Users() {
+  const [searchValue, setSearchValue] = useState("");
+
   const rowData = useStore<IUserData[]>($rowData);
   const rowCount = useStore<number>($rowCount);
   const paging = useStore<IPagination>($paging);
@@ -38,12 +39,7 @@ function Users() {
 
   const handleOnSearch = (value: string) => {
     if (companyId) {
-      searchUsersByName({
-        company_id: companyId,
-        page_number: 1,
-        row_count: paging.perPage,
-        name: value,
-      });
+      setSearchValue(value);
     }
   };
 
@@ -56,12 +52,13 @@ function Users() {
           company_id: companyId,
           page_number: page,
           row_count: paging.perPage,
+          name: searchValue || undefined,
         });
       }
 
       return null;
     },
-    [companyId, paging.perPage, usersIsChanged]
+    [companyId, paging.perPage, usersIsChanged, searchValue]
   );
 
   useEffect(() => {
@@ -76,12 +73,13 @@ function Users() {
         getUsersList({
           company_id: companyId,
           page_number: 1,
+          name: searchValue || undefined,
         });
       } else {
         changeUsers(false);
       }
     }
-  }, [companyId, usersIsChanged]);
+  }, [companyId, usersIsChanged, searchValue]);
 
   return (
     <TwoColumnLayout className="bg-input-grey" asideContent={<UserInfoForm />}>

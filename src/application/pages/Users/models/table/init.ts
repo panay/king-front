@@ -6,7 +6,6 @@ import {
   updateUserListSuccess,
   getUsersFx,
   getUsersList,
-  searchUsersByName,
   updateUsersFx,
 } from "./";
 import { setPaging } from "infrastructure/models/paging";
@@ -48,7 +47,6 @@ const getUsers = async (request: IUsersRequest) => {
 };
 
 getUsersList.watch((body) => getUsersFx(body));
-searchUsersByName.watch((body) => updateUsersFx(body));
 updateUserListSuccess.watch(() => {
   setPaging({
     isNextPageLoading: false,

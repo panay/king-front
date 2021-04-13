@@ -4,7 +4,6 @@ import {
   updateLocationListSuccess,
   getLocationsFx,
   getLocationsList,
-  searchLocationsByName,
   updateLocationsFx,
 } from "./";
 import { setPaging } from "infrastructure/models/paging";
@@ -58,7 +57,6 @@ const getLocations = async (request: ILocationRequest) => {
 };
 
 getLocationsList.watch((body) => getLocationsFx(body));
-searchLocationsByName.watch((body) => updateLocationsFx(body));
 updateLocationListSuccess.watch(() => {
   setPaging({
     isNextPageLoading: false,

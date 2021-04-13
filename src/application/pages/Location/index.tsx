@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { Header, Table } from "ui";
 import { TwoColumnLayout } from "domains";
 import { useStore } from "effector-react";
@@ -14,7 +14,6 @@ import {
   changeLocations,
   changeLocationsSorting,
   getLocationsList,
-  searchLocationsByName,
   updateLocationListSuccess,
 } from "./models/table";
 import { ILocationData } from "./types/LocationData";
@@ -30,6 +29,8 @@ import "./models/init";
 import { ISorting } from "infrastructure/types/Sorting";
 
 function Location() {
+  const [searchValue, setSearchValue] = useState("");
+
   const rowData = useStore<ILocationData[]>($rowData);
   const rowCount = useStore<number>($rowCount);
   const paging = useStore<IPagination>($paging);
@@ -41,12 +42,7 @@ function Location() {
 
   const handleOnSearch = (value: string) => {
     if (companyId) {
-      searchLocationsByName({
-        company_id: companyId,
-        page_number: 1,
-        row_count: paging.perPage,
-        name: value,
-      });
+      setSearchValue(value);
     }
   };
 
@@ -59,12 +55,13 @@ function Location() {
           company_id: companyId,
           page_number: page,
           row_count: paging.perPage,
+          name: searchValue || undefined
         });
       }
 
       return null;
     },
-    [companyId, paging.perPage, locationsIsChanged]
+    [companyId, paging.perPage, locationsIsChanged, searchValue]
   );
 
   const onSortHandler = useCallback((value: any) => {
@@ -94,6 +91,7 @@ function Location() {
           getLocationsList({
             company_id: companyId,
             page_number: 1,
+            name: searchValue || undefined,
             ...locationsSorting,
           });
         }
@@ -101,7 +99,7 @@ function Location() {
         changeLocations(false);
       }
     }
-  }, [companyId, locationsIsChanged, locationsSorting]);
+  }, [companyId, locationsIsChanged, locationsSorting, searchValue]);
 
   return (
     <TwoColumnLayout
