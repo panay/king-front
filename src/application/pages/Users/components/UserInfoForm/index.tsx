@@ -112,8 +112,9 @@ function UserInfoForm() {
     deleteUserFx(userData!.id).then((response) => {
       if (response) {
         cancelForm();
-        changeUsers(true);
       }
+
+      changeUsers(true);
     });
   };
 
@@ -141,15 +142,17 @@ function UserInfoForm() {
       updateUserFx(body).then((response) => {
         if (response) {
           cancelForm();
-          changeUsers(true);
         }
+
+        changeUsers(true);
       });
     } else {
       createUserFx(body).then((response) => {
         if (response) {
           cancelForm();
-          changeUsers(true);
         }
+
+        changeUsers(true);
       });
     }
   };
@@ -158,14 +161,14 @@ function UserInfoForm() {
     <Button
       icon={<IcLoader className="w-7 h-7 m-auto" />}
       type="submit"
-      disabled={!isDirty || !isValid || error !== null || pending}
+      disabled={!isDirty || !isValid || pending}
       className="w-full"
     />
   ) : (
     <Button
       value={userData ? "Сохранить" : "Добавить"}
       type="submit"
-      disabled={!isDirty || !isValid || error !== null || pending}
+      disabled={!isDirty || !isValid || pending}
       className="w-full"
     />
   );
@@ -186,7 +189,7 @@ function UserInfoForm() {
           }
           type="button"
           bgType={BgTypeEnum.warning}
-          disabled={!userData || error !== null || pending}
+          disabled={!userData || pending}
           className="w-full"
           onButtonClick={() => confirmToDelete(true)}
         />

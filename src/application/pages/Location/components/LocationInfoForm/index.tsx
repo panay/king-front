@@ -53,8 +53,9 @@ function LocationInfoForm() {
     deleteLocationFx(locationData!.id).then((response) => {
       if (response) {
         cancelForm();
-        changeLocations(true);
       }
+
+      changeLocations(true);
     });
   };
 
@@ -82,15 +83,17 @@ function LocationInfoForm() {
       updateLocationFx(body).then((response) => {
         if (response) {
           cancelForm();
-          changeLocations(true);
         }
+
+        changeLocations(true);
       });
     } else {
       createLocationFx(body).then((response) => {
         if (response) {
           cancelForm();
-          changeLocations(true);
         }
+
+        changeLocations(true);
       });
     }
   };
@@ -99,14 +102,14 @@ function LocationInfoForm() {
     <Button
       icon={<IcLoader className="w-7 h-7 m-auto" />}
       type="submit"
-      disabled={!isDirty || !isValid || error !== null || pending}
+      disabled={!isDirty || !isValid || pending}
       className="w-full"
     />
   ) : (
     <Button
       value={locationData ? "Сохранить" : "Добавить"}
       type="submit"
-      disabled={!isDirty || !isValid || error !== null || pending}
+      disabled={!isDirty || !isValid || pending}
       className="w-full"
     />
   );
@@ -127,7 +130,7 @@ function LocationInfoForm() {
           }
           type="button"
           bgType={BgTypeEnum.warning}
-          disabled={!locationData || error !== null || pending}
+          disabled={!locationData || pending}
           className="w-full"
           onButtonClick={() => confirmToDelete(true)}
         />
