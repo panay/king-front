@@ -4,6 +4,7 @@ import { ReactComponent as IcSettings } from "infrastructure/assets/images/svgs/
 import { NavLink } from "react-router-dom";
 import SearchInput from "../SearchInput";
 import UserContext from "infrastructure/context/UserContext";
+import { Tooltip } from "ui";
 
 type Props = HTMLProps<unknown> & {
   headerTitle: ReactElement | string;
@@ -33,16 +34,22 @@ function Header({ headerTitle, onSearch, ...props }: Props) {
               to="/users"
               className="block mr-4 rounded-xl w-10 h-10 flex flex-col justify-center items-center text-icon-grey bg-white hover:bg-primary hover:text-white"
               activeClassName="text-icon-white bg-primary"
+              data-tip="Пользователи"
+              data-for="users-tooltip"
             >
               <IcUser />
+              <Tooltip id="users-tooltip" place="bottom" />
             </NavLink>
             <NavLink
               exact
               to="/settings"
               className="block rounded-xl w-10 h-10 flex flex-col justify-center items-center text-icon-grey bg-white hover:bg-primary hover:text-white"
               activeClassName="text-icon-white bg-primary"
+              data-tip="Настройки"
+              data-for="settings-tooltip"
             >
               <IcSettings />
+                <Tooltip id="settings-tooltip" place="bottom" />
             </NavLink>
           </>
         ) : (
@@ -50,7 +57,10 @@ function Header({ headerTitle, onSearch, ...props }: Props) {
         )}
       </div>
       <div className="px-2.5 w-1/3">
-        <SearchInput onSearch={handleSearch} placeholder={props.placeholder || "Поиск"} />
+        <SearchInput
+          onSearch={handleSearch}
+          placeholder={props.placeholder || "Поиск"}
+        />
       </div>
     </header>
   );

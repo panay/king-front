@@ -1,12 +1,14 @@
 import React, { ReactElement, SyntheticEvent } from "react";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as IcExit } from "infrastructure/assets/images/svgs/ic-exit.svg";
+import { Tooltip } from "ui";
 
 type Props = {
   user?: HTMLImageElement | string;
   nav: {
     to: string;
-    content: ReactElement | string;
+    text: string;
+    icon: ReactElement
   }[];
   onLogout: () => void;
 };
@@ -30,15 +32,18 @@ function Sidebar({ user, nav, onLogout }: Props) {
               to={link.to}
               className="block mt-6 rounded-xl text-white p-3 hover:bg-white hover:bg-opacity-20 hover:text-white"
               activeClassName="text-white bg-white bg-opacity-20"
+              data-tip={link.text}
             >
-              {link.content}
+              {link.icon || link.text}
+              <Tooltip id="sidebar-tooltip" place="right" arrow={false} />
             </NavLink>
           ))}
         </nav>
       </div>
       <div className="mt-6">
-        <a href="/#" onClick={handleOnClick} title="Выйти">
+        <a href="/#" onClick={handleOnClick} data-tip="Выйти">
           <IcExit className="text-white" />
+          <Tooltip id="logout" place="right" arrow={false} />
         </a>
       </div>
     </aside>

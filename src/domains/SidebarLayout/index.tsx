@@ -15,35 +15,43 @@ function SidebarLayout({ children }: { children: ReactElement }) {
   const nav = [
     {
       to: "/",
-      content: <IcHome />,
+      icon: <IcHome />,
+      text: "Дашбоард"
     },
     {
       to: "/location",
-      content: <IcGeo />,
+      icon: <IcGeo />,
+      text: "Местоположения"
     },
     {
       to: "/apps",
-      content: <IcApp />,
+      icon: <IcApp />,
+      text: "Приложения"
     },
     {
       to: "/routes",
-      content: <IcTrack />,
+      icon: <IcTrack />,
+      text: "Маршруты"
     },
     {
       to: "/geofence",
-      content: <IcGeofence />,
+      icon: <IcGeofence />,
+      text: "Геофенсы"
     },
     {
       to: "/campaigns",
-      content: <IcMarketing />,
+      icon: <IcMarketing />,
+      text: "Кампании"
     },
     {
       to: "/geotrigger",
-      content: <IcGeotrigger />,
+      icon: <IcGeotrigger />,
+      text: "Геотриггеры"
     },
     {
       to: "/analytics",
-      content: <IcAnalytics />,
+      icon: <IcAnalytics />,
+      text: "Аналитика"
     },
   ];
 

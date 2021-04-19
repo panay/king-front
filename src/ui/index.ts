@@ -14,6 +14,7 @@ import DashboardLoader from "./Loaders/DashboardLoader";
 import TableLoader from "./Loaders/TableLoader";
 import UsersLoader from "./Loaders/UsersLoader";
 import ConfirmPanel from "./ConfirmPanel";
+import Tooltip from "./Tooltip";
 
 export {
   Button,
@@ -32,4 +33,5 @@ export {
   TableLoader,
   UsersLoader,
   ConfirmPanel,
+  Tooltip,
 };
