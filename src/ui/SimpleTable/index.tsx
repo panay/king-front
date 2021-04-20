@@ -30,7 +30,7 @@ type Props = {
   reload?: boolean;
 };
 
-function Table({
+function SimpleTable({
   items,
   rowCount,
   columns,
@@ -231,7 +231,7 @@ function Table({
                 <FixedSizeList
                   height={height}
                   itemCount={itemCount}
-                  itemSize={107}
+                  itemSize={50}
                   onItemsRendered={onItemsRendered}
                   ref={ref}
                   width={width}
@@ -249,4 +249,4 @@ function Table({
   );
 }
 
-export default Table;
+export default SimpleTable;

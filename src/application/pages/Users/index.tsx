@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import { Header, Table } from "ui";
+import {Header, SimpleTable} from "ui";
 import UserInfoForm from "./components/UserInfoForm";
 import { CompanyPanel, TwoColumnLayout } from "domains";
 import { Column } from "react-table";
@@ -94,7 +94,7 @@ function Users() {
           height: "calc(100vh - 125px)",
         }}
       >
-        <Table
+        <SimpleTable
           items={rowData}
           rowCount={rowCount}
           columns={columns}

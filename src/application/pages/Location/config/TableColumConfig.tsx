@@ -10,16 +10,16 @@ const TableColumnConfig = (): Array<Column<any>> => {
         maxWidth: 400,
       },
       {
-        Header: () => <div className="text-center">Геофенс</div>,
+        Header: () => <div className="mx-auto">Геофенс</div>,
         accessor: "geofence_count",
         maxWidth: 100,
-        Cell: (row) => <span className="text-center">{row.value}</span>,
+        Cell: (row) => <div className="mx-auto text-center">{row.value}</div>,
       },
       {
-        Header: () => <div className="text-center">Кампании</div>,
+        Header: () => <div className="mx-auto">Кампании</div>,
         accessor: "campaign_count",
         maxWidth: 100,
-        Cell: (row) => <span className="text-center">{row.value}</span>,
+        Cell: (row) => <div className="mx-auto text-center">{row.value}</div>,
       },
     ],
     []

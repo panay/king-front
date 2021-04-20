@@ -16,7 +16,7 @@ function SidebarLayout({ children }: { children: ReactElement }) {
     {
       to: "/",
       icon: <IcHome />,
-      text: "Дашбоард"
+      text: "Главная"
     },
     {
       to: "/location",

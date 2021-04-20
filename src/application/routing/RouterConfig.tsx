@@ -51,6 +51,11 @@ const routes: Route[] = [
     exact: true,
   },
   {
+    path: "/campaigns",
+    component: lazy(() => import("../pages/Campaigns")),
+    exact: true,
+  },
+  {
     path: "*",
     component: lazy(() => import("../pages/NotFound")),
     exact: false,

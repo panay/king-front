@@ -7,6 +7,7 @@ import Sidebar from "./Sidebar";
 import TitleWithDropdown from "./TitleWithDropdown";
 import Input from "./Input";
 import Table from "./Table";
+import SimpleTable from "./SimpleTable";
 import CustomSelect from "./CustomSelect";
 import FormErrorMessage from "./FormErrorMessage";
 import LoginLoader from "./Loaders/LoginLoader";
@@ -26,6 +27,7 @@ export {
   TitleWithDropdown,
   Input,
   Table,
+  SimpleTable,
   CustomSelect,
   FormErrorMessage,
   LoginLoader,

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import { Header, Table } from "ui";
+import {Header, SimpleTable} from "ui";
 import { TwoColumnLayout } from "domains";
 import { useStore } from "effector-react";
 import { IKeyValue, IPagination } from "infrastructure/types";
@@ -107,17 +107,17 @@ function Location() {
       asideContent={<LocationInfoForm />}
     >
       <Header
-        headerTitle={"Местоположения"}
+        headerTitle="Местоположения"
         placeholder="Поиск по местоположению"
         onSearch={handleOnSearch}
       />
       <div
         className="bg-white rounded-xl p-4 mt-6"
         style={{
-          height: "calc(100vh - 125px)",
+          height: "calc(100vh - 115px)",
         }}
       >
-        <Table
+        <SimpleTable
           items={rowData}
           rowCount={rowCount}
           columns={columns}
