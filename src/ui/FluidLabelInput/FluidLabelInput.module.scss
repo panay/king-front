@@ -13,7 +13,8 @@
     @apply placeholder-transparent block bg-input-grey p-2.5 w-full border-2 border-input-grey rounded-lg focus:bg-white focus:outline-none;
 
     &:focus,
-    &:not(:placeholder-shown) {
+    &:not(:placeholder-shown),
+    &:-webkit-autofill {
       @apply pt-4 pb-1;
     }
 
@@ -22,7 +23,8 @@
     }
 
     &:focus ~ .placeholder,
-    &:not(:placeholder-shown) ~ .placeholder {
+    &:not(:placeholder-shown) ~ .placeholder,
+    &:-webkit-autofill ~ .placeholder {
       @apply -translate-y-full;
     }
   }

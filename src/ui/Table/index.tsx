@@ -138,9 +138,9 @@ function Table({
         return (
           <div
             {...row.getRowProps({
-              style,
+              style: {...style, marginTop: index > 0 ? index / 3 + 1 + "rem" : "1rem"}
             })}
-            className="relative flex mt-2.5 cursor-pointer rounded-xl hover:bg-lighten-blue"
+            className="flex cursor-pointer rounded-xl bg-lighten-grey border border-input-grey hover:bg-lighten-blue"
             onClick={() => onClickRowHandler(row.original)}
           >
             {row.cells.map((cell: any) => {

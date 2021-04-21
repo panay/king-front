@@ -22,9 +22,9 @@ const TableColumnConfig = (): Array<Column<any>> => {
                     <span>{period.start_date}-{period.end_date}</span>
                 </div>
               <h2>{row.value}</h2>
-              <div>
+              <div className="flex items-center">
                 {platforms.map((app: string, index: number) =>
-                  app === "IOS" ? <IcApple key={index} /> : <IcAndroid key={index} />
+                  app === "IOS" ? <IcApple key={index} className="mr-2" /> : <IcAndroid key={index} />
                 )}
               </div>
             </div>
