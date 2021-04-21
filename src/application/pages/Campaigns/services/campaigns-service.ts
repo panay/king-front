@@ -35,5 +35,20 @@ const deleteCampaign = (id: string) =>
   globalService.delete(`${process.env.REACT_APP_CAMPAIGN_ENDPOINT}`, {
     data: { id },
   });
+const suspendCampaign = (campaign_id: string) =>
+  globalService.put(
+    `${process.env.REACT_APP_CAMPAIGN_ENDPOINT}/${campaign_id}/suspend`
+  );
+const activateCampaign = (campaign_id: string) =>
+  globalService.put(
+    `${process.env.REACT_APP_CAMPAIGN_ENDPOINT}/${campaign_id}/activate`
+  );
 
-export { getCampaignList, createCampaign, updateCampaign, deleteCampaign };
+export {
+  getCampaignList,
+  createCampaign,
+  updateCampaign,
+  deleteCampaign,
+  suspendCampaign,
+  activateCampaign,
+};

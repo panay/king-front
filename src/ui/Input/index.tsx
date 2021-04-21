@@ -1,8 +1,8 @@
 import React, { InputHTMLAttributes, Ref } from "react";
 
-type Props = InputHTMLAttributes<unknown> & {
-  inputRef?: Ref<HTMLInputElement>;
-};
+  type Props = InputHTMLAttributes<unknown> & {
+    inputRef?: Ref<HTMLInputElement>;
+  };
 
 function Input({ inputRef, ...props }: Props) {
   return (

@@ -15,6 +15,7 @@
     "apexcharts": "3.25.0",
     "autoprefixer": "9.8.6",
     "axios": "0.21.1",
+    "dayjs": "^1.10.4",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "effector": "21.8.2",

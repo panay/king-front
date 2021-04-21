@@ -45,4 +45,20 @@ interface ICampaignsRequest {
   name?: string;
 }
 
-export type { ICampaignData, ICampaignsResponse, ICampaignsRequest };
+interface IPausedCampaign {
+  campaign_id: string;
+  paused: boolean;
+}
+
+interface IPausedCampaignResponse {
+  campaign_id: string;
+  state: string;
+}
+
+export type {
+  ICampaignData,
+  ICampaignsResponse,
+  ICampaignsRequest,
+  IPausedCampaign,
+  IPausedCampaignResponse,
+};

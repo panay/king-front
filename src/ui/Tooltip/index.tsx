@@ -24,6 +24,7 @@ function Tooltip({
     />
   ) : (
     <ReactTooltip
+      id={id}
       place={place}
       className={styles.radarTooltip}
       effect={effect}

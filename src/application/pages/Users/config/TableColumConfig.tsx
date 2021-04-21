@@ -1,5 +1,6 @@
 import { Column } from "react-table";
 import React, { useMemo } from "react";
+import { Tag } from "ui";
 
 const TableColumnConfig = (): Array<Column<any>> => {
   return useMemo(
@@ -34,15 +35,12 @@ const TableColumnConfig = (): Array<Column<any>> => {
         accessor: "is_active",
         Cell: (props: any) => {
           return (
-            <span
-              className={`text-xs bg-opacity-20 text-center px-2 py-1 rounded ${
-                props.value
-                  ? "bg-seagreen text-seagreen"
-                  : "bg-warning text-warning"
-              }`}
-            >
-              {props.value ? "Активен" : "Не активен"}
-            </span>
+            <Tag
+              className="bg-opacity-20"
+              bg={props.value ? "seagreen" : "warning"}
+              color={props.value ? "seagreen" : "warning"}
+              text={props.value ? "Активен" : "Не активен"}
+            />
           );
         },
       },

@@ -45,6 +45,12 @@ module.exports = {
         "icon-lawngreen": "#6acd00",
         "icon-purple": "#ec31ff",
 
+        "tag-green": "#e5fbef",
+        "tag-red": "#fff3f0",
+        "tag-text-red": "#de3c16",
+        "tag-grey": "#e9ecea",
+        "tag-text-grey": "#6e717d",
+
         "off-white": "#fdf0ba",
         brown: "#3f2e00",
         orangered: "#f2461f",

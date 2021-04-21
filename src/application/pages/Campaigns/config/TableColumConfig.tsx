@@ -1,7 +1,13 @@
 import { Column } from "react-table";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { ReactComponent as IcAndroid } from "infrastructure/assets/images/svgs/ic-android.svg";
 import { ReactComponent as IcApple } from "infrastructure/assets/images/svgs/ic-apple.svg";
+import { Tag } from "ui";
+import dayjs from "dayjs";
+import { togglePause } from "../models/table";
+
+const customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
 
 const TableColumnConfig = (): Array<Column<any>> => {
   return useMemo(
@@ -11,21 +17,91 @@ const TableColumnConfig = (): Array<Column<any>> => {
         accessor: "name",
         maxWidth: 400,
         Cell: (row) => {
-          // console.log(row.row.original);
           const platforms = row.row.original.platforms.split(",") || [];
           const state = row.row.original.state;
           const period = row.row.original.period;
+          const actingState = state === "ACTING";
+          const pendingState = state === "PENDING";
+          const completedState = state === "COMPLETED";
+          const pauseState =
+            state === "ACTING_SUSPENDED" || state === "PENDING_SUSPENDED";
+
+          const startDate = dayjs(period.start_date, "DD.MM.YYYY,HH:mm");
+          const endDate = dayjs(period.end_date, "DD.MM.YYYY,HH:mm");
+          const showYear: boolean = startDate.diff(endDate, "year") !== 0;
+
+          const trimString = (value: string): string => {
+            return value && value.length > 40
+              ? value.substr(0, 40).concat("...")
+              : value;
+          };
+
+          const pause = (paused: boolean) => {
+            togglePause({ campaign_id: row.row.original.id, paused: paused });
+          };
+
+          const pauseButton =
+            actingState || pendingState ? (
+              <button onClick={(event) => pause(true)}>
+                Поставить на паузу
+              </button>
+            ) : pauseState ? (
+              <button onClick={(event) => pause(false)}>Снять с паузы</button>
+            ) : (
+              <></>
+            );
+
           return (
-            <div>
-                <div className="flex items-center">
-                    <span>{state === "ACTING" ? "Активный" : state === "COMPLETED" ? "Закончено" : "Ожидание"}</span>
-                    <span>{period.start_date}-{period.end_date}</span>
-                </div>
-              <h2>{row.value}</h2>
+            <div className="flex flex-col justify-between h-full">
+              <div className="flex items-center mb-1.5">
+                <Tag
+                  className="mr-2"
+                  bg={
+                    actingState
+                      ? "tag-green"
+                      : completedState
+                      ? "tag-red"
+                      : pauseState
+                      ? "off-white"
+                      : "tag-grey"
+                  }
+                  color={
+                    actingState
+                      ? "seagreen"
+                      : completedState
+                      ? "tag-text-red"
+                      : pauseState
+                      ? "brown"
+                      : "tag-text-grey"
+                  }
+                  text={
+                    actingState
+                      ? "Активный"
+                      : completedState
+                      ? "Завершена"
+                      : pauseState
+                      ? "Пауза"
+                      : "Ожидание"
+                  }
+                />
+                <span className="text-icon-grey text-xs">
+                  {startDate.format(showYear ? "DD.MM.YY" : "DD.MM")}-
+                  {endDate.format("DD.MM.YYYY")}
+                </span>
+              </div>
+              <h2 className="leading-5 mb-1.5" title={row.value}>
+                {trimString(row.value)}
+              </h2>
               <div className="flex items-center">
                 {platforms.map((app: string, index: number) =>
-                  app === "IOS" ? <IcApple key={index} className="mr-2" /> : <IcAndroid key={index} />
+                  app === "IOS" ? (
+                    <IcApple key={index} className="mr-2" />
+                  ) : (
+                    <IcAndroid key={index} />
+                  )
                 )}
+
+                {pauseButton}
               </div>
             </div>
           );

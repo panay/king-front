@@ -152,7 +152,7 @@ function Table({
                       ? cell.column.maxWidth + "px"
                       : "100%",
                   }}
-                  className="px-2.5 py-4 w-full"
+                  className="px-2.5 py-2.5 w-full"
                 >
                   {cell.render("Cell")}
                 </div>
@@ -231,7 +231,7 @@ function Table({
                 <FixedSizeList
                   height={height}
                   itemCount={itemCount}
-                  itemSize={107}
+                  itemSize={110}
                   onItemsRendered={onItemsRendered}
                   ref={ref}
                   width={width}

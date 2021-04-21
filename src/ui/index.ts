@@ -16,6 +16,7 @@ import TableLoader from "./Loaders/TableLoader";
 import UsersLoader from "./Loaders/UsersLoader";
 import ConfirmPanel from "./ConfirmPanel";
 import Tooltip from "./Tooltip";
+import Tag from "./Tag";
 
 export {
   Button,
@@ -36,4 +37,5 @@ export {
   UsersLoader,
   ConfirmPanel,
   Tooltip,
+  Tag,
 };

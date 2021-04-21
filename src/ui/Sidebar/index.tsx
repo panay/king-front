@@ -33,6 +33,7 @@ function Sidebar({ user, nav, onLogout }: Props) {
               className="block mt-6 rounded-xl text-white p-3 hover:bg-white hover:bg-opacity-20 hover:text-white"
               activeClassName="text-white bg-white bg-opacity-20"
               data-tip={link.text}
+              data-for="sidebar-tooltip"
             >
               {link.icon || link.text}
               <Tooltip id="sidebar-tooltip" place="right" arrow={false} />
@@ -41,9 +42,9 @@ function Sidebar({ user, nav, onLogout }: Props) {
         </nav>
       </div>
       <div className="mt-6">
-        <a href="/#" onClick={handleOnClick} data-tip="Выйти">
+        <a href="/#" onClick={handleOnClick} data-for="logout-tooltip" data-tip="Выйти">
           <IcExit className="text-white" />
-          <Tooltip id="logout" place="right" arrow={false} />
+          <Tooltip id="logout-tooltip" place="right" arrow={false} />
         </a>
       </div>
     </aside>

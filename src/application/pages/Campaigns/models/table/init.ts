@@ -1,18 +1,26 @@
 import {
   $rowCount,
   $rowData,
-  updateCampaignListSuccess,
   getCampaignsFx,
   getCampaignsList,
+  togglePause,
+  updateCampaignListSuccess,
   updateCampaignsFx,
+  updatePauseFx,
 } from "./";
 import { setPaging } from "infrastructure/models/paging";
 import {
   ICampaignData,
   ICampaignsRequest,
   ICampaignsResponse,
+  IPausedCampaign,
+  IPausedCampaignResponse,
 } from "../../types/CampaignsData";
-import { getCampaignList } from "../../services/campaigns-service";
+import {
+  activateCampaign,
+  getCampaignList,
+  suspendCampaign,
+} from "../../services/campaigns-service";
 
 const campaignListReducer = (
   state: ICampaignData[],
@@ -43,6 +51,30 @@ const updateCampaignsReducer = (
   return rowData;
 };
 
+const updateCampaignState = (
+  state: ICampaignData[],
+  payload: IPausedCampaignResponse | null
+) => {
+  if (payload) {
+    const rowData = state.slice();
+    const campaignIndex = rowData.findIndex(
+      (campaign) => campaign.id === payload.campaign_id
+    );
+    if (campaignIndex > -1) {
+      const campaign = rowData.find(
+        (campaign) => campaign.id === payload.campaign_id
+      );
+
+      rowData.splice(campaignIndex, 1, {
+        ...campaign,
+        state: payload.state,
+      } as ICampaignData);
+    }
+    // debugger;
+    return rowData;
+  }
+};
+
 const countReducer = (state: number, payload: ICampaignsResponse) => {
   return payload ? payload.rowCount : 0;
 };
@@ -56,7 +88,26 @@ const getCampaigns = async (request: ICampaignsRequest) => {
   return response?.data || [];
 };
 
+const updatePause = async (request: IPausedCampaign) => {
+  let response = null;
+  try {
+    if (request.paused) {
+      response = await suspendCampaign(request.campaign_id);
+    } else {
+      response = await activateCampaign(request.campaign_id);
+    }
+  } catch (err) {}
+
+  return response?.status === 200
+    ? {
+        campaign_id: request.campaign_id,
+        state: response?.data,
+      }
+    : null;
+};
+
 getCampaignsList.watch((body) => getCampaignsFx(body));
+togglePause.watch((paused) => updatePauseFx(paused));
 updateCampaignListSuccess.watch(() => {
   setPaging({
     isNextPageLoading: false,
@@ -67,7 +118,8 @@ updateCampaignListSuccess.watch(() => {
 $rowData
   .on(getCampaignsFx.doneData, campaignListReducer)
   .on(updateCampaignsFx.doneData, updateCampaignsReducer)
-  .on(updateCampaignListSuccess, () => []);
+  .on(updateCampaignListSuccess, () => [])
+  .on(updatePauseFx.doneData, updateCampaignState);
 $rowCount
   .on(getCampaignsFx.doneData, countReducer)
   .on(updateCampaignsFx.doneData, countReducer)
@@ -75,3 +127,4 @@ $rowCount
 
 getCampaignsFx.use(getCampaigns);
 updateCampaignsFx.use(getCampaigns);
+updatePauseFx.use(updatePause);
