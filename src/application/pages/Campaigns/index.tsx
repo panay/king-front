@@ -24,6 +24,7 @@ import { $paging } from "infrastructure/models/paging";
 import { ICampaignData } from "./types/CampaignsData";
 
 import "./models/init";
+import CampaignFilter from "./components/CampaignFilter";
 
 function Campaigns() {
   const [searchValue, setSearchValue] = useState("");
@@ -59,6 +60,10 @@ function Campaigns() {
     },
     [companyId, paging.perPage, campaignsIsChanged, searchValue]
   );
+
+  const changeModelHandler = (event: any) => {
+    debugger;
+  };
 
   useEffect(() => {
     document.title = "Местоположения – Spark [radar]";
@@ -103,7 +108,9 @@ function Campaigns() {
           rowClicked={(value) => getCampaignDataFx(value as IKeyValue)}
           loadNextPage={loadNextPage}
           reload={formIsChanged || !campaignsIsChanged}
-        />
+        >
+          <CampaignFilter changeModel={changeModelHandler} />
+        </Table>
       </div>
     </TwoColumnLayout>
   );

@@ -28,6 +28,7 @@ type Props = {
   onSort?: (field: any) => void;
   noDataComponent?: ReactElement;
   reload?: boolean;
+  children?: ReactElement;
 };
 
 function Table({
@@ -43,6 +44,7 @@ function Table({
   onSort,
   noDataComponent,
   reload,
+  children,
 }: Props) {
   const paging = useStore<IPagination>($paging);
   const listRef = useRef<InfiniteLoader>(null);
@@ -138,9 +140,12 @@ function Table({
         return (
           <div
             {...row.getRowProps({
-              style: {...style, marginTop: index > 0 ? index / 3 + 1 + "rem" : "1rem"}
+              style: {
+                ...style,
+                marginTop: index > 0 ? index / 3 + 0.25 + "rem" : "0.25rem",
+              },
             })}
-            className="flex cursor-pointer rounded-xl bg-lighten-grey border border-input-grey hover:bg-lighten-blue"
+            className="flex cursor-pointer rounded-xl bg-lighten-grey border border-input-grey hover:bg-lighten-blue group"
             onClick={() => onClickRowHandler(row.original)}
           >
             {row.cells.map((cell: any) => {
@@ -186,66 +191,85 @@ function Table({
   }, [onSort, reload, sortBy]);
 
   return (
-    <AutoSizer defaultHeight={600} defaultWidth={600}>
-      {({ height, width }) => (
-        <section {...getTableProps()} className="table-fixed w-full">
-          {headerGroups.map((headerGroup: any) => (
-            <header
-              {...headerGroup.getHeaderGroupProps()}
-              className="flex"
+    <>
+      <AutoSizer defaultHeight={600} defaultWidth={600}>
+        {({ height, width }) => (
+          <section {...getTableProps()} className="table-fixed w-full">
+            {headerGroups.map((headerGroup: any) => (
+              <header
+                {...headerGroup.getHeaderGroupProps()}
+                className="flex"
+                style={{
+                  width: width + "px",
+                }}
+              >
+                {headerGroup.headers.map((column: any) => (
+                  <div
+                    {...column.getHeaderProps(
+                      onSort ? column.getSortByToggleProps() : undefined
+                    )}
+                    className="flex items-center text-icon-grey text-xs px-2.5 text-left font-normal w-full"
+                    style={{
+                      maxWidth: column.maxWidth
+                        ? column.maxWidth + "px"
+                        : "100%",
+                    }}
+                  >
+                    {column.render("Header")}
+                    <span className="block">
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <IcSortColumn />
+                        ) : (
+                          <IcSortColumn className="transform rotate-180" />
+                        )
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </header>
+            ))}
+
+            <div
+              className="mt-4"
               style={{
                 width: width + "px",
               }}
             >
-              {headerGroup.headers.map((column: any) => (
-                <div
-                  {...column.getHeaderProps(onSort ? column.getSortByToggleProps() : undefined)}
-                  className="flex items-center text-icon-grey text-xs px-2.5 text-left font-normal w-full"
-                  style={{
-                    maxWidth: column.maxWidth ? column.maxWidth + "px" : "100%",
-                  }}
-                >
-                  {column.render("Header")}
-                  <span className="block">
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? <IcSortColumn />
-                        : <IcSortColumn className="transform rotate-180" />
-                      : ""}
-                  </span>
-                </div>
-              ))}
-            </header>
-          ))}
+              {children}
+            </div>
 
-          <div {...getTableBodyProps()}>
-            <InfiniteLoader
-              isItemLoaded={(index: number) => {
-                return !paging.hasNextPage || !!items[index];
-              }}
-              itemCount={itemCount}
-              loadMoreItems={loadMoreItems}
-              ref={listRef}
-            >
-              {({ onItemsRendered, ref }) => (
-                <FixedSizeList
-                  height={height}
-                  itemCount={itemCount}
-                  itemSize={110}
-                  onItemsRendered={onItemsRendered}
-                  ref={ref}
-                  width={width}
-                  className="overflow-auto scrollbar-thin scrollbar-thumb-border-grey scrollbar-track-input-grey"
-                >
-                  {RenderRow}
-                </FixedSizeList>
-              )}
-            </InfiniteLoader>
-          </div>
-          {!paging.hasNextPage && !items.length ? noDataRender() : <></>}
-        </section>
-      )}
-    </AutoSizer>
+            <div {...getTableBodyProps()}>
+              <InfiniteLoader
+                isItemLoaded={(index: number) => {
+                  return !paging.hasNextPage || !!items[index];
+                }}
+                itemCount={itemCount}
+                loadMoreItems={loadMoreItems}
+                ref={listRef}
+              >
+                {({ onItemsRendered, ref }) => (
+                  <FixedSizeList
+                    height={height - (children ? 80 : 30)}
+                    itemCount={itemCount}
+                    itemSize={110}
+                    onItemsRendered={onItemsRendered}
+                    ref={ref}
+                    width={width}
+                    className="overflow-auto scrollbar-thin scrollbar-thumb-border-grey scrollbar-track-input-grey"
+                  >
+                    {RenderRow}
+                  </FixedSizeList>
+                )}
+              </InfiniteLoader>
+            </div>
+            {!paging.hasNextPage && !items.length ? noDataRender() : <></>}
+          </section>
+        )}
+      </AutoSizer>
+    </>
   );
 }
 

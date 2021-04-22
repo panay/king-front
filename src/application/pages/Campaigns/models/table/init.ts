@@ -101,7 +101,7 @@ const updatePause = async (request: IPausedCampaign) => {
   return response?.status === 200
     ? {
         campaign_id: request.campaign_id,
-        state: response?.data,
+        state: response?.data.state,
       }
     : null;
 };

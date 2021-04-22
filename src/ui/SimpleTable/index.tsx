@@ -229,7 +229,7 @@ function SimpleTable({
             >
               {({ onItemsRendered, ref }) => (
                 <FixedSizeList
-                  height={height}
+                  height={height - 20}
                   itemCount={itemCount}
                   itemSize={50}
                   onItemsRendered={onItemsRendered}

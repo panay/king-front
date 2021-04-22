@@ -70,6 +70,7 @@ module.exports = {
       opacity: ["disabled"],
       pointerEvents: ["disabled"],
       display: ["group-hover"],
+      visibility: ["group-hover"],
     },
   },
   plugins: [require("tailwind-scrollbar")],

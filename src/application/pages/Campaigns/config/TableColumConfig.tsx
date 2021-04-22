@@ -2,6 +2,8 @@ import { Column } from "react-table";
 import React, { useMemo } from "react";
 import { ReactComponent as IcAndroid } from "infrastructure/assets/images/svgs/ic-android.svg";
 import { ReactComponent as IcApple } from "infrastructure/assets/images/svgs/ic-apple.svg";
+import { ReactComponent as IcPauseTimer } from "infrastructure/assets/images/svgs/ic-pausetimer.svg";
+import { ReactComponent as IcPlayTimer } from "infrastructure/assets/images/svgs/ic-playtimer.svg";
 import { Tag } from "ui";
 import dayjs from "dayjs";
 import { togglePause } from "../models/table";
@@ -42,11 +44,21 @@ const TableColumnConfig = (): Array<Column<any>> => {
 
           const pauseButton =
             actingState || pendingState ? (
-              <button onClick={(event) => pause(true)}>
+              <button
+                className="invisible flex items-center border-none text-xs text-primary hover:text-hover-primary group-hover:visible"
+                onClick={(event) => pause(true)}
+              >
+                <IcPauseTimer className="mr-1" />
                 Поставить на паузу
               </button>
             ) : pauseState ? (
-              <button onClick={(event) => pause(false)}>Снять с паузы</button>
+              <button
+                className="invisible flex items-center border-none text-xs text-primary hover:text-hover-primary group-hover:visible"
+                onClick={(event) => pause(false)}
+              >
+                <IcPlayTimer className="mr-1" />
+                Снять с паузы
+              </button>
             ) : (
               <></>
             );
@@ -89,17 +101,19 @@ const TableColumnConfig = (): Array<Column<any>> => {
                   {endDate.format("DD.MM.YYYY")}
                 </span>
               </div>
-              <h2 className="leading-5 mb-1.5" title={row.value}>
+              <h2 className="leading-5 mb-1.5 group-hover:text-primary" title={row.value}>
                 {trimString(row.value)}
               </h2>
               <div className="flex items-center">
-                {platforms.map((app: string, index: number) =>
-                  app === "IOS" ? (
-                    <IcApple key={index} className="mr-2" />
-                  ) : (
-                    <IcAndroid key={index} />
-                  )
-                )}
+                <div className="flex items-center mr-4">
+                  {platforms.map((app: string, index: number) =>
+                    app === "IOS" ? (
+                      <IcApple key={index} className="mr-2" />
+                    ) : (
+                      <IcAndroid key={index} />
+                    )
+                  )}
+                </div>
 
                 {pauseButton}
               </div>
