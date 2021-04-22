@@ -17,6 +17,8 @@ import UsersLoader from "./Loaders/UsersLoader";
 import ConfirmPanel from "./ConfirmPanel";
 import Tooltip from "./Tooltip";
 import Tag from "./Tag";
+import Dropdown from "./Dropdown";
+import Scrollbar from "./Scrollbar";
 
 export {
   Button,
@@ -38,4 +40,6 @@ export {
   ConfirmPanel,
   Tooltip,
   Tag,
+  Dropdown,
+  Scrollbar,
 };

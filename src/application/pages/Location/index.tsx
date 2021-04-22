@@ -55,13 +55,14 @@ function Location() {
           company_id: companyId,
           page_number: page,
           row_count: paging.perPage,
-          name: searchValue || undefined
+          name: searchValue || undefined,
+          ...locationsSorting
         });
       }
 
       return null;
     },
-    [companyId, paging.perPage, locationsIsChanged, searchValue]
+    [companyId, paging.perPage, locationsIsChanged, searchValue, locationsSorting]
   );
 
   const onSortHandler = useCallback((value: any) => {
