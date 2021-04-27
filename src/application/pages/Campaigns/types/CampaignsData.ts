@@ -43,6 +43,7 @@ interface ICampaignsRequest {
   location_id?: string;
   platforms?: string;
   name?: string;
+  states?: string[];
 }
 
 interface IPausedCampaign {

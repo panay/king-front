@@ -1,0 +1,54 @@
+/* purgecss start ignore */
+.label {
+  @apply relative inline-flex items-center align-middle text-primary hover:text-hover-primary;
+
+  .box {
+    @apply flex-none w-4 h-4 relative border-2 border-input-grey rounded-sm mr-2 bg-white hover:border-hover-primary;
+  }
+
+  &:hover {
+    .box {
+      @apply border-hover-primary;
+    }
+  }
+
+  > input[type="checkbox"] {
+    @apply opacity-0 absolute top-0 left-0;
+
+    &:checked + .box {
+      @apply border-primary;
+
+      &:before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgMTAgNyI+ICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+ICAgICAgICA8ZyBmaWxsPSIjMDA1MkNDIj4gICAgICAgICAgICA8Zz4gICAgICAgICAgICAgICAgPHBhdGggZD0iTTI3LjM2IDc3LjIzMmMuNDI0LS4zNTQgMS4wNTUtLjI5NiAxLjQwOC4xMjguMzU0LjQyNC4yOTYgMS4wNTUtLjEyOCAxLjQwOGwtNiA1Yy0uMzk3LjMzMS0uOTgxLjMwNS0xLjM0Ny0uMDZsLTItMmMtLjM5LS4zOTEtLjM5LTEuMDI1IDAtMS40MTUuMzktLjM5IDEuMDI0LS4zOSAxLjQxNCAwbDEuMzU0IDEuMzU0IDUuMjk5LTQuNDE1eiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIxMiAtMjM0KSB0cmFuc2xhdGUoMTkzIDE1NykiLz4gICAgICAgICAgICA8L2c+ICAgICAgICA8L2c+ICAgIDwvZz48L3N2Zz4=);
+        @apply absolute top-0 bottom-0 left-0 right-0 m-auto bg-no-repeat;
+      }
+    }
+
+    &:focus + .box {
+      @apply border-hover-primary;
+    }
+
+    &:checked[disabled] + .box {
+      @apply cursor-not-allowed border-input-grey;
+      &:before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgMTAgNyI+ICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+ICAgICAgICA8ZyBmaWxsPSIjZWJlY2YwIj4gICAgICAgICAgICA8Zz4gICAgICAgICAgICAgICAgPHBhdGggZD0iTTI3LjM2IDc3LjIzMmMuNDI0LS4zNTQgMS4wNTUtLjI5NiAxLjQwOC4xMjguMzU0LjQyNC4yOTYgMS4wNTUtLjEyOCAxLjQwOGwtNiA1Yy0uMzk3LjMzMS0uOTgxLjMwNS0xLjM0Ny0uMDZsLTItMmMtLjM5LS4zOTEtLjM5LTEuMDI1IDAtMS40MTUuMzktLjM5IDEuMDI0LS4zOSAxLjQxNCAwbDEuMzU0IDEuMzU0IDUuMjk5LTQuNDE1eiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIxMiAtMjM0KSB0cmFuc2xhdGUoMTkzIDE1NykiLz4gICAgICAgICAgICA8L2c+ICAgICAgICA8L2c+ICAgIDwvZz48L3N2Zz4=);
+        @apply absolute top-0 bottom-0 left-0 right-0 m-auto bg-no-repeat;
+      }
+    }
+
+    &[disabled] + .box {
+      @apply cursor-not-allowed border-input-grey;
+      &:before {
+        content: none;
+      }
+    }
+  }
+}
+
+/* purgecss end ignore */

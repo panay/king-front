@@ -28,6 +28,7 @@ import CampaignFilter from "./components/CampaignFilter";
 
 function Campaigns() {
   const [searchValue, setSearchValue] = useState("");
+  const [filter, changeFilter] = useState({});
 
   const rowData = useStore<ICampaignData[]>($rowData);
   const rowCount = useStore<number>($rowCount);
@@ -61,9 +62,10 @@ function Campaigns() {
     [companyId, paging.perPage, campaignsIsChanged, searchValue]
   );
 
-  const changeModelHandler = (event: any) => {
+  const changeModelHandler = useCallback((model: any) => {
     debugger;
-  };
+    changeFilter(model)
+  }, []);
 
   useEffect(() => {
     document.title = "Местоположения – Spark [radar]";
@@ -77,12 +79,13 @@ function Campaigns() {
           company_id: companyId,
           page_number: 1,
           name: searchValue || undefined,
+          ...filter
         });
       } else {
         changeCampaigns(false);
       }
     }
-  }, [companyId, campaignsIsChanged, searchValue]);
+  }, [companyId, campaignsIsChanged, searchValue, filter]);
 
   useEffect(() => {
     document.title = "Кампании – Spark [radar]";

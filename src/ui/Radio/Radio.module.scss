@@ -1,0 +1,52 @@
+/* purgecss start ignore */
+.label {
+  @apply relative inline-flex items-center align-middle text-primary hover:text-hover-primary;
+
+  .box {
+    @apply flex-none w-4 h-4 relative border-2 border-input-grey rounded-full mr-2 bg-white hover:border-hover-primary;
+  }
+
+  &:hover {
+    .box {
+      @apply border-hover-primary;
+    }
+  }
+
+  > input[type="radio"] {
+    @apply opacity-0 absolute top-0 left-0;
+
+    &:checked + .box {
+      @apply border-primary;
+
+      &:before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        @apply bg-primary rounded-full absolute top-0 bottom-0 left-0 right-0 m-auto;
+      }
+    }
+
+    &:focus + .box {
+      @apply border-hover-primary;
+    }
+
+    &:checked[disabled] + .box {
+      @apply cursor-not-allowed border-input-grey;
+      &:before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        @apply bg-input-grey rounded-full absolute top-0 bottom-0 left-0 right-0 m-auto;
+      }
+    }
+
+    &[disabled] + .box {
+      @apply cursor-not-allowed border-input-grey;
+      &:before {
+        content: none;
+      }
+    }
+  }
+}
+
+/* purgecss end ignore */

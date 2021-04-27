@@ -88,9 +88,9 @@ const TableColumnConfig = (): Array<Column<any>> => {
                   }
                   text={
                     actingState
-                      ? "Активный"
+                      ? "Активна"
                       : completedState
-                      ? "Завершена"
+                      ? "Завершена" 
                       : pauseState
                       ? "Пауза"
                       : "Ожидание"

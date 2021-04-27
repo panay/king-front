@@ -4,7 +4,7 @@ function Scrollbar({
   children,
   maxHeight = "300px",
 }: {
-  children: ReactElement;
+  children: ReactElement[] | ReactElement;
   maxHeight?: string;
 }) {
   return (

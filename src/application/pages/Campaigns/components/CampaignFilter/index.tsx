@@ -1,91 +1,128 @@
-import React, { SyntheticEvent, useCallback, useRef, useState } from "react";
-import { ReactComponent as IcRefresh } from "infrastructure/assets/images/svgs/ic-refresh.svg";
-import { Tooltip, Dropdown, Scrollbar } from "ui";
-import { useOnClickOutside } from "infrastructure/hooks";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { FilterForm } from "ui";
+import { IKeyValue } from "infrastructure/types";
 
 type Props = {
-  changeModel?: (value: unknown) => void;
+  changeModel?: (value: object) => void;
 };
 
 function CampaignFilter({ changeModel }: Props) {
   const defaultModel = {
-    location: null,
-    platforms: null,
-    period: null,
-    state: null,
-  };
-  const [model, setModel] = useState({});
-  const [dropdownOpened, toggleDropdown] = useState<boolean>(false);
-
-  const dropdownWrapperRef = useRef(null);
-
-  const onCloseDropdown = useCallback(() => {
-    toggleDropdown(false);
-  }, []);
-
-  useOnClickOutside(dropdownWrapperRef, onCloseDropdown);
-
-  const handleClick = (event: SyntheticEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    return toggleDropdown(!dropdownOpened);
+    location: [],
+    platforms: [],
+    period: [],
+    states: [
+      {
+        id: "ACTING",
+        name: "ACTING",
+      },
+      {
+        id: "PENDING",
+        name: "PENDING",
+      },
+    ],
   };
 
-  const resetFilter = (event: SyntheticEvent) => {
-    event.preventDefault();
-    setModel({});
-  };
+  const fields = [
+    {
+      key: "states",
+      title: "Статус",
+      type: "checkbox-dropdown",
+      data: [
+        {
+          id: "ACTING",
+          name: "ACTING",
+          value: "Активна",
+        },
+        {
+          id: "PENDING",
+          name: "PENDING",
+          value: "Ожидание",
+        },
+        {
+          id: "COMPLETED",
+          name: "COMPLETED",
+          value: "Завершена",
+        },
+      ],
+    },
+    {
+      key: "location",
+      title: "Местоположение",
+      type: "checkbox-dropdown",
+      data: [
+        {
+          id: "1234",
+          name: "Ярославль",
+          value: "Ярославль",
+        },
+        {
+          id: "6666",
+          name: "Шоссе Энтузиастов",
+          value: "Шоссе Энтузиастов",
+        },
+        {
+          id: "8888",
+          name: "Ничего такого",
+          value: "Ничего такого",
+        },
+        {
+          id: "9999",
+          name: "Татарстан Респ,Зеленодольский р-н, Зеленодольск г,",
+          value: "Татарстан Респ,Зеленодольский р-н, Зеленодольск г,",
+        },
+      ],
+    },
+    {
+      key: "platforms",
+      title: "Моб.платформа",
+      type: "radio-dropdown",
+      data: [
+        {
+          name: "platforms",
+          value: "IOS",
+        },
+        {
+          name: "platforms",
+          value: "Android",
+        },
+      ],
+    },
+  ];
 
-  const selectItem = (value: unknown) => {
-    if (changeModel) {
-      changeModel(value);
-    }
-    onCloseDropdown();
-  };
+  const filterChangedHandler = useCallback(
+    (model: object) => {
+      if (changeModel) {
+        const myObj: { [index: string]: any } = model;
+        debugger;
+        const serverModel = {
+          ...model,
+          platforms: myObj["platforms"] ? myObj["platforms"][0].id : undefined,
+          location_id: myObj["locations"]
+            ? myObj["locations"][0].id
+            : undefined,
+          states:
+            myObj["states"] && myObj["states"].length
+              ? myObj["states"].map((state: IKeyValue) => state.id)
+              : ["ACTING","PENDING"],
+        };
+        changeModel(serverModel);
+      }
+    },
+    [changeModel, defaultModel]
+  );
+
+  useEffect(() => {
+    // if(defaultModel)
+    // filterChangedHandler(defaultModel);
+  }, [defaultModel, filterChangedHandler]);
 
   return (
-    <div className="bg-lighten-grey border border-input-grey rounded-xl p-3 flex justify-between">
-      <div className="flex" ref={dropdownWrapperRef}>
-        <strong className="font-bold mr-2">Фильтр:</strong>
-        <span
-          onClick={handleClick}
-          className="relative z-50 font-semibold cursor-pointer text-primary border-b border-dashed border-hover-primary mr-10 hover:border-transparent hover:text-default"
-        >
-          Местоположение
-        </span>
-        <span
-          onClick={handleClick}
-          className="relative z-50 font-semibold cursor-pointer text-primary border-b border-dashed border-hover-primary hover:border-transparent hover:text-default"
-        >
-          Моб.платформа
-          <Dropdown
-            opened={dropdownOpened}
-            style={{
-              minWidth: "284px",
-              maxWidth: "300px",
-            }}
-          >
-            <Scrollbar maxHeight="240px">
-              <ul>
-                <li>IOS</li>
-                <li>Android</li>
-              </ul>
-            </Scrollbar>
-          </Dropdown>
-        </span>
-      </div>
-      <button
-        onClick={resetFilter}
-        className="border-none text-primary cursor-pointer disabled:text-icon-grey"
-        disabled={!Object.keys(model).length}
-        data-tip="Сбросить фильтр"
-        data-for="reset-filter-tooltip"
-      >
-        <IcRefresh />
-        <Tooltip id="reset-filter-tooltip" place="bottom" />
-      </button>
-    </div>
+    <FilterForm
+      model={defaultModel}
+      fields={fields}
+      onFilterChanged={filterChangedHandler}
+    />
   );
 }
 

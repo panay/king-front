@@ -9,13 +9,16 @@ const getCampaignList = ({
   end_date,
   location_id,
   platforms,
+  states,
   name,
 }: ICampaignsRequest) => {
   const params = `${name ? "&name=" + name : ""}${
     start_date ? "&start_date=" + start_date : ""
   }${end_date ? "&end_date=" + end_date : ""}${
     location_id ? "&location_id=" + location_id : ""
-  }${platforms ? "&platforms=" + platforms : ""}`;
+  }${platforms ? "&platforms=" + platforms : ""}${
+    states ? "&states=" + states.join(",") : ""
+  }`;
 
   return globalService.get(
     `${process.env.REACT_APP_CAMPAIGN_ENDPOINT}/list?company_id=${company_id}&page_number=${page_number}&row_count=${row_count}${params}`
