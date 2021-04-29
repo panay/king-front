@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { IKeyValue, IRadio } from "infrastructure/types";
 import { Radio } from "ui";
 
 type Props = {
   item: IRadio;
-  selected: IKeyValue;
+  selected?: IKeyValue;
   onChangeModel: (value: IKeyValue) => unknown;
 };
 
 function FilterRadioItem(props: Props) {
-  const [selected, select] = useState<IKeyValue>(props.selected);
+  const [selected, select] = useState<IKeyValue>();
 
   const selectItem = (input: HTMLInputElement) => {
     const item: IKeyValue = {
@@ -20,6 +20,14 @@ function FilterRadioItem(props: Props) {
     select(item);
     props.onChangeModel(item);
   };
+
+  useEffect(() => {
+    select({} as IKeyValue);
+
+    setTimeout(() => {
+      select(props.selected);
+    });
+  }, [props.selected])
 
   return (
     <div className="mb-2.5">

@@ -10,9 +10,16 @@ import { useDebouncedCallback } from "use-debounce";
 
 type Props = InputHTMLAttributes<unknown> & {
   onSearch: (value: string) => void;
+  bgInputColor?: string;
+  noSearchIcon?: boolean;
 };
 
-function SearchInput({ onSearch, ...props }: Props) {
+function SearchInput({
+  onSearch,
+  bgInputColor,
+  noSearchIcon = false,
+  ...props
+}: Props) {
   const inputSearchRef = useRef<HTMLInputElement>(null);
 
   const handleSearchEvent = (event: SyntheticEvent) => {
@@ -31,6 +38,16 @@ function SearchInput({ onSearch, ...props }: Props) {
     400
   );
 
+  const showSearchIcon = () => {
+    return noSearchIcon ? (
+      <></>
+    ) : (
+      <button type="button" className={styles.icon} onClick={handleSearchEvent}>
+        <IcSearch className="text-icon-grey" />
+      </button>
+    );
+  };
+
   return (
     <label className={styles.label}>
       <input
@@ -38,11 +55,10 @@ function SearchInput({ onSearch, ...props }: Props) {
         {...props}
         onChange={debouncedSearchEvent}
         onKeyDown={handleKeyDown}
+        className={props.className}
       />
       <span className={styles.placeholder}>{props.placeholder || "Поиск"}</span>
-      <button type="button" className={styles.icon} onClick={handleSearchEvent}>
-        <IcSearch className="text-icon-grey" />
-      </button>
+      {showSearchIcon}
     </label>
   );
 }

@@ -1,27 +1,75 @@
-import React, { useCallback, useEffect, useMemo } from "react";
-import { FilterForm } from "ui";
-import { IKeyValue } from "infrastructure/types";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { FilterForm } from "domains";
+import { IKeyValue, IPagination } from "infrastructure/types";
+import { useStore } from "effector-react";
+import { $paging } from "infrastructure/models/paging";
+import { $currentCompany } from "infrastructure/models/auth/user";
+
+import "../../models/location-list/init";
+import {
+  $rowCount,
+  $rowData,
+  getLocationsList,
+  updateLocationListSuccess,
+} from "../../models/location-list";
 
 type Props = {
   changeModel?: (value: object) => void;
 };
 
 function CampaignFilter({ changeModel }: Props) {
-  const defaultModel = {
-    location: [],
-    platforms: [],
-    period: [],
-    states: [
-      {
-        id: "ACTING",
-        name: "ACTING",
-      },
-      {
-        id: "PENDING",
-        name: "PENDING",
-      },
-    ],
+  const [searchValue, setSearchValue] = useState("");
+
+  const rowData = useStore<IKeyValue[]>($rowData);
+  const rowCount = useStore<number>($rowCount);
+  const paging = useStore<IPagination>($paging);
+  const currentCompany = useStore<IKeyValue | null>($currentCompany);
+  const companyId = currentCompany?.id;
+
+  const loadLocationList = (searchValue: string, pageNum: number) => {
+    if (pageNum === 1) {
+      updateLocationListSuccess();
+    }
+
+    getLocationsList({
+      company_id: companyId,
+      page_number: pageNum,
+      row_count: paging.perPage,
+      name: searchValue || undefined,
+    });
   };
+
+  const loadNextPage = useCallback(
+    (startIndex: number, stopIndex: number, page: number) => {
+      if (companyId && page > 1) {
+        loadLocationList(searchValue, page);
+      }
+
+      return null;
+    },
+    [companyId, loadLocationList, searchValue]
+  );
+
+  const model = useMemo(
+    () => ({
+      location_id: null,
+      platforms: null,
+      period: null,
+      states: [
+        {
+          id: "ACTING",
+          name: "ACTING",
+          value: "Активна",
+        },
+        {
+          id: "PENDING",
+          name: "PENDING",
+          value: "Ожидание",
+        },
+      ],
+    }),
+    []
+  );
 
   const fields = [
     {
@@ -47,31 +95,24 @@ function CampaignFilter({ changeModel }: Props) {
       ],
     },
     {
-      key: "location",
+      key: "location_id",
       title: "Местоположение",
-      type: "checkbox-dropdown",
-      data: [
-        {
-          id: "1234",
-          name: "Ярославль",
-          value: "Ярославль",
-        },
-        {
-          id: "6666",
-          name: "Шоссе Энтузиастов",
-          value: "Шоссе Энтузиастов",
-        },
-        {
-          id: "8888",
-          name: "Ничего такого",
-          value: "Ничего такого",
-        },
-        {
-          id: "9999",
-          name: "Татарстан Респ,Зеленодольский р-н, Зеленодольск г,",
-          value: "Татарстан Респ,Зеленодольский р-н, Зеленодольск г,",
-        },
-      ],
+      type: "virtual-list",
+      data: rowData,
+      virtualListProps: {
+        loadNextPage: loadNextPage,
+        rowCount: rowCount,
+        type: "checkbox",
+      },
+      onSearch: (value: string) => {
+        setSearchValue(value);
+        loadLocationList(value, 1);
+      },
+      onDropdownOpened: (opened: boolean) => {
+        if (opened) {
+          loadLocationList(searchValue, 1);
+        }
+      },
     },
     {
       key: "platforms",
@@ -84,42 +125,40 @@ function CampaignFilter({ changeModel }: Props) {
         },
         {
           name: "platforms",
-          value: "Android",
+          value: "ANDROID",
         },
       ],
     },
   ];
 
   const filterChangedHandler = useCallback(
-    (model: object) => {
+    (model: { [key: string]: any }) => {
       if (changeModel) {
-        const myObj: { [index: string]: any } = model;
-        debugger;
         const serverModel = {
           ...model,
-          platforms: myObj["platforms"] ? myObj["platforms"][0].id : undefined,
-          location_id: myObj["locations"]
-            ? myObj["locations"][0].id
+          platforms: model["platforms"] ? model["platforms"][0].id : undefined,
+          location_id: model["location_id"]
+            ? model["location_id"].map((location: IKeyValue) => location.id)
             : undefined,
           states:
-            myObj["states"] && myObj["states"].length
-              ? myObj["states"].map((state: IKeyValue) => state.id)
-              : ["ACTING","PENDING"],
+            model["states"] && model["states"].length
+              ? model["states"].map((state: IKeyValue) => state.id)
+              : ["ACTING", "PENDING"],
         };
+
         changeModel(serverModel);
       }
     },
-    [changeModel, defaultModel]
+    [changeModel]
   );
 
   useEffect(() => {
-    // if(defaultModel)
-    // filterChangedHandler(defaultModel);
-  }, [defaultModel, filterChangedHandler]);
+    filterChangedHandler(model);
+  }, [model, filterChangedHandler]);
 
   return (
     <FilterForm
-      model={defaultModel}
+      model={model}
       fields={fields}
       onFilterChanged={filterChangedHandler}
     />

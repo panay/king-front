@@ -70,7 +70,7 @@ const updateCampaignState = (
         state: payload.state,
       } as ICampaignData);
     }
-    // debugger;
+
     return rowData;
   }
 };

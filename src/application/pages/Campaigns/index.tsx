@@ -54,23 +54,23 @@ function Campaigns() {
           page_number: page,
           row_count: paging.perPage,
           name: searchValue || undefined,
+          ...filter,
         });
       }
 
       return null;
     },
-    [companyId, paging.perPage, campaignsIsChanged, searchValue]
+    [companyId, paging.perPage, campaignsIsChanged, searchValue, filter]
   );
 
   const changeModelHandler = useCallback((model: any) => {
-    debugger;
     changeFilter(model)
   }, []);
 
   useEffect(() => {
     document.title = "Местоположения – Spark [radar]";
 
-    if (companyId) {
+    if (companyId && Object.keys(filter).length > 0) {
       if (!campaignsIsChanged) {
         updateCampaignListSuccess();
         resetCampaignData();

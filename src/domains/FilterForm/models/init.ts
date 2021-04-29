@@ -1,1 +1,1 @@
-import { $model, $field } from "./index";
+import { $model, changeModel, setModel } from "./index";
