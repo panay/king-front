@@ -129,6 +129,12 @@ function CampaignFilter({ changeModel }: Props) {
         },
       ],
     },
+    {
+      key: "period",
+      title: "Дата",
+      type: "date",
+      data: [],
+    },
   ];
 
   const filterChangedHandler = useCallback(
@@ -144,6 +150,8 @@ function CampaignFilter({ changeModel }: Props) {
             model["states"] && model["states"].length
               ? model["states"].map((state: IKeyValue) => state.id)
               : ["ACTING", "PENDING"],
+          start_date: model["period"] ? model["period"][0] + ", 00:00" : undefined,
+          end_date: model["period"] ? model["period"][1] + ", 23:59" : undefined,
         };
 
         changeModel(serverModel);

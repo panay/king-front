@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactElement, useCallback, useRef } from "react";
+import React, { CSSProperties, useCallback, useEffect, useRef } from "react";
 import {
   ICheckbox,
   IKeyValue,
@@ -11,7 +11,7 @@ import { $paging, setPaging } from "infrastructure/models/paging";
 import { FixedSizeList } from "react-window";
 import FilterCheckboxItem from "../FilterCheckboxItem";
 import FilterRadioItem from "../FilterRadioItem";
-import { ReactComponent as IcLoader } from "../../../../infrastructure/assets/images/svgs/ic-loader.svg";
+import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
 import SearchInput from "ui/SearchInput";
 import AutoSizer from "react-virtualized-auto-sizer";
 
@@ -27,11 +27,13 @@ type Props = {
   onChangeModel: (value: IKeyValue) => unknown;
   selectedValues?: IKeyValue[];
   onSearch?: (value: string) => void;
+  reload?: boolean;
 };
 
 function FilterVirtualList(props: Props) {
   const paging = useStore<IPagination>($paging);
   const listRef = useRef<InfiniteLoader>(null);
+  const hasMountedRef = useRef<boolean>(false);
 
   const loadMore = useCallback(
     (startIndex: number, stopIndex: number) => {
@@ -93,6 +95,7 @@ function FilterVirtualList(props: Props) {
         return (
           <div style={style}>
             <FilterCheckboxItem
+              key={index}
               item={item}
               selected={
                 props.selectedValues?.find((s) => s.id === item.id) || undefined
@@ -109,6 +112,7 @@ function FilterVirtualList(props: Props) {
         };
         return (
           <FilterRadioItem
+            key={index}
             item={item}
             selected={
               props.selectedValues?.find((s) => s.id === item.value) ||
@@ -124,13 +128,21 @@ function FilterVirtualList(props: Props) {
     }
   };
 
+  useEffect(() => {
+    if (props.reload) {
+      if (listRef.current) {
+        listRef.current?.resetloadMoreItemsCache(true);
+      }
+      hasMountedRef.current = true;
+    }
+  }, [props.reload]);
+
   return (
-    <div
-      className="font-normal"
-    >
+    <div className="font-normal">
       <SearchInput
         className="bg-input-grey px-2.5"
         onSearch={handleSearch}
+        noSearchIcon={true}
         placeholder="Поиск по названию"
       />
       <div

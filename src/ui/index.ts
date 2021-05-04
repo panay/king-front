@@ -21,6 +21,7 @@ import Dropdown from "./Dropdown";
 import Scrollbar from "./Scrollbar";
 import Checkbox from "./Checkbox";
 import Radio from "./Radio";
+import Datepicker from "./Datepicker";
 
 export {
   Button,
@@ -46,4 +47,5 @@ export {
   Scrollbar,
   Checkbox,
   Radio,
+  Datepicker,
 };

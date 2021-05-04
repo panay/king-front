@@ -10,7 +10,7 @@
   }
 
   > input {
-    @apply placeholder-transparent bg-white block p-2.5 pr-8 w-full border-2 border-input-grey rounded-xl focus:outline-none;
+    @apply placeholder-transparent block p-2.5 pr-8 w-full border-2 border-input-grey rounded-xl focus:outline-none;
 
     &:focus,
     &:not(:placeholder-shown) {

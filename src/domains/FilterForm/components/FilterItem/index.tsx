@@ -13,6 +13,7 @@ import FilterCheckboxItem from "../FilterCheckboxItem";
 import { BgTypeEnum } from "ui/Button";
 import { ICheckbox, IKeyValue, IRadio } from "infrastructure/types";
 import FilterVirtualList from "../FilterVirtualList";
+import FilterDateItem from "../FilterDateItem";
 
 type Props = {
   title: string;
@@ -38,12 +39,14 @@ type Props = {
 function FilterItem(props: Props) {
   const [dropdownOpened, toggleDropdown] = useState<boolean>(false);
   const [selected, select] = useState<IKeyValue[]>([]);
+  const [dateSelected, selectDate] = useState<string[]>([]);
 
   const dropdownWrapperRef = useRef(null);
 
   const onCloseDropdown = useCallback(() => {
+    props.onDropdownOpened(false);
     toggleDropdown(false);
-  }, []);
+  }, [props]);
 
   useOnClickOutside(dropdownWrapperRef, onCloseDropdown);
 
@@ -95,6 +98,16 @@ function FilterItem(props: Props) {
       select(selectedCopy);
     };
 
+    const handleChangeDateFilter = ({
+      start_date,
+      end_date,
+    }: {
+      start_date: string;
+      end_date: string;
+    }) => {
+      selectDate([start_date, end_date]);
+    };
+
     switch (props.type) {
       case "radio-dropdown": {
         return props.data.map((item, index) => (
@@ -130,23 +143,35 @@ function FilterItem(props: Props) {
               {...props.virtualListProps}
               selectedValues={selected}
               onSearch={props.onSearch}
+              reload={!dropdownOpened}
               onChangeModel={handleChangeFilter}
             />
           );
         }
+        return <></>;
+      }
+      case "date": {
+        return (
+          <FilterDateItem
+            value={(props.data as Date[]) || dateSelected}
+            onChangeModel={handleChangeDateFilter}
+            maxDate={new Date()}
+          />
+        );
       }
     }
 
     return <></>;
   }, [props.data, props.type, selected]);
 
-  const filterCount = props.model?.length ? (
-    <span className="absolute top-1/2 -right-6 z-10 bg-warning text-white font-normal text-xs text-center rounded-full p-1 w-5 h-5 flex flex-col items-center justify-center transform -translate-y-1/2">
-      {props.model?.length}
-    </span>
-  ) : (
-    <></>
-  );
+  const filterCount =
+    props.model?.length && props.type !== "date" ? (
+      <span className="absolute top-1/2 -right-6 z-10 bg-warning text-white font-normal text-xs text-center rounded-full p-1 w-5 h-5 flex flex-col items-center justify-center transform -translate-y-1/2">
+        {props.model?.length}
+      </span>
+    ) : (
+      <></>
+    );
 
   const cancel = () => {
     debugger;
@@ -155,7 +180,11 @@ function FilterItem(props: Props) {
   };
 
   const apply = () => {
-    props.applyFilter({ [props.fieldKey]: selected });
+    if (props.type === "date") {
+      props.applyFilter({ [props.fieldKey]: dateSelected });
+    } else {
+      props.applyFilter({ [props.fieldKey]: selected });
+    }
     toggleDropdown(false);
   };
 
@@ -168,7 +197,11 @@ function FilterItem(props: Props) {
       className="relative mr-10 z-50 font-semibold cursor-pointer text-primary border-b border-dashed border-hover-primary hover:border-transparent hover:text-default"
       ref={dropdownWrapperRef}
     >
-      <span onClick={handleClick}>{props.title}</span>
+      <span onClick={handleClick}>
+        {props.type === "date" && props.model?.length
+          ? `${props.model[0]}–${props.model[1]}`
+          : props.title}
+      </span>
       {filterCount}
       <Dropdown
         opened={dropdownOpened}

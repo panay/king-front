@@ -10,13 +10,11 @@ import { useDebouncedCallback } from "use-debounce";
 
 type Props = InputHTMLAttributes<unknown> & {
   onSearch: (value: string) => void;
-  bgInputColor?: string;
   noSearchIcon?: boolean;
 };
 
 function SearchInput({
   onSearch,
-  bgInputColor,
   noSearchIcon = false,
   ...props
 }: Props) {
@@ -58,7 +56,7 @@ function SearchInput({
         className={props.className}
       />
       <span className={styles.placeholder}>{props.placeholder || "Поиск"}</span>
-      {showSearchIcon}
+      {showSearchIcon()}
     </label>
   );
 }

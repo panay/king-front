@@ -1,0 +1,43 @@
+.react-calendar {
+  abbr[title] {
+    @apply no-underline;
+  }
+
+  &__navigation__arrow {
+    &[disabled] > svg {
+      @apply text-input-grey;
+    }
+  }
+
+  &__month-view__weekdays__weekday {
+    @apply font-normal text-icon-grey text-center capitalize;
+  }
+
+  &__tile {
+    @apply py-1;
+
+    &--range {
+      @apply bg-input-grey;
+    }
+
+    &--rangeStart,
+    &--rangeEnd {
+      @apply bg-primary text-white rounded-md;
+    }
+
+    &--now {
+      @apply text-primary;
+    }
+    &[disabled] {
+      @apply text-input-grey;
+    }
+  }
+
+  &__navigation__label {
+    @apply font-semibold;
+  }
+
+  &__month-view__weekdays {
+    @apply my-2;
+  }
+}
