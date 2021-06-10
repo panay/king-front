@@ -24,9 +24,10 @@ function RadioItem(props: Props) {
   useEffect(() => {
     select({} as IKeyValue);
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       select(props.selected);
     }, 0);
+    return () => clearTimeout(timer);
   }, [props.selected]);
 
   return (
