@@ -9,8 +9,8 @@ import InfiniteLoader from "react-window-infinite-loader";
 import { useStore } from "effector-react";
 import { $paging, setPaging } from "infrastructure/models/paging";
 import { FixedSizeList } from "react-window";
-import FilterCheckboxItem from "../FilterCheckboxItem";
-import FilterRadioItem from "../FilterRadioItem";
+import CheckboxItem from "./components/CheckboxItem";
+import RadioItem from "./components/RadioItem";
 import { ReactComponent as IcLoader } from "infrastructure/assets/images/svgs/ic-loader.svg";
 import SearchInput from "ui/SearchInput";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -25,12 +25,13 @@ type Props = {
   type: string;
   rowCount: number;
   onChangeModel: (value: IKeyValue) => unknown;
+  searchInside?: boolean;
   selectedValues?: IKeyValue[];
   onSearch?: (value: string) => void;
   reload?: boolean;
 };
 
-function FilterVirtualList(props: Props) {
+function VirtualList(props: Props) {
   const paging = useStore<IPagination>($paging);
   const listRef = useRef<InfiniteLoader>(null);
   const hasMountedRef = useRef<boolean>(false);
@@ -94,7 +95,7 @@ function FilterVirtualList(props: Props) {
         };
         return (
           <div style={style}>
-            <FilterCheckboxItem
+            <CheckboxItem
               key={index}
               item={item}
               selected={
@@ -111,7 +112,7 @@ function FilterVirtualList(props: Props) {
           value: props.items[index].name,
         };
         return (
-          <FilterRadioItem
+          <RadioItem
             key={index}
             item={item}
             selected={
@@ -139,19 +140,23 @@ function FilterVirtualList(props: Props) {
 
   return (
     <div className="font-normal">
-      <SearchInput
-        className="bg-input-grey px-2.5"
-        onSearch={handleSearch}
-        noSearchIcon={true}
-        placeholder="Поиск по названию"
-      />
+      {props.searchInside ? (
+        <SearchInput
+          className="bg-input-grey px-2.5"
+          onSearch={handleSearch}
+          noSearchIcon={true}
+          placeholder="Поиск по названию"
+        />
+      ) : (
+        <></>
+      )}
       <div
-        className="border-t border-t-border-grey mt-4"
+        className={props.searchInside ? 'border-t border-t-border-grey mt-4' : ''}
         style={{
           height: "240px",
         }}
       >
-        <AutoSizer className="mt-4" defaultHeight={240} defaultWidth={240}>
+        <AutoSizer className={props.searchInside ? 'mt-4' : ''} defaultHeight={240} defaultWidth={240}>
           {({ height, width }) => (
             <InfiniteLoader
               isItemLoaded={(index: number) => {
@@ -182,4 +187,4 @@ function FilterVirtualList(props: Props) {
   );
 }
 
-export default FilterVirtualList;
+export default VirtualList;

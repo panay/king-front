@@ -19,13 +19,12 @@ import {
   updateCampaign,
 } from "../../services/campaigns-service";
 import { ICampaignData } from "../../types/CampaignsData";
-import { IKeyValue } from "infrastructure/types";
 
 const pendingReducer = (state: boolean, payload: boolean) => payload;
 const failReducer = (state: string | null, payload: string | null) => payload;
 const campaignDataReducer = (
-  state: IKeyValue | null,
-  payload: IKeyValue | null
+  state: ICampaignData | null,
+  payload: ICampaignData | null
 ) => (payload ? { ...payload } : null);
 
 const deleteCurrentCampaign = async (id: string) => {

@@ -1,32 +1,36 @@
-import React, { SyntheticEvent } from "react";
+import React, {ReactElement, Ref, SyntheticEvent} from "react";
 import styles from "./Checkbox.module.scss";
 
 type Props = {
-  id: string;
+  id?: string;
   name: string;
   value: string;
-  checked: boolean;
-  onInputChange: (inputElement: HTMLInputElement) => void;
+  checked?: boolean;
+  icon?: ReactElement;
+  onInputChange?: (inputElement: HTMLInputElement) => void;
+  inputRef?: Ref<HTMLInputElement>;
 };
 
 function Checkbox(props: Props) {
   const handleClickLabel = (event: SyntheticEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
     const input: HTMLInputElement = event.currentTarget
       .children[0] as HTMLInputElement;
 
-    props.onInputChange(input);
+    if (props.onInputChange) {
+      event.preventDefault();
+      event.stopPropagation();
+      props.onInputChange(input);
+    }
   };
 
   const handleChangeInput = (event: SyntheticEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
     const input: HTMLInputElement = event.currentTarget as HTMLInputElement;
 
-    props.onInputChange(input);
+    if (props.onInputChange) {
+      event.preventDefault();
+      event.stopPropagation();
+      props.onInputChange(input);
+    }
   };
 
   return (
@@ -37,10 +41,11 @@ function Checkbox(props: Props) {
         id={props.id}
         checked={props.checked}
         value={props.value}
+        ref={props.inputRef}
         onChange={handleChangeInput}
       />
       <span className={styles.box} />
-      {props.value}
+      {props.icon || props.value}
     </label>
   );
 }

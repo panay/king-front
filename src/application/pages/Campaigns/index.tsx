@@ -108,7 +108,7 @@ function Campaigns() {
           items={rowData}
           rowCount={rowCount}
           columns={columns}
-          rowClicked={(value) => getCampaignDataFx(value as IKeyValue)}
+          rowClicked={(value) => getCampaignDataFx(value as ICampaignData)}
           loadNextPage={loadNextPage}
           reload={formIsChanged || !campaignsIsChanged}
         >

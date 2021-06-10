@@ -1,7 +1,5 @@
 interface ICampaignData {
-  end_date: string;
   geofence_count: number;
-  id: string;
   in_action: {
     subtitle: string;
     text: string;
@@ -24,8 +22,8 @@ interface ICampaignData {
     start_date: string;
   };
   platforms: string;
-  start_date: string;
   state: string;
+  id?: string;
   company_id?: string;
 }
 

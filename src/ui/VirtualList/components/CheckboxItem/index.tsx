@@ -8,7 +8,7 @@ type Props = {
   onChangeModel: (value: IKeyValue) => unknown;
 };
 
-function FilterCheckboxItem(props: Props) {
+function CheckboxItem(props: Props) {
   const [selected, select] = useState<IKeyValue>();
 
   const selectItem = (input: HTMLInputElement) => {
@@ -45,4 +45,4 @@ function FilterCheckboxItem(props: Props) {
   );
 }
 
-export default FilterCheckboxItem;
+export default CheckboxItem;

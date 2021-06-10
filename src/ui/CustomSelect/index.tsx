@@ -32,8 +32,36 @@ function CustomSelect({ ...props }: P) {
         "&:hover": {
           borderColor: isFocused ? "#ebecf0" : "#f4f4f6",
         },
+        fontSize: 12
       };
     },
+    placeholder: (base: any) => {
+      return {
+        ...base,
+        color: "#8f92a1"
+      }
+    },
+    multiValue: (base: any) => {
+      return {
+        ...base,
+        background: "#4b87df",
+        color: "#ffffff",
+        borderRadius: 6,
+        padding: 2
+      };
+    },
+    multiValueLabel: (base: any) => ({
+      ...base,
+      color: "#ffffff",
+    }),
+    multiValueRemove: (base: any) => ({
+      ...base,
+      color: "#ffffff",
+      ":hover": {
+        backgroundColor: "",
+        color: "#0052cc",
+      },
+    }),
   };
 
   return (
@@ -41,6 +69,7 @@ function CustomSelect({ ...props }: P) {
       <Select
         {...props}
         styles={colourStyles}
+        isMulti={props.isMulti}
         components={{
           DropdownIndicator,
           IndicatorSeparator,

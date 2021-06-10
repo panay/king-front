@@ -22,6 +22,7 @@ import Scrollbar from "./Scrollbar";
 import Checkbox from "./Checkbox";
 import Radio from "./Radio";
 import Datepicker from "./Datepicker";
+import VirtualList from "./VirtualList";
 
 export {
   Button,
@@ -48,4 +49,5 @@ export {
   Checkbox,
   Radio,
   Datepicker,
+  VirtualList,
 };

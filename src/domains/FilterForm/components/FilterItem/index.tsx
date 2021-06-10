@@ -6,13 +6,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Button, Dropdown, Scrollbar } from "ui";
+import { Button, Dropdown, Scrollbar, VirtualList } from "ui";
 import { useOnClickOutside } from "infrastructure/hooks";
-import FilterRadioItem from "../FilterRadioItem";
-import FilterCheckboxItem from "../FilterCheckboxItem";
+import RadioItem from "ui/VirtualList/components/RadioItem";
+import CheckboxItem from "ui/VirtualList/components/CheckboxItem";
 import { BgTypeEnum } from "ui/Button";
 import { ICheckbox, IKeyValue, IRadio } from "infrastructure/types";
-import FilterVirtualList from "../FilterVirtualList";
 import FilterDateItem from "../FilterDateItem";
 
 type Props = {
@@ -111,7 +110,7 @@ function FilterItem(props: Props) {
     switch (props.type) {
       case "radio-dropdown": {
         return props.data.map((item, index) => (
-          <FilterRadioItem
+          <RadioItem
             key={index}
             selected={
               selected?.find((s) => s.id === (item as IRadio).value) ||
@@ -124,7 +123,7 @@ function FilterItem(props: Props) {
       }
       case "checkbox-dropdown": {
         return props.data.map((item, index) => (
-          <FilterCheckboxItem
+          <CheckboxItem
             key={index}
             selected={
               selected?.find((s) => s.id === (item as ICheckbox).id) ||
@@ -138,7 +137,7 @@ function FilterItem(props: Props) {
       case "virtual-list": {
         if (props.virtualListProps) {
           return (
-            <FilterVirtualList
+            <VirtualList
               items={props.data as IKeyValue[]}
               {...props.virtualListProps}
               selectedValues={selected}
