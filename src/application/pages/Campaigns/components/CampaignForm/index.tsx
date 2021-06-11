@@ -32,6 +32,7 @@ import UserContext from "infrastructure/context/UserContext";
 import PeriodDatepicker from "../PeriodDatepicker";
 import LocationsList from "../LocationsList";
 import MaskedInput from "react-text-mask";
+import GeofenceList from "../GeofenceList";
 
 function CampaignForm() {
   const { register, handleSubmit, formState, reset, control } = useForm({
@@ -493,10 +494,7 @@ function CampaignForm() {
                 <LocationsList
                   inputRef={props.ref}
                   field="location_id"
-                  onChange={(e) => {
-                    debugger;
-                    props.onChange(e)
-                  }}
+                  onChange={props.onChange}
                 />
               )}
             />
@@ -507,13 +505,10 @@ function CampaignForm() {
               control={control}
               rules={{ required: true }}
               render={(props) => (
-                <CustomSelect
-                  placeholder="Выбор геофенсов"
-                  isSearchable={false}
-                  name="geofence_ids"
-                  options={[]}
-                  value={props.value}
-                  onChange={(e) => props.onChange(e)}
+                <GeofenceList
+                  inputRef={props.ref}
+                  field="geofence_ids"
+                  onChange={props.onChange}
                 />
               )}
             />

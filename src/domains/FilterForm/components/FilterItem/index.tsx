@@ -143,6 +143,7 @@ function FilterItem(props: Props) {
               selectedValues={selected}
               onSearch={props.onSearch}
               reload={!dropdownOpened}
+              searchInside={true}
               onChangeModel={handleChangeFilter}
             />
           );

@@ -1,5 +1,13 @@
 import { Dropdown, FluidLabelInput, VirtualList } from "ui";
-import React, {KeyboardEvent, Ref, RefObject, SyntheticEvent, useCallback, useEffect, useRef, useState} from "react";
+import React, {
+  KeyboardEvent,
+  Ref,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useStore } from "effector-react";
 import { IKeyValue, IPagination } from "infrastructure/types";
 import {
@@ -11,15 +19,15 @@ import {
 import { $paging } from "infrastructure/models/paging";
 import { $currentCompany } from "infrastructure/models/auth/user";
 import { useOnClickOutside } from "infrastructure/hooks";
-import {useDebouncedCallback} from "use-debounce";
+import { useDebouncedCallback } from "use-debounce";
 
 type Props = {
   field: string;
-  onChange: (value: string) => void;
+  onChange: (values: string[]) => void;
   inputRef?: Ref<HTMLInputElement>;
 };
 
-function LocationsList({ field, onChange, inputRef }: Props) {
+function GeofenceList({ field, onChange, inputRef }: Props) {
   const rowData = useStore<IKeyValue[]>($rowData);
   const rowCount = useStore<number>($rowCount);
   const paging = useStore<IPagination>($paging);
@@ -45,11 +53,11 @@ function LocationsList({ field, onChange, inputRef }: Props) {
   };
 
   const debouncedSearchEvent = useDebouncedCallback(
-      () => search((inputRef as RefObject<any>)?.current!.value),
-      400
+    () => search((inputRef as RefObject<any>)?.current!.value),
+    400
   );
 
-  const loadLocationList = (searchValue: string, pageNum: number) => {
+  const loadGeofenceList = (searchValue: string, pageNum: number) => {
     if (pageNum === 1) {
       updateLocationListSuccess();
     }
@@ -65,22 +73,33 @@ function LocationsList({ field, onChange, inputRef }: Props) {
   const loadNextPage = useCallback(
     (startIndex: number, stopIndex: number, page: number) => {
       if (companyId && page > 1) {
-        loadLocationList(searchValue, page);
+        loadGeofenceList(searchValue, page);
       }
 
       return null;
     },
-    [companyId, loadLocationList, searchValue]
+    [companyId, loadGeofenceList, searchValue]
   );
 
   const selectItem = (item: IKeyValue) => {
-    onChange(item.name);
-    select([item]);
+    const selectedCopy = selected ? selected.slice() : [].slice();
+    const index = selectedCopy.findIndex(
+      (selectedItem) => selectedItem.id === item.id
+    );
+
+    if (index > -1) {
+      selectedCopy.splice(index, 1);
+    } else {
+      selectedCopy.push(item);
+    }
+    onChange(selectedCopy.map((item) => item.id));
+
+    select(selectedCopy);
   };
 
   useEffect(() => {
     if (opened) {
-      loadLocationList(searchValue, 1);
+      loadGeofenceList(searchValue, 1);
     }
   }, [opened, searchValue]);
 
@@ -91,8 +110,14 @@ function LocationsList({ field, onChange, inputRef }: Props) {
         type="text"
         id={field}
         name={field}
-        value={selected[0]?.id || ''}
-        placeholder="Местоположение"
+        value={
+          selected[0]
+            ? `${selected[0].name} ${
+                selected.length > 1 ? "+ ещё " + (selected.length - 1) : ""
+              }`
+            : ""
+        }
+        placeholder="Выбор геофенсов"
         onChange={debouncedSearchEvent}
         onKeyDown={handleKeyDown}
         onFocus={() => toggle(true)}
@@ -107,7 +132,7 @@ function LocationsList({ field, onChange, inputRef }: Props) {
         <VirtualList
           loadNextPage={loadNextPage}
           items={rowData}
-          type="radio"
+          type="checkbox"
           rowCount={rowCount}
           selectedValues={selected}
           onChangeModel={selectItem}
@@ -117,4 +142,4 @@ function LocationsList({ field, onChange, inputRef }: Props) {
   );
 }
 
-export default LocationsList;
+export default GeofenceList;
