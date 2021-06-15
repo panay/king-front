@@ -1,6 +1,5 @@
 import { createDomain, restore } from "effector";
 import { ICampaignData } from "../../types/CampaignsData";
-import { IKeyValue } from "infrastructure/types";
 
 const campaignDomain = createDomain("CampaignForm");
 

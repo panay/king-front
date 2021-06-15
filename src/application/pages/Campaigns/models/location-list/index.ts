@@ -19,6 +19,8 @@ export const updateLocationsFx = locationsListDomain.effect<
 
 export const getLocationsList = locationsListDomain.event<ILocationListRequest>();
 export const updateLocationListSuccess = locationsListDomain.event<void>();
+export const setCurrentLocation = locationsListDomain.event<IKeyValue | null>();
 
 export const $rowData = locationsListDomain.store<IKeyValue[]>([]);
 export const $rowCount = locationsListDomain.store<number>(0);
+export const $locationItem = locationsListDomain.store<IKeyValue | null>(null);

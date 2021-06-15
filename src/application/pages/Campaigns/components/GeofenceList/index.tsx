@@ -1,4 +1,4 @@
-import { Dropdown, FluidLabelInput, VirtualList } from "ui";
+import { Dropdown, FluidLabelInput } from "ui";
 import React, {
   KeyboardEvent,
   Ref,
@@ -9,17 +9,13 @@ import React, {
   useState,
 } from "react";
 import { useStore } from "effector-react";
-import { IKeyValue, IPagination } from "infrastructure/types";
-import {
-  $rowCount,
-  $rowData,
-  getLocationsList,
-  updateLocationListSuccess,
-} from "../../models/location-list";
-import { $paging } from "infrastructure/models/paging";
+import { IKeyValue } from "infrastructure/types";
+import { $rowData, getGeofencesList } from "../../models/geofence-list";
 import { $currentCompany } from "infrastructure/models/auth/user";
 import { useOnClickOutside } from "infrastructure/hooks";
 import { useDebouncedCallback } from "use-debounce";
+import CheckboxItem from "ui/VirtualList/components/CheckboxItem";
+import { $locationItem } from "../../models/location-list";
 
 type Props = {
   field: string;
@@ -29,9 +25,8 @@ type Props = {
 
 function GeofenceList({ field, onChange, inputRef }: Props) {
   const rowData = useStore<IKeyValue[]>($rowData);
-  const rowCount = useStore<number>($rowCount);
-  const paging = useStore<IPagination>($paging);
   const currentCompany = useStore<IKeyValue | null>($currentCompany);
+  const locationItem = useStore<IKeyValue | null>($locationItem);
   const companyId = currentCompany?.id;
 
   const [searchValue, search] = useState("");
@@ -57,29 +52,13 @@ function GeofenceList({ field, onChange, inputRef }: Props) {
     400
   );
 
-  const loadGeofenceList = (searchValue: string, pageNum: number) => {
-    if (pageNum === 1) {
-      updateLocationListSuccess();
-    }
-
-    getLocationsList({
+  const loadGeofenceList = (searchValue: string) => {
+    getGeofencesList({
       company_id: companyId,
-      page_number: pageNum,
-      row_count: paging.perPage,
+      location_id: locationItem?.name || undefined,
       name: searchValue || undefined,
     });
   };
-
-  const loadNextPage = useCallback(
-    (startIndex: number, stopIndex: number, page: number) => {
-      if (companyId && page > 1) {
-        loadGeofenceList(searchValue, page);
-      }
-
-      return null;
-    },
-    [companyId, loadGeofenceList, searchValue]
-  );
 
   const selectItem = (item: IKeyValue) => {
     const selectedCopy = selected ? selected.slice() : [].slice();
@@ -99,7 +78,7 @@ function GeofenceList({ field, onChange, inputRef }: Props) {
 
   useEffect(() => {
     if (opened) {
-      loadGeofenceList(searchValue, 1);
+      loadGeofenceList(searchValue);
     }
   }, [opened, searchValue]);
 
@@ -129,14 +108,19 @@ function GeofenceList({ field, onChange, inputRef }: Props) {
           maxWidth: "300px",
         }}
       >
-        <VirtualList
-          loadNextPage={loadNextPage}
-          items={rowData}
-          type="checkbox"
-          rowCount={rowCount}
-          selectedValues={selected}
-          onChangeModel={selectItem}
-        />
+        {rowData.map((item, index) => {
+          return (
+            <div key={index}>
+              <CheckboxItem
+                item={{
+                  ...item,
+                  value: item.name,
+                }}
+                onChangeModel={selectItem}
+              />
+            </div>
+          );
+        })}
       </Dropdown>
     </div>
   );

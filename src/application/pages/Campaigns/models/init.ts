@@ -1,5 +1,7 @@
 import "./table/init";
 import "./form/init";
+import "./location-list/init";
+import "./geofence-list/init";
 import "infrastructure/models/paging/init";
 import "infrastructure/models/auth/init";
 

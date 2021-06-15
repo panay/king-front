@@ -1,9 +1,11 @@
 import {
+  $locationItem,
   $rowCount,
   $rowData,
-  updateLocationListSuccess,
   getLocationsFx,
   getLocationsList,
+  setCurrentLocation,
+  updateLocationListSuccess,
   updateLocationsFx,
 } from "./";
 import { setPaging } from "infrastructure/models/paging";
@@ -43,9 +45,13 @@ const updateLocationsReducer = (
   return rowData;
 };
 
-const countReducer = (state: number, payload: ILocationListResponse) => {
-  return payload ? payload.rowCount : 0;
-};
+const countReducer = (state: number, payload: ILocationListResponse) =>
+  payload ? payload.rowCount : 0;
+
+const locationItemReducer = (
+  state: IKeyValue | null,
+  payload: IKeyValue | null
+) => (payload ? { ...payload } : null);
 
 const getLocations = async (request: ILocationListRequest) => {
   let response = null;
@@ -72,6 +78,8 @@ $rowCount
   .on(getLocationsFx.doneData, countReducer)
   .on(updateLocationsFx.doneData, countReducer)
   .on(updateLocationListSuccess, () => 0);
+
+$locationItem.on(setCurrentLocation, locationItemReducer);
 
 getLocationsFx.use(getLocations);
 updateLocationsFx.use(getLocations);

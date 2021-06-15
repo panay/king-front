@@ -5,7 +5,6 @@ import { useStore } from "effector-react";
 import { $paging } from "infrastructure/models/paging";
 import { $currentCompany } from "infrastructure/models/auth/user";
 
-import "../../models/location-list/init";
 import {
   $rowCount,
   $rowData,

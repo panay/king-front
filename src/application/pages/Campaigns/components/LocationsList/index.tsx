@@ -1,11 +1,11 @@
 import { Dropdown, FluidLabelInput, VirtualList } from "ui";
-import React, {KeyboardEvent, Ref, RefObject, SyntheticEvent, useCallback, useEffect, useRef, useState} from "react";
+import React, {KeyboardEvent, Ref, RefObject, useCallback, useEffect, useRef, useState} from "react";
 import { useStore } from "effector-react";
 import { IKeyValue, IPagination } from "infrastructure/types";
 import {
   $rowCount,
   $rowData,
-  getLocationsList,
+  getLocationsList, setCurrentLocation,
   updateLocationListSuccess,
 } from "../../models/location-list";
 import { $paging } from "infrastructure/models/paging";
@@ -76,6 +76,7 @@ function LocationsList({ field, onChange, inputRef }: Props) {
   const selectItem = (item: IKeyValue) => {
     onChange(item.name);
     select([item]);
+    setCurrentLocation(item);
   };
 
   useEffect(() => {
