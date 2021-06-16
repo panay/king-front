@@ -1,8 +1,10 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, Ref } from "react";
 import Select, { components, NamedProps, Props } from "react-select";
 import { ReactComponent as IcArrowDropdown } from "infrastructure/assets/images/svgs/ic-arrow-dropdown.svg";
 
-type P = Props & NamedProps;
+type P = Props & NamedProps & {
+  inputRef?: Ref<Select>;
+}
 
 const DropdownIndicator = (props: any): ReactElement => {
   return (
@@ -32,14 +34,14 @@ function CustomSelect({ ...props }: P) {
         "&:hover": {
           borderColor: isFocused ? "#ebecf0" : "#f4f4f6",
         },
-        fontSize: 12
+        fontSize: 12,
       };
     },
     placeholder: (base: any) => {
       return {
         ...base,
-        color: "#8f92a1"
-      }
+        color: "#8f92a1",
+      };
     },
     multiValue: (base: any) => {
       return {
@@ -47,7 +49,7 @@ function CustomSelect({ ...props }: P) {
         background: "#4b87df",
         color: "#ffffff",
         borderRadius: 6,
-        padding: 2
+        padding: 2,
       };
     },
     multiValueLabel: (base: any) => ({
@@ -68,6 +70,7 @@ function CustomSelect({ ...props }: P) {
     <>
       <Select
         {...props}
+          ref={props.inputRef}
         styles={colourStyles}
         isMulti={props.isMulti}
         components={{

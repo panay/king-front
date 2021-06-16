@@ -33,9 +33,17 @@ import PeriodDatepicker from "../PeriodDatepicker";
 import LocationsList from "../LocationsList";
 import MaskedInput from "react-text-mask";
 import GeofenceList from "../GeofenceList";
+import { ReactComponent as IcVision } from "infrastructure/assets/images/svgs/ic-vision.svg";
 
 function CampaignForm() {
-  const { register, handleSubmit, formState, reset, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState,
+    reset,
+    control,
+    setValue,
+  } = useForm({
     mode: "onChange",
   });
   const { isValid, isDirty } = formState;
@@ -124,15 +132,17 @@ function CampaignForm() {
     company_id: currentCompany?.id,
     days_of_week: [],
     geofence_ids: [],
-    in_action: {
-      subtitle: null,
-      text: null,
-      title: null,
-    },
-    out_action: {
-      subtitle: null,
-      text: null,
-      title: null,
+    action: {
+      in_action: {
+        subtitle: null,
+        text: null,
+        title: null,
+      },
+      out_action: {
+        subtitle: null,
+        text: null,
+        title: null,
+      },
     },
     location_id: null,
     max_notify_count_per_day: null,
@@ -262,10 +272,12 @@ function CampaignForm() {
 
   const handleActionTypeChanged = (value: any) => {
     debugger;
+    // setValue(value.value, {});
   };
 
   const handleActionChanged = (value: any) => {
     debugger;
+    // setValue(value.value, value.label);
   };
 
   useEffect(() => {
@@ -504,6 +516,7 @@ function CampaignForm() {
               name="geofence_ids"
               control={control}
               rules={{ required: true }}
+              defaultValue={[]}
               render={(props) => (
                 <GeofenceList
                   inputRef={props.ref}
@@ -516,27 +529,72 @@ function CampaignForm() {
         </div>
         <div className="mt-4 -mx-2.5 flex items-center">
           <div className="flex-1 mx-2.5">
-            <CustomSelect
-              placeholder="Тип события"
-              isSearchable={false}
+            <Controller
               name="action"
-              options={actionOptions}
-              onChange={handleActionTypeChanged}
+              control={control}
+              rules={{ required: true }}
+              defaultValue={null}
+              render={(props) => (
+                <CustomSelect
+                  inputRef={props.ref}
+                  placeholder="Тип события"
+                  isSearchable={false}
+                  name="action"
+                  options={actionOptions}
+                  onChange={(e) => {
+                    debugger;
+                    props.onChange({
+                      [e!.value]: {},
+                    });
+                  }}
+                />
+              )}
             />
           </div>
           <div className="flex-1 mx-2.5">
-            <CustomSelect
-              placeholder="Действие для кампании"
-              isSearchable={false}
-              name="campaign_action"
-              options={[
-                {
-                  value: "message",
-                  label: "Сообщение",
-                },
-              ]}
-              onChange={handleActionChanged}
+            <Controller
+              name="action"
+              control={control}
+              rules={{ required: true }}
+              defaultValue={null}
+              render={(props) => (
+                <CustomSelect
+                  inputRef={props.ref}
+                  placeholder="Действие для кампании"
+                  isSearchable={false}
+                  name="action"
+                  options={[
+                    {
+                      value: "message",
+                      label: "Сообщение",
+                    },
+                  ]}
+                  onChange={(e) => {
+                    debugger;
+                    props.onChange({
+                      [e!.value]: {},
+                    });
+                  }}
+                />
+              )}
             />
+          </div>
+        </div>
+        <div className="mt-4 bg-input-grey rounded-lg">
+          <div>
+            <FluidLabelInput placeholder="Напишите заголовок" />
+          </div>
+          <div>
+            <FluidLabelInput placeholder="Напишите подзаголовок" />
+          </div>
+          <div>
+            <FluidLabelInput placeholder="Текст уведомления для кампании" />
+          </div>
+          <div className="flex items-center pb-4 hover:cursor-pointer">
+            <span className="mr-2 pl-3">
+              <IcVision className="text-primary hover:text-hover-primary" />
+            </span>
+            <span className="font-semibold text-icon-grey">Посмотреть</span>
           </div>
         </div>
         <div className="mt-6 -mx-2.5 flex items-center">
